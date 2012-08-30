@@ -10,12 +10,13 @@
    ------------ */
 
 
+var Sim = require('host/control');
 //
-// OS Startup and Shutdown Routines   
+// OS Startup and Shutdown Routines
 //
 function krnBootstrap()      // Page 8.
 {
-    simLog("bootstrap", "host");  // Use simLog because we ALWAYS want this, even if _Trace is off.
+    Sim.log("bootstrap", "host");  // Use simLog because we ALWAYS want this, even if _Trace is off.
 
     // Initialize our global queues.
     _KernelInterruptQueue = new Queue();  // A (currently) non-priority queue for interrupt requests (IRQs).
@@ -72,17 +73,17 @@ function krnOnCPUClockPulse()
        that it has to look for interrupts and process them if it finds any.                           */
 
     // Check for an interrupt, are any. Page 560
-    if (_KernelInterruptQueue.getSize() > 0)    
+    if (_KernelInterruptQueue.getSize() > 0)
     {
         // Process the first interrupt on the interrupt queue.
         // TODO: Implement a priority queye based on the IRQ number/id to enforce interrupt priority.
         var interrput = _KernelInterruptQueue.dequeue();
-        krnInterruptHandler(interrput.irq, interrput.params);        
+        krnInterruptHandler(interrput.irq, interrput.params);
     }
     else if (_CPU.isExecuting) // If there are no interrupts then run a CPU cycle if there is anything being processed.
     {
         _CPU.cycle();
-    }    
+    }
     else                       // If there are no interrupts and there is nothing being executed then just be idle.
     {
        krnTrace("Idle");
@@ -137,7 +138,7 @@ function krnInterruptHandler(irq, params)    // This is the Interrupt Handler Ro
 function krnTimerISR()  // The built-in TIMER (not clock) Interrupt Service Routine (as opposed to an ISR coming from a device driver).
 {
     // Check multiprogramming parameters and enfore quanta here. Call the scheduler / context switch here if necessary.
-}   
+}
 
 
 
@@ -170,19 +171,19 @@ function krnTrace(msg)
          // We can't log every idle clock pulse because it would lag the browser very quickly.
          if (_OSclock % 10 == 0)  // Check the CPU_CLOCK_INTERVAL in globals.js for an 
          {                        // idea of the tick rate and adjust this line accordingly.
-            simLog(msg, "OS");          
+            Sim.log(msg, "OS");          
          }         
       }
       else
       {
-       simLog(msg, "OS");
+       Sim.log(msg, "OS");
       }
    }
 }
-   
+
 function krnTrapError(msg)
 {
-    simLog("OS ERROR - TRAP: " + msg);
+    Sim.log("OS ERROR - TRAP: " + msg);
     // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
     krnShutdown();
 }

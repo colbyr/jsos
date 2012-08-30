@@ -15,9 +15,7 @@
    Operating System Concepts 8th editiion by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
    ------------ */
 
-define([
-  'globals'
-], function (globals) {
+define([], function () {
   //
   // Control Services
   //
@@ -33,16 +31,16 @@ define([
     }
   }
 
-  var Controls = {
+  var Sim = {
 
     init: function () {
       _display = document.getElementById("display");
       // Get a global reference to the canvas.  TODO: Move this stuff into a Display Device Driver, maybe?
-      globals.CANVAS  = _display;
+      CANVAS  = _display;
       // Get a global reference to the drawing context.
-      globals.DRAWING_CONTEXT = globals.CANVAS.getContext('2d');
+      DRAWING_CONTEXT = CANVAS.getContext('2d');
       // Enable the added-in canvas text functions (see canvastext.js for provenance and details).
-      CanvasTextFunctions.enable(globals.DRAWING_CONTEXT);
+      CanvasTextFunctions.enable(DRAWING_CONTEXT);
       // Clear the log text box.
       _taLog = document.getElementById("taLog");
       _taLog.value = '';
@@ -59,21 +57,16 @@ define([
     },
 
     log: function (msg, source) {
-        // Check the source.
-        if (!source)
-        {
+        if (!source) {
             source = "?";
         }
 
-        // Note the OS CLOCK.
-        var clock = globals._OSclock;
-
-        // Note the REAL clock in milliseconds since January 1, 1970.
-        var now = new Date().getTime();
-
         // Build the log string.   
-        var str = "({ clock:" + clock + ", source:" + source + ", msg:" + msg + ", now:" + now  + " })"  + "\n";
-        // WAS: var str = "[" + clock   + "]," + "[" + now    + "]," + "[" + source + "]," +"[" + msg    + "]"  + "\n";
+        var str = "({ clock:" + _OSclock +
+          ", source:" + source +
+          ", msg:" + msg +
+          ", now:" + Date.now() +
+          " })"  + "\n";
 
         // Update the log console.
         _taLog.value = str + taLog.value;
@@ -96,18 +89,18 @@ define([
         _display.focus();
 
         // ... Create and initialize the CPU ...
-        globals._CPU = new cpu();
-        globals._CPU.init();
+        _CPU = new cpu();
+        _CPU.init();
 
         // ... then set the clock pulse simulation to call ?????????.
-        _hardwareClockID = setInterval(this.clockPulse, globals.CPU_CLOCK_INTERVAL);
+        _hardwareClockID = setInterval(simClockPulse, CPU_CLOCK_INTERVAL);
         // .. and call the OS Kernel Bootstrap routine.
         krnBootstrap();
     },
 
     halt: function (btn) {
-        simLog("emergency halt", "host");
-        simLog("Attempting Kernel shutdown.", "host");
+        this.log("emergency halt", "host");
+        this.log("Attempting Kernel shutdown.", "host");
         // Call the OS sutdown routine.
         krnShutdown();
         // Stop the JavaScript interval that's simulating our clock pulse.
@@ -124,6 +117,6 @@ define([
     }
   };
 
-  return Controls;
+  return Sim;
 
 });

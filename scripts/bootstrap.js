@@ -1,5 +1,7 @@
 require([], function () {
 
+  require(['globals']);
+
   require([
     'host/control',
     'host/devices',
