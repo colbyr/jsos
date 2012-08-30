@@ -1,7 +1,5 @@
 require([], function () {
 
-  console.log('boostrapped!');
-
   require([
     'host/control',
     'host/devices',
@@ -17,7 +15,15 @@ require([], function () {
     'os/queue',
     'os/shell'
   ], function () {
-    require(['os/kernel']);
+    require([
+      'os/kernel',
+      'host/control',
+      'utils/ready'
+    ], function (kernel, Sim, ready) {
+      ready(function () {
+        Sim.init();
+      });
+    });
   });
 
   require(['utils']);
