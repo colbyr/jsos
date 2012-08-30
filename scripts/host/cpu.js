@@ -13,34 +13,40 @@
    Operating System Concepts 8th editiion by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
    ------------ */
 
-function cpu()
-{
-    this.PC    = 0;     // Program Counter
-    this.Acc   = 0;     // Accumulator
-    this.Xreg  = 0;     // X register
-    this.Yreg  = 0;     // Y register
-    this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
-    this.isExecuting = false;
-    
-    this.init = function() 
-    {
-        this.PC    = 0
-        this.Acc   = 0;
-        this.Xreg  = 0;
-        this.Yreg  = 0;
-        this.Zflag = 0;      
-        this.isExecuting = false;  
-    }
-    
-    this.pulse = function()
-    {
-        // TODO: Do we need this?  Probably not.
-    }
-    
-    this.cycle = function()
-    {
-        krnTrace("CPU cycle");
-        // TODO: Accumulate CPU usage and profiling statistics here.
-        // Do real work here. Set this.isExecuting appropriately.
-    }
-}
+define([
+  'utils/underscore'
+], function () {
+
+  function CPU()
+  {
+      this.PC    = 0;     // Program Counter
+      this.Acc   = 0;     // Accumulator
+      this.Xreg  = 0;     // X register
+      this.Yreg  = 0;     // Y register
+      this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
+      this.isExecuting = false;
+  }
+
+  _.extend(CPU.prototype, {
+    init: function() {
+          this.PC    = 0
+          this.Acc   = 0;
+          this.Xreg  = 0;
+          this.Yreg  = 0;
+          this.Zflag = 0;      
+          this.isExecuting = false;  
+      },
+
+      pulse: function() {
+          // TODO: Do we need this?  Probably not.
+      },
+
+      cycle: function() {
+          krnTrace("CPU cycle");
+          // TODO: Accumulate CPU usage and profiling statistics here.
+          // Do real work here. Set this.isExecuting appropriately.
+      }
+  });
+
+  return CPU;
+});

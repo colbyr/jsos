@@ -15,7 +15,9 @@
    Operating System Concepts 8th editiion by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
    ------------ */
 
-define([], function () {
+define([
+  'host/cpu'
+], function (CPU) {
   //
   // Control Services
   //
@@ -89,7 +91,7 @@ define([], function () {
         _display.focus();
 
         // ... Create and initialize the CPU ...
-        _CPU = new cpu();
+        _CPU = new CPU();
         _CPU.init();
 
         // ... then set the clock pulse simulation to call ?????????.
