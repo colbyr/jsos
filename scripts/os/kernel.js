@@ -9,8 +9,6 @@
    Operating System Concepts 8th editiion by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5   
    ------------ */
 
-
-var Sim = require('host/control');
 //
 // OS Startup and Shutdown Routines
 //
@@ -97,14 +95,14 @@ function krnOnCPUClockPulse()
 function krnEnableInterrupts()
 {
     // Keyboard
-    simEnableKeyboardInterrupt();
+    Sim.enableKeyboardInterrupt();
     // Put more here.
 }
 
 function krnDisableInterrupts()
 {
     // Keyboard
-    simDisableKeyboardInterrupt();
+    Sim.disableKeyboardInterrupt();
     // Put more here.
 }
 

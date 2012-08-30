@@ -16,11 +16,9 @@
    ------------ */
 
 define([
-  'host/cpu'
+  'host/CPU'
 ], function (CPU) {
-  //
-  // Control Services
-  //
+
   var _btns = null;
   var _display = null;
   var _hardwareClockId = null;
@@ -33,9 +31,52 @@ define([
     }
   }
 
-  var Sim = {
+  function _onKeypress(e) {
+    // The canvas element CAN receive focus if you give it a tab index. 
+    // Check that we are processing keystrokes only from the canvas's id (as set in index.html).
+    if (e.target.id == "display")
+    {
+        e.preventDefault();
+        // Note the pressed key code in the params (Mozilla-specific).
+        var params = [e.which, e.shiftKey];
+        // Enqueue this interrupt on the kernal interrupt queue so that it gets to the Interrupt handler.
+        _KernelInterruptQueue.enqueue( new Interrput(KEYBOARD_IRQ, params) );
+    }
+  }
+
+  // TODO: fix this global once kernel.js is modularized
+  Sim = { // var Sim = {
+
+    clockPulse: function () {
+      // Increment the hardware (host) clock.
+      _OSclock++;
+      // Call the kernel clock pulse event handler.
+      krnOnCPUClockPulse();
+    },
+
+    disableKeyboardInterrupt: function() {
+      document.removeEventListener("keydown", _onKeypress, false);
+    },
+
+    enableKeyboardInterrupt: function () {
+      // Listen for key presses (keydown, actually) in the document 
+      // and call the simulation processor, which will in turn call the 
+      // os interrupt handler.
+      document.addEventListener("keydown", _onKeypress, false);
+    },
+
+    halt: function (btn) {
+        this.log("emergency halt", "host");
+        this.log("Attempting Kernel shutdown.", "host");
+        // Call the OS sutdown routine.
+        krnShutdown();
+        // Stop the JavaScript interval that's simulating our clock pulse.
+        clearInterval(_hardwareClockID);
+        // TODO: Is there anything else we need to do here?
+    },
 
     init: function () {
+      _.bindAll(this, 'halt', 'reset', 'start');
       _display = document.getElementById("display");
       // Get a global reference to the canvas.  TODO: Move this stuff into a Display Device Driver, maybe?
       CANVAS  = _display;
@@ -75,10 +116,14 @@ define([
         // Optionally udpate a log database or some streaming service.
     },
 
+    reset: function (btn) {
+        // The easiest and most thorough way to do this is to reload (not refresh) the document.
+        location.reload(true);  
+        // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
+        // be reloaded from the server. If it is false or not specified, the browser may reload the 
+        // page from its cache, which is not what we want.
+    },
 
-    //
-    // Control Events
-    //
     start: function (btn) {
         // Disable the start button...
         btn.disabled = true;
@@ -95,28 +140,11 @@ define([
         _CPU.init();
 
         // ... then set the clock pulse simulation to call ?????????.
-        _hardwareClockID = setInterval(simClockPulse, CPU_CLOCK_INTERVAL);
+        _hardwareClockID = setInterval(this.clockPulse, CPU_CLOCK_INTERVAL);
         // .. and call the OS Kernel Bootstrap routine.
         krnBootstrap();
-    },
-
-    halt: function (btn) {
-        this.log("emergency halt", "host");
-        this.log("Attempting Kernel shutdown.", "host");
-        // Call the OS sutdown routine.
-        krnShutdown();
-        // Stop the JavaScript interval that's simulating our clock pulse.
-        clearInterval(_hardwareClockID);
-        // TODO: Is there anything else we need to do here?
-    },
-
-    reset: function (btn) {
-        // The easiest and most thorough way to do this is to reload (not refresh) the document.
-        location.reload(true);  
-        // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
-        // be reloaded from the server. If it is false or not specified, the browser may reload the 
-        // page from its cache, which is not what we want.
     }
+
   };
 
   return Sim;

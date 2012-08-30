@@ -3,12 +3,6 @@ require([], function () {
   require(['globals']);
 
   require([
-    'host/control',
-    'host/devices',
-    'host/cpu'
-  ]);
-
-  require([
     'os/interrupt',
     'os/canvastext',
     'os/console',
@@ -19,7 +13,7 @@ require([], function () {
   ], function () {
     require([
       'os/kernel',
-      'host/control',
+      'host/Sim',
       'utils/ready'
     ], function (kernel, Sim, ready) {
       ready(function () {
