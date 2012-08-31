@@ -9,13 +9,12 @@
 
 define(['utils/underscore'], function () {
 
-  function Console()
-  {
-      this.CurrentFont      = DEFAULT_FONT;
-      this.CurrentFontSize  = DEFAULT_FONT_SIZE;
-      this.CurrentXPosition = 0;
-      this.CurrentYPosition = DEFAULT_FONT_SIZE;
-      this.buffer = "";
+  function Console() {
+    this.CurrentFont      = DEFAULT_FONT;
+    this.CurrentFontSize  = DEFAULT_FONT_SIZE;
+    this.CurrentXPosition = 0;
+    this.CurrentYPosition = DEFAULT_FONT_SIZE;
+    this.buffer = "";
   }
 
   _.extend(Console.prototype, {
@@ -30,8 +29,8 @@ define(['utils/underscore'], function () {
     },
 
     resetXY: function () {
-        this.CurrentXPosition = 0;
-        this.CurrentYPosition = this.CurrentFontSize;
+      this.CurrentXPosition = 0;
+      this.CurrentYPosition = this.CurrentFontSize;
     },
 
     handleInput: function () {
@@ -56,25 +55,34 @@ define(['utils/underscore'], function () {
     },
 
     putText: function (txt) {
-        // My first inclination here was to write two functions: putChar() and putString().
-        // Then I remembered that Javascript is (sadly) untyped and it won't differentiate 
-        // between the two.  So rather than be like PHP and write two (or more) functions that
-        // do the same thing, thereby encouraging confusion and decreasing readability, I 
-        // decided to write one function and use the term "text" to connote string or char.
-        if (txt != "")
-        {
-            // Draw the text at the current X and Y coordinates.
-            DRAWING_CONTEXT.drawText(this.CurrentFont, this.CurrentFontSize, this.CurrentXPosition, this.CurrentYPosition, txt);
-          // Move the current X position.
-            var offset = DRAWING_CONTEXT.measureText(this.CurrentFont, this.CurrentFontSize, txt);
-            this.CurrentXPosition = this.CurrentXPosition + offset;    
-        }
+      // My first inclination here was to write two functions: putChar() and putString().
+      // Then I remembered that Javascript is (sadly) untyped and it won't differentiate 
+      // between the two.  So rather than be like PHP and write two (or more) functions that
+      // do the same thing, thereby encouraging confusion and decreasing readability, I 
+      // decided to write one function and use the term "text" to connote string or char.
+      if (txt != "") {
+        // Draw the text at the current X and Y coordinates.
+        DRAWING_CONTEXT.drawText(
+          this.CurrentFont,
+          this.CurrentFontSize,
+          this.CurrentXPosition,
+          this.CurrentYPosition,
+          txt
+        );
+        // Move the current X position.
+        var offset = DRAWING_CONTEXT.measureText(
+          this.CurrentFont,
+          this.CurrentFontSize,
+          txt
+        );
+        this.CurrentXPosition = this.CurrentXPosition + offset;
+      }
     },
 
     advanceLine: function () {
-        this.CurrentXPosition = 0;
-        this.CurrentYPosition += DEFAULT_FONT_SIZE + FONT_HEIGHT_MARGIN;
-        // TODO: Handle scrolling.
+      this.CurrentXPosition = 0;
+      this.CurrentYPosition += DEFAULT_FONT_SIZE + FONT_HEIGHT_MARGIN;
+      // TODO: Handle scrolling.
     }
   });
 

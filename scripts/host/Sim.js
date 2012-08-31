@@ -38,13 +38,12 @@ define([
   function _onKeypress(e) {
     // The canvas element CAN receive focus if you give it a tab index. 
     // Check that we are processing keystrokes only from the canvas's id (as set in index.html).
-    if (e.target.id == "display")
-    {
-        e.preventDefault();
-        // Note the pressed key code in the params (Mozilla-specific).
-        var params = [e.which, e.shiftKey];
-        // Enqueue this interrupt on the kernal interrupt queue so that it gets to the Interrupt handler.
-        _KernelInterruptQueue.enqueue( new Interrupt(KEYBOARD_IRQ, params) );
+    if (e.target.id == "display") {
+      e.preventDefault();
+      // Note the pressed key code in the params (Mozilla-specific).
+      var params = [e.which, e.shiftKey];
+      // Enqueue this interrupt on the kernal interrupt queue so that it gets to the Interrupt handler.
+      _KernelInterruptQueue.enqueue( new Interrupt(KEYBOARD_IRQ, params) );
     }
   }
 
@@ -69,13 +68,13 @@ define([
     },
 
     halt: function (btn) {
-        log("emergency halt", "host");
-        log("Attempting Kernel shutdown.", "host");
-        // Call the OS sutdown routine.
-        _kernel.shutdown();
-        // Stop the JavaScript interval that's simulating our clock pulse.
-        clearInterval(_hardwareClockID);
-        // TODO: Is there anything else we need to do here?
+      log("emergency halt", "host");
+      log("Attempting Kernel shutdown.", "host");
+      // Call the OS sutdown routine.
+      _kernel.shutdown();
+      // Stop the JavaScript interval that's simulating our clock pulse.
+      clearInterval(_hardwareClockID);
+      // TODO: Is there anything else we need to do here?
     },
 
     init: function (kernel) {
@@ -102,36 +101,35 @@ define([
     },
 
     reset: function (btn) {
-        // The easiest and most thorough way to do this is to reload (not refresh) the document.
-        location.reload(true);  
-        // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
-        // be reloaded from the server. If it is false or not specified, the browser may reload the 
-        // page from its cache, which is not what we want.
+      // The easiest and most thorough way to do this is to reload (not refresh) the document.
+      location.reload(true);  
+      // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
+      // be reloaded from the server. If it is false or not specified, the browser may reload the 
+      // page from its cache, which is not what we want.
     },
 
     start: function (btn) {
-        // Disable the start button...
-        btn.disabled = true;
+      // Disable the start button...
+      btn.disabled = true;
 
-        // .. enable the Emergency Halt and Reset buttons ...
-        _btns.halt.disabled = false;
-        _btns.reset.disabled = false;
+      // .. enable the Emergency Halt and Reset buttons ...
+      _btns.halt.disabled = false;
+      _btns.reset.disabled = false;
 
-        // .. set focus on the OS console display ... 
-        _display.focus();
+      // .. set focus on the OS console display ... 
+      _display.focus();
 
-        // ... Create and initialize the CPU ...
-        _CPU = new CPU();
-        _CPU.init();
+      // ... Create and initialize the CPU ...
+      _CPU = new CPU();
+      _CPU.init();
 
-        // ... then set the clock pulse simulation to call ?????????.
-        _hardwareClockID = setInterval(this.clockPulse, CPU_CLOCK_INTERVAL);
+      // ... then set the clock pulse simulation to call ?????????.
+      _hardwareClockID = setInterval(this.clockPulse, CPU_CLOCK_INTERVAL);
 
-        _kernel.bootstrap();
+      _kernel.bootstrap();
     }
 
   };
 
   return Sim;
-
 });

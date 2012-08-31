@@ -18,8 +18,7 @@ define([
   'utils/underscore'
 ], function (trace) {
 
-  function CPU()
-  {
+  function CPU() {
     this.PC    = 0;     // Program Counter
     this.Acc   = 0;     // Accumulator
     this.Xreg  = 0;     // X register

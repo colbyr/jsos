@@ -4,11 +4,10 @@
 
 define([], function () {
 
-  function Interrupt(irq, params) {
-      // Properties
-      this.irq = irq;
-      this.params = params;
-  }
+  return function (irq, params) {
+    // Properties
+    this.irq = irq;
+    this.params = params;
+  };
 
-  return Interrupt;
 });

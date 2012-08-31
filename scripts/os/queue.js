@@ -15,33 +15,26 @@ define(['utils/underscore'], function () {
 
   _.extend(Queue.prototype, {
 
-    getSize: function() {
+    getSize: function () {
       return this.q.length;
     },
 
-    isEmpty: function() {
-      return (this.q.length == 0);
+    isEmpty: function () {
+      return this.q.length == 0;
     },
 
-    enqueue: function(element) {
+    enqueue: function (element) {
       this.q.push(element);
     },
 
-    dequeue: function() {
-      var retVal = null;
-      if (this.q.length > 0)
-      {
-          retVal = this.q.shift();
-      }
-      return retVal;
+    dequeue: function () {
+      return this.q.length > 0 ? this.q.shift() : null;
     },
 
-    toString: function() {
-      retVal = "";
-      for (i in this.q) {
-        retVal += "[" + this.q[i] + "] ";
-      }
-      return retVal;
+    toString: function () {
+      return this.q.map(function (val) {
+        return '[' + val + ']';
+      }).join(' ');
     }
 
   });

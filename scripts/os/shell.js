@@ -15,15 +15,65 @@ define([
 
   var _kernel = null;
 
-  function Shell()
-  {
-      this.promptStr   = ">";
-      this.commandList = [];
-      this.curses      = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
-      this.apologies   = "[sorry]";
+  function Shell() {
+    this.promptStr   = ">";
+    this.commandList = [];
+    this.curses      = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
+    this.apologies   = "[sorry]";
   }
 
   _.extend(Shell.prototype, {
+
+    execute: function (fn, args) {
+      // we just got a command, so advance the line... 
+      _StdIn.advanceLine();
+      // .. call the command function passing in the args...
+      fn(args);
+      // Check to see if we need to advance the line again
+      if (_StdIn.CurrentXPosition > 0) {
+        _StdIn.advanceLine();
+      }
+      // ... and finally write the prompt again.
+      this.putPrompt();
+    },
+
+    handleInput: function (buffer) {
+      trace("Shell Command~" + buffer);
+      // 
+      // Parse the input...
+      //
+      var userCommand = new _UserCommand();
+      userCommand = this.parseInput(buffer);
+      // ... and assign the command and args to local variables.
+      var cmd = userCommand.command;
+      var args = userCommand.args;
+      //
+      // Determine the command and execute it.
+      //
+      // Javascript may not support associative arrays (one of the few nice features of PHP, actually)
+      // so we have to iterate over the command list in attempt to find a match.  TODO: Is there a better way?
+      var index = 0;
+      var fn = null;
+      while (!fn && index < this.commandList.length) {
+        if (this.commandList[index].command === cmd) {
+          fn = this.commandList[index].function;
+        } else {
+          ++index;
+        }
+      }
+      if (fn) {
+        this.execute(fn, args);
+      } else {
+        // It's not found, so check for curses and apologies before declaring the command invalid.
+        if (this.curses.indexOf("[" + rot13(cmd) + "]") >= 0) { // Check for curses.
+          this.execute(shellCurse);
+        } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) { // Check for apoligies.
+          this.execute(_apology);
+        } else { // It's just a bad command.
+          this.execute(_invalidCommand);
+        }
+      }
+    },
 
     // TODO: really hate passing in a ref to the kernel like this
     init: function (kernel) {
@@ -96,48 +146,6 @@ define([
       this.putPrompt();
     },
 
-    putPrompt: function () {
-      _StdIn.putText(this.promptStr);
-    },
-
-    handleInput: function (buffer) {
-      trace("Shell Command~" + buffer);
-      // 
-      // Parse the input...
-      //
-      var userCommand = new _UserCommand();
-      userCommand = this.parseInput(buffer);
-      // ... and assign the command and args to local variables.
-      var cmd = userCommand.command;
-      var args = userCommand.args;
-      //
-      // Determine the command and execute it.
-      //
-      // Javascript may not support associative arrays (one of the few nice features of PHP, actually)
-      // so we have to iterate over the command list in attempt to find a match.  TODO: Is there a better way?
-      var index = 0;
-      var fn = null;
-      while (!fn && index < this.commandList.length) {
-        if (this.commandList[index].command === cmd) {
-          fn = this.commandList[index].function;
-        } else {
-          ++index;
-        }
-      }
-      if (fn) {
-        this.execute(fn, args);
-      } else {
-        // It's not found, so check for curses and apologies before declaring the command invalid.
-        if (this.curses.indexOf("[" + rot13(cmd) + "]") >= 0) { // Check for curses.
-            this.execute(shellCurse);
-        } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) { // Check for apoligies.
-            this.execute(_apology);
-        } else { // It's just a bad command.
-            this.execute(_invalidCommand);
-        }
-      }
-    },
-
     parseInput: function (buffer) {
       var retVal = new _UserCommand();
       //
@@ -164,20 +172,9 @@ define([
       return retVal;
     },
 
-
-    execute: function (fn, args) {
-        // we just got a command, so advance the line... 
-        _StdIn.advanceLine();
-        // .. call the command function passing in the args...
-        fn(args);
-        // Check to see if we need to advance the line again
-        if (_StdIn.CurrentXPosition > 0) {
-          _StdIn.advanceLine();
-        }
-        // ... and finally write the prompt again.
-        this.putPrompt();
+    putPrompt: function () {
+      _StdIn.putText(this.promptStr);
     }
-
 
   });
 
@@ -211,13 +208,14 @@ define([
   //
   // Shell Command Functions.  Again, not part of Shell() class per se', just called from there.
   //
-  function _invalidCommand() {
-    _StdIn.putText("Invalid Command. ");
-    if (_SarcasticMode) {
-      _StdIn.putText("Duh. Go back to your Speak & Spell.");
-    } else {
-      _StdIn.putText("Type 'help' for, well... help.");
-    }
+  function _apology() {
+    _StdIn.putText("Okay. I forgive you. This time.");
+    _SarcasticMode = false;
+  }
+
+  function _cls(args) {
+    _StdIn.clearScreen();
+    _StdIn.resetXY();
   }
 
   function _curse() {
@@ -225,15 +223,6 @@ define([
     _StdIn.advanceLine();
     _StdIn.putText("Bitch.");
     _SarcasticMode = true;
-  }
-
-  function _apology() {
-    _StdIn.putText("Okay. I forgive you. This time.");
-    _SarcasticMode = false;
-  }
-
-  function _ver(args) {
-    _StdIn.putText(APP_NAME + " version " + APP_VERSION);    
   }
 
   function _help(args) {
@@ -244,21 +233,16 @@ define([
     }
   }
 
-  function _shutdown(args) {
-     _StdIn.putText("Shutting down...");
-     // Call Kernal shutdown routine.
-    _kernel.shutdown();   
-    // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
+  function _invalidCommand() {
+    _StdIn.putText("Invalid Command. ");
+    if (_SarcasticMode) {
+      _StdIn.putText("Duh. Go back to your Speak & Spell.");
+    } else {
+      _StdIn.putText("Type 'help' for, well... help.");
+    }
   }
 
-  function _cls(args)
-  {
-    _StdIn.clearScreen();
-    _StdIn.resetXY();
-  }
-
-  function _man(args)
-  {
+  function _man(args) {
     if (args.length > 0) {
       var topic = args[0];
       switch (topic) {
@@ -273,6 +257,29 @@ define([
     }
   }
 
+  function _prompt(args) {
+    if (args.length > 0) {
+      _OsShell.promptStr = args[0];
+    } else {
+      _StdIn.putText("Usage: prompt <string>  Please supply a string.");
+    }
+  }
+
+  function _rot13(args) {
+    if (args.length > 0) {
+      _StdIn.putText(args[0] + " = '" + rot13(args[0]) +"'");     // Requires Utils.js for rot13() function.
+    } else {
+      _StdIn.putText("Usage: rot13 <string>  Please supply a string.");
+    }
+  }
+
+  function _shutdown(args) {
+     _StdIn.putText("Shutting down...");
+     // Call Kernal shutdown routine.
+    _kernel.shutdown();   
+    // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
+  }
+
   function _trace(args)
   {
     if (args.length > 0) {
@@ -285,7 +292,6 @@ define([
             _Trace = true;
             _StdIn.putText("Trace ON");
           }
-
           break;
         case "off": 
           _Trace = false;
@@ -294,27 +300,13 @@ define([
         default:
           _StdIn.putText("Invalid arguement.  Usage: trace <on | off>.");
       }
-    }
-    else
-    {
+    } else {
       _StdIn.putText("Usage: trace <on | off>");
     }
   }
 
-  function _rot13(args) {
-    if (args.length > 0) {
-      _StdIn.putText(args[0] + " = '" + rot13(args[0]) +"'");     // Requires Utils.js for rot13() function.
-    } else {
-      _StdIn.putText("Usage: rot13 <string>  Please supply a string.");
-    }
-  }
-
-  function _prompt(args) {
-    if (args.length > 0) {
-      _OsShell.promptStr = args[0];
-    } else {
-      _StdIn.putText("Usage: prompt <string>  Please supply a string.");
-    }
+  function _ver(args) {
+    _StdIn.putText(APP_NAME + " version " + APP_VERSION);    
   }
 
   return Shell;
