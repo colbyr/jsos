@@ -1,13 +1,7 @@
 require(['globals'], function () {
 
   require([
-    'os/interrupt',
-    'os/canvastext',
-    'os/console',
-    'os/deviceDriver',
-    'os/deviceDriverKeyboard',
-    'os/queue',
-    'os/shell'
+    'os/canvastext'
   ], function () {
     require([
       'os/Kernel',

@@ -14,39 +14,41 @@
    ------------ */
 
 define([
-  'os/Kernel',
+  'os/trace',
   'utils/underscore'
-], function (Kernel) {
+], function (trace) {
 
   function CPU()
   {
-      this.PC    = 0;     // Program Counter
-      this.Acc   = 0;     // Accumulator
-      this.Xreg  = 0;     // X register
-      this.Yreg  = 0;     // Y register
-      this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
-      this.isExecuting = false;
+    this.PC    = 0;     // Program Counter
+    this.Acc   = 0;     // Accumulator
+    this.Xreg  = 0;     // X register
+    this.Yreg  = 0;     // Y register
+    this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
+    this.isExecuting = false;
   }
 
   _.extend(CPU.prototype, {
+
     init: function() {
-          this.PC    = 0
-          this.Acc   = 0;
-          this.Xreg  = 0;
-          this.Yreg  = 0;
-          this.Zflag = 0;
-          this.isExecuting = false;
-      },
+      this.PC    = 0
+      this.Acc   = 0;
+      this.Xreg  = 0;
+      this.Yreg  = 0;
+      this.Zflag = 0;
+      this.isExecuting = false;
+    },
 
-      pulse: function() {
-          // TODO: Do we need this?  Probably not.
-      },
+    pulse: function() {
+      // TODO: Do we need this?  Probably not.
+    },
 
-      cycle: function() {
-          Kernel.trace("CPU cycle");
-          // TODO: Accumulate CPU usage and profiling statistics here.
-          // Do real work here. Set this.isExecuting appropriately.
-      }
+    cycle: function() {
+      trace("CPU cycle");
+      // TODO: Accumulate CPU usage and profiling statistics here.
+      // Do real work here. Set this.isExecuting appropriately.
+    }
+
   });
 
   return CPU;

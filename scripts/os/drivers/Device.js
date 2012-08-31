@@ -1,11 +1,12 @@
 /* ------------------------------
    DeviceDriver.js
-   
+
    The "base class" (or 'prototype') for all Device Drivers.
    ------------------------------ */
 
-function DeviceDriver()
-{
+define([], function () {
+
+  return function () {
     // Base Attributes
     this.version = "0.07";
     this.status = "unloaded";
@@ -16,4 +17,6 @@ function DeviceDriver()
     this.driverEntry = null;    // Initialization routine.  Should be called when the driver is loaded.
     this.isr = null;            // Interrupt Service Routine
     // TODO: this.dpc = null;   // Deferred Procedure Call routine - Start next queued operation on this device.
-}
+  };
+
+});

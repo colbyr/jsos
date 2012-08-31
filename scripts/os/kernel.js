@@ -12,8 +12,11 @@ define([
   'host/log',
   'host/Sim',
   'os/Console',
-  'os/Queue'
-], function (log, Sim, Console, Queue) {
+  'os/Queue',
+  'os/Shell',
+  'os/trace',
+  'os/drivers/Keyboard'
+], function (log, Sim, Console, Queue, Shell, trace, KeyboardDriver) {
 
   // TODO: unglobal when possible
   Kernel = {
@@ -37,35 +40,35 @@ define([
         _StdOut = _Console;
 
         // Load the Keyboard Device Driver
-        this.trace("Loading the keyboard device driver.");
-        this.keyboardDriver = new DeviceDriverKeyboard();     // Construct it.
+        trace("Loading the keyboard device driver.");
+        this.keyboardDriver = new KeyboardDriver();     // Construct it.
         this.keyboardDriver.driverEntry();                    // Call the driverEntry() initialization routine.
-        this.trace(this.keyboardDriver.status);
+        trace(this.keyboardDriver.status);
 
         // 
         // ... more?
         //
 
         // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
-        this.trace("Enabling the interrupts.");
+        trace("Enabling the interrupts.");
         this.enableInterrupts();
         // Launch the shell.
-        this.trace("Creating and Launching the shell.")
+        trace("Creating and Launching the shell.")
         _OsShell = new Shell();
         _OsShell.init();
     },
 
     shutdown: function () {
-        this.trace("begin shutdown OS");
+        trace("begin shutdown OS");
         // TODO: Check for running processes.  Alert if there are some, alert and stop.  Else...    
         // ... Disable the Interruupts.
-        this.trace("Disabling the interrupts.");
+        trace("Disabling the interrupts.");
         this.disableInterrupts();
         // 
         // Unload the Device Drivers?
         // More?
         //
-        this.trace("end shutdown OS");
+        trace("end shutdown OS");
     },
 
 
@@ -86,7 +89,7 @@ define([
           _CPU.cycle();
         } else {
           // If there are no interrupts and there is nothing being executed then just be idle.
-          this.trace("Idle");
+          trace("Idle");
         }
     },
 
@@ -108,7 +111,7 @@ define([
     // This is the Interrupt Handler Routine.  Page 8.
     interruptHandler: function (irq, params) {
         // Trace our entrance here so we can compute Interrupt Latency by analyzing the log file later on.  Page 766.
-        this.trace("Handling IRQ~" + irq);
+        trace("Handling IRQ~" + irq);
 
         // Save CPU state. (I think we do this elsewhere.)
 
@@ -152,28 +155,6 @@ define([
     // - WriteFile
     // - CloseFile
 
-
-    //
-    // OS Utility Routines
-    //
-    trace: function (msg) {
-       // Check globals to see if trace is set ON.  If so, then (maybe) log the message. 
-       if (_Trace)
-       {
-          if (msg === "Idle")
-          {
-             // We can't log every idle clock pulse because it would lag the browser very quickly.
-             if (_OSclock % 10 == 0)  // Check the CPU_CLOCK_INTERVAL in globals.js for an 
-             {                        // idea of the tick rate and adjust this line accordingly.
-                log(msg, "OS");
-             }
-          }
-          else
-          {
-           log(msg, "OS");
-          }
-       }
-    },
 
     trapError: function (msg) {
         log("OS ERROR - TRAP: " + msg);
