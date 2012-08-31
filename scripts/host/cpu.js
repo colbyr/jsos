@@ -16,7 +16,7 @@
 define([
   'os/Kernel',
   'utils/underscore'
-], function (Kernel, _) {
+], function (Kernel) {
 
   function CPU()
   {

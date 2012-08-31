@@ -10,8 +10,9 @@
    ------------ */
 define([
   'host/log',
-  'host/Sim'
-], function (log, Sim) {
+  'host/Sim',
+  'os/Console'
+], function (log, Sim, Console) {
 
   // TODO: unglobal when possible
   Kernel = {
