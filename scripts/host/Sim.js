@@ -81,6 +81,7 @@ define([
     init: function (kernel) {
       _.bindAll(this, 'halt', 'reset', 'start');
       _display = document.getElementById("display");
+      // TODO: really hate passing in a ref to the kernel like this
       _kernel = kernel;
       // Get a global reference to the canvas.  TODO: Move this stuff into a Display Device Driver, maybe?
       CANVAS  = _display;

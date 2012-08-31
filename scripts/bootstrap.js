@@ -2,8 +2,7 @@ require([
   'os/Kernel',
   'host/Sim',
   'utils/ready',
-  'globals',
-  'utils'
+  'globals'
 ], function (Kernel, Sim, ready) {
   ready(function () {
     Sim.init(Kernel);

@@ -8,8 +8,12 @@
 
 define([
   'os/trace',
+  'utils/rot13',
+  'utils/trim',
   'utils/underscore'
-], function (trace) {
+], function (trace, rot13, trim) {
+
+  var _kernel = null;
 
   function Shell()
   {
@@ -21,8 +25,10 @@ define([
 
   _.extend(Shell.prototype, {
 
-    init: function () {
+    // TODO: really hate passing in a ref to the kernel like this
+    init: function (kernel) {
       var sc = null;
+      _kernel = kernel;
       //
       // Load the command list.
 
@@ -125,9 +131,9 @@ define([
         if (this.curses.indexOf("[" + rot13(cmd) + "]") >= 0) { // Check for curses.
             this.execute(shellCurse);
         } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) { // Check for apoligies.
-            this.execute(shellApology);
+            this.execute(_apology);
         } else { // It's just a bad command.
-            this.execute(shellInvalidCommand);
+            this.execute(_invalidCommand);
         }
       }
     },
@@ -241,7 +247,7 @@ define([
   function _shutdown(args) {
      _StdIn.putText("Shutting down...");
      // Call Kernal shutdown routine.
-    krnShutdown();   
+    _kernel.shutdown();   
     // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
   }
 

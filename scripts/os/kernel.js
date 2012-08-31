@@ -18,8 +18,7 @@ define([
   'os/drivers/Keyboard'
 ], function (log, Sim, Console, Queue, Shell, trace, KeyboardDriver) {
 
-  // TODO: unglobal when possible
-  Kernel = {
+  var Kernel = {
     //
     // OS Startup and Shutdown Routines
     //
