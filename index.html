@@ -1,14 +1,20 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-   <meta name="author"             content="Alan G. Labouseur" />
-   <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
-   <title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="author"             content="Alan G. Labouseur" />
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
+    <title>
       AlanBOS 0.1 - a Browser-based virtual Operating System
-   </title>
-
-   <script data-main="scripts/bootstrap" type="text/javascript" src="scripts/require.js"></script>
+    </title>
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://localhost:8080');
+      socket.on('client log', function (data) {
+        console.log(data.msg);
+      });
+    </script>
+    <script data-main="scripts/bootstrap" type="text/javascript" src="scripts/require.js"></script>
 
 </head>
 

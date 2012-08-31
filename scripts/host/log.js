@@ -9,15 +9,22 @@ define([
     _taLog.value = '';
   });
 
-  function log(msg, source) {
+  function log(msg, source, type) {
     // Update the log console.
-    _taLog.value = JSON.stringify({
+    var data = {
       clock: _OSclock,
       source: source ? source : '?',
       msg: msg,
       now: Date.now()
-    }) + taLog.value;
+    };
+
+    _taLog.value = JSON.stringify(data) + _taLog.value;
+
     // Optionally udpate a log database or some streaming service.
+    socket.emit('log', {
+      log: data.source,
+      info: data
+    });
   }
 
   return log;
