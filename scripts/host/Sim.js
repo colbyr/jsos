@@ -18,8 +18,9 @@
 define([
   'host/CPU',
   'host/log',
+  'os/Canvas',
   'os/Interrupt'
-], function (CPU, log, Interrupt) {
+], function (CPU, log, Canvas, Interrupt) {
 
   var _btns = null;
   var _display = null;
@@ -86,7 +87,7 @@ define([
       // Get a global reference to the drawing context.
       DRAWING_CONTEXT = CANVAS.getContext('2d');
       // Enable the added-in canvas text functions (see canvastext.js for provenance and details).
-      CanvasTextFunctions.enable(DRAWING_CONTEXT);
+      Canvas.enable(DRAWING_CONTEXT);
       _btns = {
         halt: document.getElementById('btnHaltOS'),
         start: document.getElementById('btnStartOS'),
