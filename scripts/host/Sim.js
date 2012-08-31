@@ -16,12 +16,14 @@
    ------------ */
 
 define([
-  'host/CPU'
-], function (CPU) {
+  'host/CPU',
+  'host/log'
+], function (CPU, log) {
 
   var _btns = null;
   var _display = null;
   var _hardwareClockId = null;
+  var _kernel = null;
   var _taLog = null;
 
   function _listen(element, func) {
@@ -44,14 +46,13 @@ define([
     }
   }
 
-  // TODO: fix this global once kernel.js is modularized
-  Sim = { // var Sim = {
+  var Sim = {
 
     clockPulse: function () {
       // Increment the hardware (host) clock.
       _OSclock++;
       // Call the kernel clock pulse event handler.
-      krnOnCPUClockPulse();
+      _kernel.onCPUClockPulse();
     },
 
     disableKeyboardInterrupt: function() {
@@ -66,28 +67,25 @@ define([
     },
 
     halt: function (btn) {
-        this.log("emergency halt", "host");
-        this.log("Attempting Kernel shutdown.", "host");
+        log("emergency halt", "host");
+        log("Attempting Kernel shutdown.", "host");
         // Call the OS sutdown routine.
-        krnShutdown();
+        _kernel.shutdown();
         // Stop the JavaScript interval that's simulating our clock pulse.
         clearInterval(_hardwareClockID);
         // TODO: Is there anything else we need to do here?
     },
 
-    init: function () {
+    init: function (kernel) {
       _.bindAll(this, 'halt', 'reset', 'start');
       _display = document.getElementById("display");
+      _kernel = kernel;
       // Get a global reference to the canvas.  TODO: Move this stuff into a Display Device Driver, maybe?
       CANVAS  = _display;
       // Get a global reference to the drawing context.
       DRAWING_CONTEXT = CANVAS.getContext('2d');
       // Enable the added-in canvas text functions (see canvastext.js for provenance and details).
       CanvasTextFunctions.enable(DRAWING_CONTEXT);
-      // Clear the log text box.
-      _taLog = document.getElementById("taLog");
-      _taLog.value = '';
-      // Set focus on the start button.
       _btns = {
         halt: document.getElementById('btnHaltOS'),
         start: document.getElementById('btnStartOS'),
@@ -96,24 +94,8 @@ define([
       for (var k in _btns) {
         _listen(_btns[k], this[k]);
       }
+      // Set focus on the start button.
       _btns.start.focus();     // TODO: This does not seem to work.  Why?
-    },
-
-    log: function (msg, source) {
-        if (!source) {
-            source = "?";
-        }
-
-        // Build the log string.   
-        var str = "({ clock:" + _OSclock +
-          ", source:" + source +
-          ", msg:" + msg +
-          ", now:" + Date.now() +
-          " })"  + "\n";
-
-        // Update the log console.
-        _taLog.value = str + taLog.value;
-        // Optionally udpate a log database or some streaming service.
     },
 
     reset: function (btn) {
@@ -141,8 +123,8 @@ define([
 
         // ... then set the clock pulse simulation to call ?????????.
         _hardwareClockID = setInterval(this.clockPulse, CPU_CLOCK_INTERVAL);
-        // .. and call the OS Kernel Bootstrap routine.
-        krnBootstrap();
+
+        _kernel.bootstrap();
     }
 
   };

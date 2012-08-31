@@ -2,7 +2,7 @@
    CPU.js
 
    Requires global.js.
-   
+
    Routines for the host CPU simulation, NOT for the OS itself.  
    In this manner, it's A LITTLE BIT like a hypervisor,
    in that the Document envorinment inside a browser is the "bare metal" (so to speak) for which we write code
@@ -14,8 +14,9 @@
    ------------ */
 
 define([
+  'os/Kernel',
   'utils/underscore'
-], function () {
+], function (Kernel, _) {
 
   function CPU()
   {
@@ -33,8 +34,8 @@ define([
           this.Acc   = 0;
           this.Xreg  = 0;
           this.Yreg  = 0;
-          this.Zflag = 0;      
-          this.isExecuting = false;  
+          this.Zflag = 0;
+          this.isExecuting = false;
       },
 
       pulse: function() {
@@ -42,7 +43,7 @@ define([
       },
 
       cycle: function() {
-          krnTrace("CPU cycle");
+          Kernel.trace("CPU cycle");
           // TODO: Accumulate CPU usage and profiling statistics here.
           // Do real work here. Set this.isExecuting appropriately.
       }

@@ -1,6 +1,4 @@
-require([], function () {
-
-  require(['globals']);
+require(['globals'], function () {
 
   require([
     'os/interrupt',
@@ -12,12 +10,12 @@ require([], function () {
     'os/shell'
   ], function () {
     require([
-      'os/kernel',
+      'os/Kernel',
       'host/Sim',
       'utils/ready'
-    ], function (kernel, Sim, ready) {
+    ], function (Kernel, Sim, ready) {
       ready(function () {
-        Sim.init();
+        Sim.init(Kernel);
       });
     });
   });

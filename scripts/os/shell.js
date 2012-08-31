@@ -97,7 +97,7 @@ function shellPutPrompt()
 
 function shellHandleInput(buffer)
 {
-    krnTrace("Shell Command~" + buffer);
+    Kernel.trace("Shell Command~" + buffer);
     // 
     // Parse the input...
     //
