@@ -17,8 +17,9 @@
 
 define([
   'host/CPU',
-  'host/log'
-], function (CPU, log) {
+  'host/log',
+  'os/Interrupt'
+], function (CPU, log, Interrupt) {
 
   var _btns = null;
   var _display = null;
@@ -42,7 +43,7 @@ define([
         // Note the pressed key code in the params (Mozilla-specific).
         var params = [e.which, e.shiftKey];
         // Enqueue this interrupt on the kernal interrupt queue so that it gets to the Interrupt handler.
-        _KernelInterruptQueue.enqueue( new Interrput(KEYBOARD_IRQ, params) );
+        _KernelInterruptQueue.enqueue( new Interrupt(KEYBOARD_IRQ, params) );
     }
   }
 

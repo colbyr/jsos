@@ -1,10 +1,14 @@
 /* ------------
    Interrupt.js   
    ------------ */
-   
-function Interrput(_irq, _params)
-{
-    // Properties
-    this.irq = _irq;
-    this.params = _params;
-}
+
+define([], function () {
+
+  function Interrupt(irq, params) {
+      // Properties
+      this.irq = irq;
+      this.params = params;
+  }
+
+  return Interrupt;
+});
