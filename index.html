@@ -20,66 +20,34 @@
 
 <body>
 
-<table id="tableDisplay" style="border:1px solid white;">
-    <tr>
-        <td>
-            <input type="button"
-                   id = "btnStartOS"
-                   name="brnStartOS"
-                   class="normal_button"
-                   value="Start"
-                   tabindex="0"
-            />
-            <input type="button"
-                   id = "btnHaltOS"
-                   name="brnHaltOS"
-                   class="normal_button"
-                   disabled="disabled"
-                   value="Halt"
-                   tabindex="1"
-            />            
-            <input type="button"
-                   id = "btnReset"
-                   name="brnReset"
-                   class="normal_button"
-                   disabled="disabled"
-                   value="Reset"
-                   tabindex="2"
-            />            
-        </td>
-        <td class="label">
-            Control Log
-        </td>
-    </tr>
-    <tr valign="top">
-        <td id="tdDisplay">
-            <canvas id="display"
-                    width="500px"
-                    height="500px"
-                    tabindex="3">
-            </canvas>
-        </td>
-        <td id="tdLog">
-            <textarea name="taLog"
-                      id = "taLog"
-                      rows="36"
-                      cols="48"
-            ></textarea>
-        </td>
-    </tr>
-</table>
-
-<p></p>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr valign="top">
-        <td align="center" class="footer">
-            Copyright &copy; 2008 - 2012 No Rights Reserved. - 
-            Reproduction is prohibited without the express written consent of 
-            Ted Codd, Stevie Ray Vaughan, and Ian Fleming.
-        </td>
-    </tr>
-</table>
-
+  <div class="wrapper">
+    <div class="controls">
+      <input type="button"
+             id = "btnStartOS"
+             name="brnStartOS"
+             class="normal_button"
+             value="Start"
+             tabindex="0"
+      />
+      <input type="button"
+             id = "btnHaltOS"
+             name="brnHaltOS"
+             class="normal_button"
+             disabled="disabled"
+             value="Halt"
+             tabindex="1"
+      />            
+      <input type="button"
+             id = "btnReset"
+             name="brnReset"
+             class="normal_button"
+             disabled="disabled"
+             value="Reset"
+             tabindex="2"
+      />
+    </div>
+    <canvas id="display" width="870px" height="500px" tabindex="3"></canvas>
+    <textarea name="taLog" id = "taLog" rows="36" cols="48"></textarea>
+  </div>
 </body>
 </html>

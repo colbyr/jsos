@@ -18,7 +18,12 @@ define([
       now: Date.now()
     };
 
-    _taLog.value = JSON.stringify(data) + _taLog.value;
+    _taLog.value = [
+      data.source + ' :',
+      '[' + data.now + ']',
+      '[' + data.clock + ']',
+      data.msg
+    ].join(' ') + '\n' + _taLog.value;
 
     // Optionally udpate a log database or some streaming service.
     if (socket) {
