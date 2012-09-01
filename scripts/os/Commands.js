@@ -110,9 +110,10 @@ define([
     ver: {
       description: '- Displays the current version data.',
       func: function () {
-        _StdIn.putText(APP_NAME + " version " + APP_VERSION);    
+        _StdIn.putText(APP_NAME + ' v' + APP_VERSION);
       }
     }
+
     // processes - list the running processes and their IDs
     // kill <id> - kills the specified process id.
   };

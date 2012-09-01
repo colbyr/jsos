@@ -21,10 +21,12 @@ define([
     _taLog.value = JSON.stringify(data) + _taLog.value;
 
     // Optionally udpate a log database or some streaming service.
-    socket.emit('log', {
-      log: data.source,
-      info: data
-    });
+    if (socket) {
+      socket.emit('log', {
+        log: data.source,
+        info: data
+      });
+    }
   }
 
   return log;

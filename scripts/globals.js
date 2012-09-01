@@ -11,14 +11,14 @@
 //
 // Global Constants
 //
-var APP_NAME = "AlanBOS";  // 'cause I was at a loss for a better name.
+var APP_NAME = "JSOS";  // 'cause I was at a loss for a better name.
 var APP_VERSION = "0.1"
 
 var CPU_CLOCK_INTERVAL = 100;   // in ms, or milliseconds, so 1000 = 1 second.
 
 var TIMER_IRQ    = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority). 
                        // NOTE: The timer is different from hardware clock pulses. Don't confuse these.
-var KEYBOARD_IRQ = 1;  
+var KEYBOARD_IRQ = 1;
 
 
 //
@@ -34,7 +34,7 @@ var _Mode = 0;   // 0 = Kernel Mode, 1 = User Mode.  See page 21.
 var CANVAS = null;              // Initialized in hostInit().
 var DRAWING_CONTEXT = null;     // Initialized in hostInit().
 var DEFAULT_FONT = "sans";      // Ignored, just a place-holder in this version.
-var DEFAULT_FONT_SIZE = 13;     
+var DEFAULT_FONT_SIZE = 13;
 var FONT_HEIGHT_MARGIN = 4;     // Additional space added to font size when advancing a line.
 
 // Default the OS trace to be on.
