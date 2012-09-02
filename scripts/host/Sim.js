@@ -68,8 +68,8 @@ define([
     },
 
     halt: function (btn) {
-      log("emergency halt", "host");
-      log("Attempting Kernel shutdown.", "host");
+      log('warning', 'host', 'emergency halt');
+      log('warning', 'host', 'Attempting Kernel shutdown.');
       // Call the OS sutdown routine.
       _kernel.shutdown();
       // Stop the JavaScript interval that's simulating our clock pulse.

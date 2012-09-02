@@ -1,13 +1,14 @@
 /* ------------
    Kernel.js
-   
+
    Requires globals.js
-   
+
    Routines for the Operataing System, NOT the host.
-   
+
    This code references page numbers in the text book: 
    Operating System Concepts 8th editiion by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5   
    ------------ */
+
 define([
   'host/log',
   'host/Sim',
@@ -23,7 +24,7 @@ define([
     // OS Startup and Shutdown Routines
     //
     bootstrap: function () { // Page 8
-      log("bootstrap", "host");  // Use simLog because we ALWAYS want this, even if _Trace is off.
+      log('info', 'host', 'bootstrap');  // Use simLog because we ALWAYS want this, even if _Trace is off.
 
       // Initialize our global queues.
       _KernelInterruptQueue = new Queue();  // A (currently) non-priority queue for interrupt requests (IRQs).
@@ -155,7 +156,7 @@ define([
 
 
     trapError: function (msg) {
-      log("OS ERROR - TRAP: " + msg);
+      log('error', 'OS', "TRAP: " + msg);
       // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
       this.shutdown();
     }

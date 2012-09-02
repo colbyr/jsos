@@ -11,7 +11,7 @@ define(['host/log'], function (log) {
     if (_Trace &&
         // We can't log every idle clock pulse because it would lag the browser very quickly.
         (msg !== "Idle" || _OSclock % _THROTTLE === 0)) {
-      log(msg, "OS");
+      log('info', 'OS', msg);
     }
   };
 

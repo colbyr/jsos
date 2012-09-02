@@ -3,10 +3,10 @@ var dateformat = require('dateformat');
 var io = require('socket.io').listen(app);
 var fs = require('fs');
 
-app.listen(8080);
+app.listen(3001);
 
 function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
+  fs.readFile(__dirname + '/../index.html',
   function (err, data) {
     if (err) {
       res.writeHead(500);
@@ -22,14 +22,14 @@ function format(data) {
   return [
     data.source + ' :',
     '[' + dateformat(data.now) + ']',
-    '[' + (data.type ? date.type : 'info') + ']',
+    '[' + (data.type ? data.type : 'info') + ']',
     (data.msg ? data.msg : 'null') + '\n'
   ].join(' ');
 }
 
 function log(log, message) {
   console.log(log, message);
-  fs.open('logs/' + log + '.log', 'a', 666, function( e, id ) {
+  fs.open('../logs/' + log + '.log', 'a', 666, function( e, id ) {
     fs.write(id, format(message), null, 'utf8', function(){
       fs.close(id);
     });

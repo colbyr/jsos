@@ -9,13 +9,14 @@ define([
     _taLog.value = '';
   });
 
-  function log(msg, source, type) {
+  function log(type, source, msg) {
     // Update the log console.
     var data = {
       clock: _OSclock,
       source: source ? source : '?',
       msg: msg,
-      now: Date.now()
+      now: Date.now(),
+      type: type ? type : 'info'
     };
 
     _taLog.value = [

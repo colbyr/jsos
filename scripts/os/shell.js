@@ -51,7 +51,7 @@ define([
         } else if (this.apologies.indexOf("[" + cmd.command + "]") >= 0) { // Check for apoligies.
           this.execute(_apology);
         } else { // It's just a bad command.
-          this.execute(_invalidCommand);
+          this.execute(_invalidCommand, [cmd.command]);
         }
       }
     },
@@ -132,8 +132,9 @@ define([
     _SarcasticMode = true;
   }
 
-  function _invalidCommand() {
+  function _invalidCommand(command) {
     _StdIn.putText("Invalid Command. ");
+    log('warning', 'OS', 'Invalid command - "' + command + '"');
     if (_SarcasticMode) {
       _StdIn.putText("Duh. Go back to your Speak & Spell.");
     } else {
