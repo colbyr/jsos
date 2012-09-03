@@ -13,10 +13,10 @@ define([
     // Update the log console.
     var data = {
       clock: _OSclock,
-      source: source ? source : '?',
+      source: source || '?',
       msg: msg,
       now: Date.now(),
-      type: type ? type : 'info'
+      type: type || 'info'
     };
 
     _taLog.value = [

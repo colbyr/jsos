@@ -7,12 +7,13 @@
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
 
 define([
+  'host/log',
   'os/Commands',
   'os/trace',
   'utils/rot13',
   'utils/trim',
   'utils/underscore'
-], function (Commands, trace, rot13, trim) {
+], function (log, Commands, trace, rot13, trim) {
 
   var _kernel = null;
 

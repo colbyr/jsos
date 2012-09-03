@@ -38,7 +38,7 @@ define(['utils/underscore'], function () {
         // Get the next character from the kernel input queue.
         var chr = _KernelInputQueue.dequeue();
         // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
-        if (chr == String.fromCharCode(13)) { // Enter key
+        if (chr === String.fromCharCode(13)) { // Enter key
           // The enter key marks the end of a console command, so ...
           // ... tell the shell ... 
           _OsShell.handleInput(this.buffer);
@@ -60,7 +60,7 @@ define(['utils/underscore'], function () {
       // between the two.  So rather than be like PHP and write two (or more) functions that
       // do the same thing, thereby encouraging confusion and decreasing readability, I 
       // decided to write one function and use the term "text" to connote string or char.
-      if (txt != "") {
+      if (txt !== "") {
         // Draw the text at the current X and Y coordinates.
         DRAWING_CONTEXT.drawText(
           this.CurrentFont,

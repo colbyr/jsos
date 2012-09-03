@@ -53,7 +53,7 @@ define([
       trace("Enabling the interrupts.");
       this.enableInterrupts();
       // Launch the shell.
-      trace("Creating and Launching the shell.")
+      trace("Creating and Launching the shell.");
       _OsShell = new Shell();
       _OsShell.init();
     },
@@ -84,7 +84,7 @@ define([
         // TODO: Implement a priority queye based on the IRQ number/id to enforce interrupt priority.
         var interrput = _KernelInterruptQueue.dequeue();
         this.interruptHandler(interrput.irq, interrput.params);
-      } else if (_CPU.isExecuting) { 
+      } else if (_CPU.isExecuting) {
         // If there are no interrupts then run a CPU cycle if there is anything being processed.
         _CPU.cycle();
       } else {
@@ -120,15 +120,15 @@ define([
       // Note: There is no need to "dismiss" or acknowledge the interrupts in our design here.  
       //       Maybe the hardware simulation will grow to support/require that in the future.
       switch (irq) {
-        case TIMER_IRQ: 
-          this.TimerISR();                   // Kernel built-in routine for timers (not the clock).
-          break;
-        case KEYBOARD_IRQ: 
-          this.keyboardDriver.isr(params);   // Kernel mode device driver
-          _StdIn.handleInput();
-          break;
-        default: 
-          this.trapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
+      case TIMER_IRQ:
+        this.TimerISR();                   // Kernel built-in routine for timers (not the clock).
+        break;
+      case KEYBOARD_IRQ:
+        this.keyboardDriver.isr(params);   // Kernel mode device driver
+        _StdIn.handleInput();
+        break;
+      default:
+        this.trapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
       }
 
       // 3. Restore the saved state.  TODO: Question: Should we restore the state via IRET in the ISR instead of here? p560.

@@ -18,6 +18,8 @@ define([
   'utils/underscore'
 ], function (trace) {
 
+  // "use strict";
+
   function CPU() {
     this.PC    = 0;     // Program Counter
     this.Acc   = 0;     // Accumulator
@@ -29,8 +31,8 @@ define([
 
   _.extend(CPU.prototype, {
 
-    init: function() {
-      this.PC    = 0
+    init: function () {
+      this.PC    = 0;
       this.Acc   = 0;
       this.Xreg  = 0;
       this.Yreg  = 0;
@@ -38,11 +40,11 @@ define([
       this.isExecuting = false;
     },
 
-    pulse: function() {
+    pulse: function () {
       // TODO: Do we need this?  Probably not.
     },
 
-    cycle: function() {
+    cycle: function () {
       trace("CPU cycle");
       // TODO: Accumulate CPU usage and profiling statistics here.
       // Do real work here. Set this.isExecuting appropriately.

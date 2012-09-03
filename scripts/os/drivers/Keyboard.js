@@ -20,7 +20,7 @@ define([
 
   _.extend(KeyboardDriver.prototype, DeviceDriver.prototype, {
 
-    driverEntry:function () {
+    driverEntry: function () {
       // Initialization routine for this, the kernel-mode Keyboard Driver
       this.status = "loaded";
       // More?
@@ -45,10 +45,10 @@ define([
         // TODO: Check for caps-lock and handle as shifted if so.
         _KernelInputQueue.enqueue(chr);
       } else if ((keyCode >= 48 && keyCode <= 57) || // digits 
-                 keyCode == 32 ||  // space
-                 keyCode == 13) { // enter
+                 keyCode === 32 ||  // space
+                 keyCode === 13) { // enter
         chr = String.fromCharCode(keyCode);
-        _KernelInputQueue.enqueue(chr); 
+        _KernelInputQueue.enqueue(chr);
       }
     }
   });

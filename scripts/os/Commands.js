@@ -18,13 +18,11 @@ define([
     help: {
       description: '- This is the help command. Seek help.',
       func: function () {
+        var command;
         _StdIn.putText("Commands:");
-        for (var command in this) {
+        for (command in this) {
           _StdIn.advanceLine();
-          _StdIn.putText(
-            "  " + command +
-            " " + this[command].description
-          );
+          _StdIn.putText('  ' + command + ' ' + this[command].description);
         }
       }
     },
@@ -34,13 +32,13 @@ define([
       func: function (topic) {
         if (topic) {
           switch (topic) {
-            case "help": 
-              _StdIn.putText(
-                "Help displays a list of (hopefully) valid commands."
-              );
-              break;
-            default:
-              _StdIn.putText("No manual entry for " + topic + ".");
+          case "help":
+            _StdIn.putText(
+              "Help displays a list of (hopefully) valid commands."
+            );
+            break;
+          default:
+            _StdIn.putText("No manual entry for " + topic + ".");
           }
         } else {
           _StdIn.putText("Usage: man <topic>  Please supply a topic.");
@@ -64,7 +62,7 @@ define([
       func: function (string) {
         if (string) {
           // Requires utils/rot13 for rot13() function
-          _StdIn.putText(string + " = '" + rot13(string) +"'");
+          _StdIn.putText(string + " = '" + rot13(string) + "'");
         } else {
           _StdIn.putText("Usage: rot13 <string>  Please supply a string.");
         }
@@ -74,8 +72,8 @@ define([
     shutdown: {
       description: '- Shuts down the virtual OS but leaves the underlying hardware simulation running',
       func: function () {
-         _StdIn.putText("Shutting down...");
-         // Call Kernal shutdown routine.
+        _StdIn.putText("Shutting down...");
+        // Call Kernal shutdown routine.
         _kernel.shutdown();
         // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
       }
@@ -86,20 +84,20 @@ define([
       func: function (toggle) {
         if (toggle) {
           switch (toggle) {
-            case "on": 
-              if (_Trace && _SarcasticMode) {
-                _StdIn.putText("Trace is already on, dumbass.");
-              } else {
-                _Trace = true;
-                _StdIn.putText("Trace ON");
-              }
-              break;
-            case "off": 
-              _Trace = false;
-              _StdIn.putText("Trace OFF");
-              break;
-            default:
-              _StdIn.putText("Invalid arguement.  Usage: trace <on | off>.");
+          case "on":
+            if (_Trace && _SarcasticMode) {
+              _StdIn.putText("Trace is already on, dumbass.");
+            } else {
+              _Trace = true;
+              _StdIn.putText("Trace ON");
+            }
+            break;
+          case "off":
+            _Trace = false;
+            _StdIn.putText("Trace OFF");
+            break;
+          default:
+            _StdIn.putText("Invalid arguement.  Usage: trace <on | off>.");
           }
         } else {
           _StdIn.putText("Usage: trace <on | off>");

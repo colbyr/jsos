@@ -22,28 +22,24 @@ define([
   'os/Interrupt'
 ], function (CPU, log, Canvas, Interrupt) {
 
+  // "use strict";
+
   var _btns = null;
   var _display = null;
   var _hardwareClockId = null;
   var _kernel = null;
   var _taLog = null;
 
-  function _listen(element, func) {
-    element.onclick = func;
-    if (element.captureEvents) {
-      element.captureEvents(Event.CLICK);
-    }
-  }
-
   function _onKeypress(e) {
+    var params;
     // The canvas element CAN receive focus if you give it a tab index. 
     // Check that we are processing keystrokes only from the canvas's id (as set in index.html).
-    if (e.target.id == "display") {
+    if (e.target.id === "display") {
       e.preventDefault();
       // Note the pressed key code in the params (Mozilla-specific).
-      var params = [e.which, e.shiftKey];
+      params = [e.which, e.shiftKey];
       // Enqueue this interrupt on the kernal interrupt queue so that it gets to the Interrupt handler.
-      _KernelInterruptQueue.enqueue( new Interrupt(KEYBOARD_IRQ, params) );
+      _KernelInterruptQueue.enqueue(new Interrupt(KEYBOARD_IRQ, params));
     }
   }
 
@@ -51,12 +47,12 @@ define([
 
     clockPulse: function () {
       // Increment the hardware (host) clock.
-      _OSclock++;
+      _OSclock += 1;
       // Call the kernel clock pulse event handler.
       _kernel.onCPUClockPulse();
     },
 
-    disableKeyboardInterrupt: function() {
+    disableKeyboardInterrupt: function () {
       document.removeEventListener("keydown", _onKeypress, false);
     },
 
@@ -78,6 +74,7 @@ define([
     },
 
     init: function (kernel) {
+      var k;
       _.bindAll(this, 'halt', 'reset', 'start');
       _display = document.getElementById("display");
       // TODO: really hate passing in a ref to the kernel like this
@@ -93,8 +90,10 @@ define([
         start: document.getElementById('btnStartOS'),
         reset: document.getElementById('btnReset')
       };
-      for (var k in _btns) {
-        _listen(_btns[k], this[k]);
+      for (k in _btns) {
+        if (_btns.hasOwnProperty(k)) {
+          _btns[k].addEventListener('click', this[k]);
+        }
       }
       // Set focus on the start button.
       _btns.start.focus();     // TODO: This does not seem to work.  Why?
@@ -102,7 +101,7 @@ define([
 
     reset: function (btn) {
       // The easiest and most thorough way to do this is to reload (not refresh) the document.
-      location.reload(true);  
+      location.reload(true);
       // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
       // be reloaded from the server. If it is false or not specified, the browser may reload the 
       // page from its cache, which is not what we want.

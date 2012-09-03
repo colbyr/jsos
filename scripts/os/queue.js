@@ -20,7 +20,7 @@ define(['utils/underscore'], function () {
     },
 
     isEmpty: function () {
-      return this.q.length == 0;
+      return this.q.length === 0;
     },
 
     enqueue: function (element) {
