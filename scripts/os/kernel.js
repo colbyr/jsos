@@ -54,8 +54,7 @@ define([
       this.enableInterrupts();
       // Launch the shell.
       trace("Creating and Launching the shell.");
-      _OsShell = new Shell();
-      _OsShell.init();
+      _OsShell = new Shell(this);
     },
 
     shutdown: function () {

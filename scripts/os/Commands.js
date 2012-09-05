@@ -20,9 +20,9 @@ define([
       func: function () {
         var command;
         _StdIn.putText("Commands:");
-        for (command in this) {
+        for (command in this.commands) {
           _StdIn.advanceLine();
-          _StdIn.putText('  ' + command + ' ' + this[command].description);
+          _StdIn.putText('  ' + command + ' ' + this.commands[command].description);
         }
       }
     },
@@ -74,7 +74,7 @@ define([
       func: function () {
         _StdIn.putText("Shutting down...");
         // Call Kernal shutdown routine.
-        _kernel.shutdown();
+        this.kernel.shutdown();
         // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
       }
     },

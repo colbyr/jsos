@@ -15,13 +15,13 @@ define([
   'utils/underscore'
 ], function (log, Commands, trace, rot13, trim) {
 
-  var _kernel = null;
-
-  function Shell() {
-    this.promptStr = ">";
-    this.commandList = [];
-    this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
+  function Shell(kernel) {
     this.apologies = "[sorry]";
+    this.commands = Commands;
+    this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
+    this.kernel = kernel;
+    this.promptStr = ">";
+    this.putPrompt();
   }
 
   _.extend(Shell.prototype, {
@@ -30,7 +30,7 @@ define([
       // we just got a command, so advance the line... 
       _StdIn.advanceLine();
       // .. call the command function passing in the args...
-      func.apply(Commands, args);
+      func.apply(this, args);
       // Check to see if we need to advance the line again
       if (_StdIn.CurrentXPosition > 0) {
         _StdIn.advanceLine();
@@ -43,8 +43,8 @@ define([
       trace("Shell Command~" + buffer);
       // Parse the input...
       var cmd = new _UserCommand(buffer);
-      if (Commands[cmd.command]) {
-        this.execute(Commands[cmd.command].func, cmd.args);
+      if (this.commands[cmd.command]) {
+        this.execute(this.commands[cmd.command].func, cmd.args);
       } else {
         // It's not found, so check for curses and apologies before declaring the command invalid.
         if (this.curses.indexOf("[" + rot13(cmd.toString()) + "]") >= 0) { // Check for curses.
@@ -55,13 +55,6 @@ define([
           this.execute(_invalidCommand, [cmd.command]);
         }
       }
-    },
-
-    // TODO: really hate passing in a ref to the kernel like this
-    init: function (kernel) {
-      _kernel = kernel;
-      // Display the initial prompt.
-      this.putPrompt();
     },
 
     putPrompt: function () {
