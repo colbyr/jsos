@@ -117,6 +117,30 @@ define([
       func: function () {
         _StdIn.putText(APP_NAME + ': version ' + APP_VERSION);
       }
+    },
+
+    whereami: {
+      description: '- Returns the location of the user',
+      func: function () {
+        if (navigator.geolocation) {
+          _StdIn.putText('creeping... ');
+          navigator.geolocation.getCurrentPosition(
+            // success
+            function (position) {
+              _StdIn.putText('found you: ' + position.coords.latitude + ', ' + position.coords.longitude);
+              this.complete();
+            }.bind(this),
+            // error
+            function (error) {
+              _StdIn.putText('FAILWHALE');
+              this.complete();
+            }.bind(this)
+          );
+        } else {
+          _StdIn.putText('Home is where the heart is, so your real home\'s in your chest.');
+        }
+        return false;
+      }
     }
 
     // processes - list the running processes and their IDs

@@ -26,17 +26,22 @@ define([
 
   _.extend(Shell.prototype, {
 
-    execute: function (func, args) {
-      // we just got a command, so advance the line... 
-      _StdIn.advanceLine();
-      // .. call the command function passing in the args...
-      func.apply(this, args);
+    complete: function () {
       // Check to see if we need to advance the line again
       if (_StdIn.CurrentXPosition > 0) {
         _StdIn.advanceLine();
       }
       // ... and finally write the prompt again.
       this.putPrompt();
+    },
+
+    execute: function (func, args) {
+      // we just got a command, so advance the line... 
+      _StdIn.advanceLine();
+      // .. call the command function passing in the args...
+      if (func.apply(this, args) !== false) {
+        this.complete();
+      }
     },
 
     handleInput: function (buffer) {
@@ -71,16 +76,6 @@ define([
   //
 
   //
-  // An "interior" or "private" class (prototype) used only inside Shell() (we hope).
-  //
-  function _ShellCommand() {
-    // Properties
-    this.command = "";
-    this.description = "";
-    this.function = "";
-  }
-
-  //
   // Another "interior" or "private" class (prototype) used only inside Shell() (we hope).
   //
   function _UserCommand(buffer) {
@@ -91,16 +86,12 @@ define([
   _.extend(_UserCommand.prototype, {
 
     parseInput: function (string) {
-      return _.reduce(
-        trim(string).toLowerCase().split(" "),
-        function (res, val) {
-          if (val !== '') {
-            res.push(val);
-          }
-          return res;
-        },
-        []
-      );
+      return trim(string).toLowerCase().split(" ").reduce(function (input, segment) {
+        if (segment !== '') {
+          input.push(segment);
+        }
+        return input;
+      }, []);
     },
 
     toString: function () {
