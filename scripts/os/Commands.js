@@ -15,6 +15,13 @@ define([
       }
     },
 
+    date: {
+      description: '- Displays the current date and time.',
+      func: function () {
+        _StdIn.putText(new Date().toLocaleDateString());
+      }
+    },
+
     help: {
       description: '- This is the help command. Seek help.',
       func: function () {
@@ -108,7 +115,7 @@ define([
     ver: {
       description: '- Displays the current version data.',
       func: function () {
-        _StdIn.putText(APP_NAME + ' v' + APP_VERSION);
+        _StdIn.putText(APP_NAME + ': version ' + APP_VERSION);
       }
     }
 
