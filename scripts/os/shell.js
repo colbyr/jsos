@@ -26,7 +26,7 @@ define([
 
   _.extend(Shell.prototype, {
 
-    complete: function () {
+    advanceLine: function () {
       // Check to see if we need to advance the line again
       if (_StdIn.CurrentXPosition > 0) {
         _StdIn.advanceLine();
@@ -46,7 +46,14 @@ define([
 
     handleInput: function (buffer) {
       trace("Shell Command~" + buffer);
+      // if the buffer is empty; advance the line
+      if (buffer === '') {
+        this.advanceLine();
+        return;
+      }
+
       // Parse the input...
+      console.log(typeof buffer);
       var cmd = new _UserCommand(buffer);
       if (this.commands[cmd.command]) {
         this.execute(this.commands[cmd.command].func, cmd.args);

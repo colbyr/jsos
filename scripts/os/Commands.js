@@ -163,12 +163,12 @@ define([
             // success
             function (position) {
               _StdIn.putText('found you: ' + position.coords.latitude + ', ' + position.coords.longitude);
-              this.complete();
+              this.advanceLine();
             }.bind(this),
             // error
             function (error) {
               _StdIn.putText('FAILWHALE');
-              this.complete();
+              this.advanceLine();
             }.bind(this)
           );
         } else {
