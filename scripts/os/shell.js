@@ -20,7 +20,7 @@ define([
     this.commands = Commands;
     this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
     this.kernel = kernel;
-    this.promptStr = ">";
+    this.promptStr = "~ ";
     this.putPrompt();
   }
 

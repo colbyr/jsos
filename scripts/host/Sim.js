@@ -31,7 +31,6 @@ define([
   var _taLog = null;
 
   function _onKeypress(e) {
-    console.log(e);
     var params;
     // The canvas element CAN receive focus if you give it a tab index. 
     // Check that we are processing keystrokes only from the canvas's id (as set in index.html).
