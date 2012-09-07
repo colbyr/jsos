@@ -17,8 +17,43 @@ define([
 
     date: {
       description: '- Displays the current date and time.',
-      func: function () {
-        _StdIn.putText(new Date().toLocaleDateString());
+      func: function (flag) {
+        var now = new Date();
+        var string;
+
+        // parse the command line flags
+        switch (flag) {
+        // yyyy-mm-dd
+        case '-d':
+        case '--date':
+          string = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay();
+          break;
+        // yyyy-mm-dd hh:mm:ss
+        case undefined:
+        case '-f':
+        case '--full':
+          string =
+            now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay() + ' ' +
+            now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+          break;
+        // hh:mm:ss
+        case '-t':
+        case '--time':
+          string = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+          break;
+        case '-u':
+        case '--utc':
+          string = now.toUTCString();
+          break;
+        case '-v':
+        case '--verbose':
+          string = now.toLocaleString();
+          break;
+        default:
+          string = 'Invalid options. See `man date`.';
+        }
+
+        _StdIn.putText(string);
       }
     },
 
