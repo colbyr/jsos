@@ -123,7 +123,7 @@ define([
         this.TimerISR();                   // Kernel built-in routine for timers (not the clock).
         break;
       case KEYBOARD_IRQ:
-        this.keyboardDriver.isr(params);   // Kernel mode device driver
+        this.keyboardDriver.isr(params[0], params[1]); // Kernel mode device driver
         _StdIn.handleInput();
         break;
       default:

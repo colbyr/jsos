@@ -12,24 +12,35 @@ define([
   'utils/underscore'
 ], function (trace, DeviceDriver) {
 
-  function KeyboardDriver() { // Add or override specific attributes and method pointers.
-    // "subclass"-specific attributes.
-    // this.buffer = "";    // TODO: Do we need this?
-    // "Constructor" code.
+  // keycode-special character map
+  var _characters = {
+    186: {l: ';', u: ':'},
+    187: {l: '=', u: '+'},
+    188: {l: ',', u: '<'},
+    189: {l: '-', u: '_'},
+    190: {l: '.', u: '>'},
+    191: {l: '/', u: '?'},
+    192: {l: '`', u: '~'},
+    219: {l: '[', u: '{'},
+    220: {l: '\\', u: '|'},
+    221: {l: ']', u: '}'},
+    222: {l: '\'', u: '"'}
+  };
+
+  function KeyboardDriver() {
+    this.status = '';
   }
 
   _.extend(KeyboardDriver.prototype, DeviceDriver.prototype, {
 
     driverEntry: function () {
       // Initialization routine for this, the kernel-mode Keyboard Driver
-      this.status = "loaded";
+      this.status = 'loaded';
       // More?
     },
 
-    isr: function (params) {
-      // Parse the params.    TODO: Check that they are valid and osTrapError if not.
-      var keyCode = params[0];
-      var isShifted = params[1];
+    isr: function (keyCode, isShifted) {
+      // Parse the params TODO: Check that they are valid and osTrapError if not.
       trace("Key code:" + keyCode + " shifted:" + isShifted);
       var chr = "";
       // Check to see if we even want to deal with the key that was pressed.
@@ -49,6 +60,10 @@ define([
                  keyCode === 13) { // enter
         chr = String.fromCharCode(keyCode);
         _KernelInputQueue.enqueue(chr);
+      } else if (_characters[keyCode]) {
+        _KernelInputQueue.enqueue(
+          isShifted ? _characters[keyCode].u : _characters[keyCode].l
+        );
       }
     }
   });
