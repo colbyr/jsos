@@ -7,12 +7,13 @@ define([
 ], function (rot13) {
 
   return {
-    cls: {
+    clear: {
       description: '- Clears the screen and resets the cursor position.',
       func: function () {
         _StdIn.clearScreen();
         _StdIn.resetXY();
-      }
+      },
+      man: 'Clear: Clears the screen and resets the cursor position.'
     },
 
     date: {
@@ -66,24 +67,25 @@ define([
           _StdIn.advanceLine();
           _StdIn.putText('  ' + command + ' ' + this.commands[command].description);
         }
-      }
+      },
+      man: 'Help displays a list of (hopefully) valid commands.'
     },
 
     man: {
       description: '<topic> - Displays the MANual page for <topic>',
       func: function (topic) {
         if (topic) {
-          switch (topic) {
-          case "help":
-            _StdIn.putText(
-              "Help displays a list of (hopefully) valid commands."
-            );
-            break;
-          default:
-            _StdIn.putText("No manual entry for " + topic + ".");
+          if (this.commands.hasOwnProperty(topic) &&
+              this.commands[topic].hasOwnProperty('man')) {
+            this.commands[topic].man.split('\n').forEach(function (line) {
+              _StdIn.advanceLine();
+              _StdIn.putText(line);
+            });
+          } else {
+            _StdIn.putText('No manual entry for ' + topic + '.');
           }
         } else {
-          _StdIn.putText("Usage: man <topic>  Please supply a topic.");
+          _StdIn.putText('Usage: man <topic>  Please supply a topic.');
         }
       }
     },
