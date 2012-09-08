@@ -156,6 +156,7 @@ define([
     trapError: function (msg) {
       log('error', 'OS', "TRAP: " + msg);
       // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
+      _Console.blueScreen();
       this.shutdown();
     }
   };

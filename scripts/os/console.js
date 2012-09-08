@@ -59,6 +59,19 @@ define(['utils/underscore'], function () {
       }
     },
 
+    blueScreen: function () {
+      DRAWING_CONTEXT.fillStyle = "blue";
+      DRAWING_CONTEXT.fillRect(0, 0, CANVAS.width, CANVAS.height);
+      DRAWING_CONTEXT.fontStyle = 'white';
+      DRAWING_CONTEXT.drawText(
+        this.CurrentFont,
+        this.CurrentFontSize,
+        10,
+        20,
+        'you fucked up bad...'
+      );
+    },
+
     /**
      * clears a rectabgle of width x CurrentFontSize behide the cursor
      *
