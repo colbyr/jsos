@@ -40,20 +40,18 @@ define([
       _StdIn.advanceLine();
       // .. call the command function passing in the args...
       if (func.apply(this, args) !== false) {
-        this.complete();
+        this.advanceLine();
       }
     },
 
     handleInput: function (buffer) {
       trace("Shell Command~" + buffer);
-      // if the buffer is empty; advance the line
-      if (buffer === '') {
+      if (buffer === '') { // advance the line and return
         this.advanceLine();
         return;
       }
 
       // Parse the input...
-      console.log(typeof buffer);
       var cmd = new _UserCommand(buffer);
       if (this.commands[cmd.command]) {
         this.execute(this.commands[cmd.command].func, cmd.args);

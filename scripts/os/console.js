@@ -14,10 +14,31 @@ define(['utils/underscore'], function () {
     this.CurrentFontSize  = DEFAULT_FONT_SIZE;
     this.CurrentXPosition = 0;
     this.CurrentYPosition = DEFAULT_FONT_SIZE;
-    this.buffer = "";
+    this.buffer = '';
   }
 
   _.extend(Console.prototype, {
+
+    backspace: function () {
+      if (this.buffer.length > 0) {
+        var offset_x = this.CurrentXPosition - DRAWING_CONTEXT.measureText(
+          this.CurrentFont,
+          this.CurrentFontSize,
+          this.buffer.slice(-1)
+        );
+        // clear the character's canvas realestate
+        DRAWING_CONTEXT.clearRect(
+          offset_x,
+          this.CurrentYPosition - this.CurrentFontSize,
+          this.CurrentXPosition,
+          this.CurrentYPosition + 1 // +1 for the leftovers on the bottom
+        );
+        // move the cursor back
+        this.CurrentXPosition = offset_x;
+        // pop the deleted character off the buffer
+        this.buffer = this.buffer.slice(0, -1);
+      }
+    },
 
     init: function () {
       this.clearScreen();
@@ -43,7 +64,9 @@ define(['utils/underscore'], function () {
           // ... tell the shell ... 
           _OsShell.handleInput(this.buffer);
           // ... and reset our buffer.
-          this.buffer = "";
+          this.buffer = '';
+        } else if(chr === String.fromCharCode(8)) {
+          this.backspace();
         } else { // TODO: Write a case for Ctrl-C.
           // This is a "normal" character, so ...
           // ... draw it on the screen...

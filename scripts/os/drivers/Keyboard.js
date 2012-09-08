@@ -72,7 +72,9 @@ define([
         // if isShifted === false; offset the code by 32 for lowercase
         character = String.fromCharCode(isShifted ? keyCode : keyCode + 32);
         // TODO: Check for caps-lock and handle as shifted if so.
-      } else if (keyCode === 32 || keyCode === 13) { // space || enter
+      } else if (keyCode === 32 || // space
+                 keyCode === 13 || // enter
+                 keyCode === 8) {  // backspace
         character = String.fromCharCode(keyCode);
       } else if (_characters.hasOwnProperty(keyCode)) { // special characters
         character = isShifted ? _characters[keyCode].u : _characters[keyCode].l;
