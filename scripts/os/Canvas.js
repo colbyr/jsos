@@ -140,7 +140,7 @@ define([], function () {
       return total;
     },
 
-    draw: function (ctx,font,size,x,y,str) {
+    draw: function (ctx,font,size,x,y,str, style) {
       var total = 0;
       var len = str.length;
       var mag = size / 25.0;
@@ -148,7 +148,7 @@ define([], function () {
       ctx.save();
       ctx.lineCap = "round";
       ctx.lineWidth = 2.0 * mag;
-      ctx.strokeStyle = "black";
+      ctx.strokeStyle = style || "black";
 
       for (var i = 0; i < len; i++) {
         var c = this.letter( str.charAt(i));
@@ -184,8 +184,8 @@ define([], function () {
   };
 
   var _ctx = {
-    drawText: function (font, size, x, y, text) {
-      return Canvas.draw(this, font, size, x, y, text);
+    drawText: function (font, size, x, y, text, style) {
+      return Canvas.draw(this, font, size, x, y, text, style);
     },
     measureText: function (font, size, text) {
       return Canvas.measure(font, size, text);
@@ -194,13 +194,13 @@ define([], function () {
       return Canvas.ascent(font, size);
     },
     fontDescent: function (font, size) { return Canvas.descent(font,size); },
-    drawTextRight: function (font, size, x, y, text) {
+    drawTextRight: function (font, size, x, y, text, style) {
       var w = Canvas.measure(font, size, text);
-      return Canvas.draw(this, font, size, x - w, y, text); 
+      return Canvas.draw(this, font, size, x - w, y, text, style); 
     },
-    drawTextCenter: function (font, size, x, y, text) { 
+    drawTextCenter: function (font, size, x, y, text, style) { 
       var w = Canvas.measure(font, size, text);
-      return Canvas.draw(this, font, size, x - w / 2, y, text); 
+      return Canvas.draw(this, font, size, x - w / 2, y, text, style); 
     }
   };
 

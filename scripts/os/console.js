@@ -62,13 +62,13 @@ define(['utils/underscore'], function () {
     blueScreen: function () {
       DRAWING_CONTEXT.fillStyle = "blue";
       DRAWING_CONTEXT.fillRect(0, 0, CANVAS.width, CANVAS.height);
-      DRAWING_CONTEXT.fontStyle = 'white';
-      DRAWING_CONTEXT.drawText(
+      DRAWING_CONTEXT.drawTextCenter(
         this.CurrentFont,
         this.CurrentFontSize,
-        10,
-        20,
-        'you fucked up bad...'
+        CANVAS.width / 2,
+        CANVAS.height / 2,
+        'you fucked up bad',
+        'white'
       );
     },
 
