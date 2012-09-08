@@ -32,9 +32,6 @@ define([
       _KernelInputQueue = new Queue();      // Where device input lands before being processed out somewhere.
       _Console = new Console();             // The console output device.
 
-      // Initialize the Console.
-      _Console.init();
-
       // Initialize standard input and output to the _Console.
       _StdIn  = _Console;
       _StdOut = _Console;

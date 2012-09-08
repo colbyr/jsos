@@ -64,6 +64,8 @@ define([
     },
 
     isr: function (keyCode, isShifted) {
+      if (typeof keyCode !== 'number' || typeof isShifted !== 'boolean') {
+      }
       var character;
       // Parse the params TODO: Check that they are valid; if not osTrapError
       trace("Key code:" + keyCode + " shifted:" + isShifted);
@@ -72,10 +74,13 @@ define([
         // if isShifted === false; offset the code by 32 for lowercase
         character = String.fromCharCode(isShifted ? keyCode : keyCode + 32);
         // TODO: Check for caps-lock and handle as shifted if so.
-      } else if (keyCode === 32 || // space
-                 keyCode === 13 || // enter
-                 keyCode === 8) {  // backspace
+      } else if (keyCode === 32) { // space
         character = String.fromCharCode(keyCode);
+      } else if (keyCode === 8  || // backspace
+                 keyCode === 13 || // enter
+                 keyCode === 38 || // up
+                 keyCode === 40) { // down
+        character = keyCode;
       } else if (_characters.hasOwnProperty(keyCode)) { // special characters
         character = isShifted ? _characters[keyCode].u : _characters[keyCode].l;
       }
