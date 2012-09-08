@@ -65,10 +65,15 @@ define([
 
     isr: function (keyCode, isShifted) {
       if (typeof keyCode !== 'number' || typeof isShifted !== 'boolean') {
+        _KernelInterface.trapError(
+          'KeyboardDriver.isr expects parameters (int, bool)'
+        );
+        return;
+      } else {
+        trace("Key code:" + keyCode + " shifted:" + isShifted);
       }
+
       var character;
-      // Parse the params TODO: Check that they are valid; if not osTrapError
-      trace("Key code:" + keyCode + " shifted:" + isShifted);
       // Check to see if we even want to deal with the key that was pressed.
       if (keyCode >= 65 && keyCode <= 90) { // [a-z]
         // if isShifted === false; offset the code by 32 for lowercase

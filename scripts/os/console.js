@@ -64,7 +64,7 @@ define(['utils/underscore'], function () {
         offset_x,
         this.CurrentYPosition - this.CurrentFontSize,
         this.CurrentXPosition,
-        this.CurrentYPosition + 1 // +1 for the leftovers on the bottom
+        this.CurrentYPosition + 5 // +1 for the leftovers on the bottom
       );
       // move the cursor back
       this.CurrentXPosition = offset_x;

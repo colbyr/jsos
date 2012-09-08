@@ -124,7 +124,9 @@ define([
         _StdIn.handleInput();
         break;
       default:
-        this.trapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
+        this.trapError(
+          "Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]"
+        );
       }
 
       // 3. Restore the saved state.  TODO: Question: Should we restore the state via IRET in the ISR instead of here? p560.
@@ -155,6 +157,21 @@ define([
       log('error', 'OS', "TRAP: " + msg);
       // TODO: Display error on console, perhaps in some sort of colored screen. (Perhaps blue?)
       this.shutdown();
+    }
+  };
+
+  /**
+   * Exposes kernel functions to other OS componenets
+   *
+   * @var object
+   */
+  _KernelInterface = {
+    shutdown: function () {
+      Kernel.shutdown();
+    },
+
+    trapError: function (message) {
+      Kernel.trapError(message);
     }
   };
 
