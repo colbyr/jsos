@@ -17,6 +17,9 @@ define(['utils/underscore'], function () {
     this.CurrentYPosition = DEFAULT_FONT_SIZE;
     this.history = [];
     this.history_index = -1;
+    this.lines = 0;
+    this.max_lines = Math.floor(CANVAS.height / this.lineheight());
+    console.log('maxlines', this.max_lines);
 
     // init
     this.clearScreen();
@@ -31,9 +34,15 @@ define(['utils/underscore'], function () {
      * @return void
      */
     advanceLine: function () {
-      this.CurrentXPosition = 0;
-      this.CurrentYPosition += DEFAULT_FONT_SIZE + FONT_HEIGHT_MARGIN;
-      // TODO: Handle scrolling.
+      if (this.lines < this.max_lines) {
+        this.lines += 1;
+        console.log(this.lines, ' lines');
+        this.CurrentXPosition = 0;
+        this.CurrentYPosition += this.lineheight();
+      } else {
+        DRAWING_CONTEXT.putImageData(this.getScreen(0, this.lineheight()), 0, 0);
+        this.CurrentXPosition = 0;
+      }
     },
 
     /**
@@ -44,9 +53,8 @@ define(['utils/underscore'], function () {
     backspace: function () {
       if (this.buffer.length > 0) {
         // get the character's left side x-coordinate
-        this.clearLine(
-          this.measure(this.buffer.slice(-1))
-        );
+        this.clearLine(this.measure(this.buffer.slice(-1)));
+        // slice the deleted character off the buffer
         this.buffer = this.buffer.slice(0, -1);
       }
     },
@@ -66,9 +74,8 @@ define(['utils/underscore'], function () {
         this.CurrentXPosition,
         this.CurrentYPosition + 5 // +1 for the leftovers on the bottom
       );
-      // move the cursor back
+      // reset the X cursor
       this.CurrentXPosition = offset_x;
-      // pop the deleted character off the buffer
     },
 
     /**
@@ -78,6 +85,23 @@ define(['utils/underscore'], function () {
      */
     clearScreen: function () {
       DRAWING_CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
+    },
+
+    /**
+     * Get image of the current canvas
+     *
+     * @param  number
+     * @param  number
+     * @param  number
+     * @param  number
+     * @return object  ImageData
+     */
+    getScreen: function (x1, y1, x2, y2) {
+      x1 = x1 || 0;
+      y1 = y1 || 0;
+      x2 = x2 || CANVAS.width;
+      y2 = y2 || CANVAS.height;
+      return DRAWING_CONTEXT.getImageData(x1, y1, x2, y2);
     },
 
     /**
@@ -125,6 +149,15 @@ define(['utils/underscore'], function () {
     },
 
     /**
+     * Returns the lineheight (i.e. fontsize + margin)
+     *
+     * @return double
+     */
+    lineheight: function () {
+      return this.CurrentFontSize + FONT_HEIGHT_MARGIN;
+    },
+
+    /**
      * Calculates the width of the given string in the canvas
      *
      * @param  string  the text in question
@@ -169,13 +202,13 @@ define(['utils/underscore'], function () {
       }
     },
 
+    /**
+     * Draws some text at the current cursor position
+     *
+     * @param  string  text to be drawn
+     * @return void
+     */
     putText: function (txt) {
-      // My first inclination here was to write two functions: putChar() and
-      // putString(). Then I remembered that Javascript is (sadly) untyped and
-      // it won't differentiate between the two. So rather than be like PHP and
-      // write two (or more) functions that do the same thing, thereby
-      // encouraging confusion and decreasing readability, I decided to write
-      // one function and use the term "text" to connote string or char.
       if (txt !== '') {
         // Draw the text at the current X and Y coordinates.
         DRAWING_CONTEXT.drawText(
@@ -204,6 +237,7 @@ define(['utils/underscore'], function () {
      * @return void
      */
     resetXY: function () {
+      this.lines = 1;
       this.CurrentXPosition = 0;
       this.CurrentYPosition = this.CurrentFontSize;
     }
