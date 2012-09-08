@@ -87,8 +87,9 @@ define([
       Canvas.enable(DRAWING_CONTEXT);
       _btns = {
         halt: document.getElementById('btnHaltOS'),
+        load: document.getElementById('btnLoad'),
         start: document.getElementById('btnStartOS'),
-        reset: document.getElementById('btnReset')
+        reset: document.getElementById('btnReset'),
       };
       for (k in _btns) {
         if (_btns.hasOwnProperty(k)) {
@@ -97,6 +98,10 @@ define([
       }
       // Set focus on the start button.
       _btns.start.focus();     // TODO: This does not seem to work.  Why?
+    },
+
+    load: function (btn) {
+      console.log('load a program!');
     },
 
     reset: function (btn) {
@@ -113,6 +118,7 @@ define([
 
       // .. enable the Emergency Halt and Reset buttons ...
       _btns.halt.disabled = false;
+      _btns.load.disabled = false;
       _btns.reset.disabled = false;
 
       // .. set focus on the OS console display ... 

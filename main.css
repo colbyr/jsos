@@ -8,6 +8,7 @@
 
 #display {
   border: 1px solid;
+  clear: both;
   cursor: default;
   -webkit-appearance: textarea;
 }
@@ -15,4 +16,12 @@
 #taLog {
   height: 200px;
   width: 866px;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
 }
