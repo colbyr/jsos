@@ -19,7 +19,6 @@ define(['utils/underscore'], function () {
     this.history_index = -1;
     this.lines = 0;
     this.max_lines = Math.floor(CANVAS.height / this.lineheight());
-    console.log('maxlines', this.max_lines);
 
     // init
     this.clearScreen();
@@ -36,7 +35,6 @@ define(['utils/underscore'], function () {
     advanceLine: function () {
       if (this.lines < this.max_lines) {
         this.lines += 1;
-        console.log(this.lines, ' lines');
         this.CurrentXPosition = 0;
         this.CurrentYPosition += this.lineheight();
       } else {
@@ -59,6 +57,11 @@ define(['utils/underscore'], function () {
       }
     },
 
+    /**
+     * BSOD for kernel errors and the like
+     *
+     * @return void
+     */
     blueScreen: function () {
       DRAWING_CONTEXT.fillStyle = "blue";
       DRAWING_CONTEXT.fillRect(0, 0, CANVAS.width, CANVAS.height);
@@ -67,7 +70,7 @@ define(['utils/underscore'], function () {
         this.CurrentFontSize,
         CANVAS.width / 2,
         CANVAS.height / 2,
-        'you fucked up bad',
+        'you messed up bad',
         'white'
       );
     },
