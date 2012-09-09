@@ -8,7 +8,6 @@
 
 #display {
   border: 1px solid;
-  clear: both;
   cursor: default;
   -webkit-appearance: textarea;
 }
@@ -56,10 +55,18 @@
   display: block;
 }
 
+.controls {
+  overflow: hidden;
+}
+
 .left {
   float: left;
 }
 
 .right {
   float: right;
+}
+
+.status {
+  text-align: center;
 }

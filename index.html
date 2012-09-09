@@ -32,41 +32,44 @@
         <input type="submit" value="Load Program" />
       </form>
     </div>
-    <div class="controls left">
-      <input type="button"
-             id = "btnStartOS"
-             name="brnStartOS"
-             class="normal_button"
-             value="Start"
-             tabindex="0"
-      />
-      <input type="button"
-             id = "btnHaltOS"
-             name="brnHaltOS"
-             class="normal_button"
-             disabled="disabled"
-             value="Halt"
-             tabindex="1"
-      />            
-      <input type="button"
-             id = "btnReset"
-             name="brnReset"
-             class="normal_button"
-             disabled="disabled"
-             value="Reset"
-             tabindex="2"
-      />
+    <div class="controls">
+      <div class="left">
+        <input type="button"
+               id = "btnStartOS"
+               name="brnStartOS"
+               class="normal_button"
+               value="Start"
+               tabindex="0"
+        />
+        <input type="button"
+               id = "btnHaltOS"
+               name="brnHaltOS"
+               class="normal_button"
+               disabled="disabled"
+               value="Halt"
+               tabindex="1"
+        />            
+        <input type="button"
+               id = "btnReset"
+               name="brnReset"
+               class="normal_button"
+               disabled="disabled"
+               value="Reset"
+               tabindex="2"
+        />
+      </div>
+      <div class="right">
+        <input type="button"
+               id = "btnLoad"
+               name="btnLoad"
+               class="normal_button"
+               disabled="disabled"
+               value="Load"
+               tabindex="3"
+        />
+      </div>
     </div>
-    <div class="controls right">
-      <input type="button"
-             id = "btnLoad"
-             name="btnLoad"
-             class="normal_button"
-             disabled="disabled"
-             value="Load"
-             tabindex="3"
-      />
-    </div>
+    <p class="status" id="status_bar"></p>
     <canvas id="display" width="870px" height="500px" tabindex="3"></canvas>
     <textarea name="taLog" id = "taLog" rows="36" cols="48"></textarea>
   </div>

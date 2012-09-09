@@ -15,9 +15,10 @@ define([
   'os/Console',
   'os/Queue',
   'os/Shell',
+  'os/Status',
   'os/trace',
   'os/drivers/Keyboard'
-], function (log, Sim, Console, Queue, Shell, trace, KeyboardDriver) {
+], function (log, Sim, Console, Queue, Shell, Status, trace, KeyboardDriver) {
 
   var Kernel = {
     //
@@ -31,6 +32,9 @@ define([
       _KernelBuffers = []; // Buffers... for the kernel.
       _KernelInputQueue = new Queue();      // Where device input lands before being processed out somewhere.
       _Console = new Console();             // The console output device.
+      _Status = new Status(
+        document.getElementById('status_bar')
+      );
 
       // Initialize standard input and output to the _Console.
       _StdIn  = _Console;

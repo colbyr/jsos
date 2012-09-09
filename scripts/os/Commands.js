@@ -131,6 +131,13 @@ define([
       }
     },
 
+    status: {
+      description: '<status> - Set the OS status message',
+      func: function (message) {
+        _Status.setStatus(message);
+      }
+    },
+
     trace: {
       description: '<on | off> - Turns the OS trace on or off.',
       func: function (toggle) {

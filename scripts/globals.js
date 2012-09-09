@@ -52,6 +52,7 @@ var _StdOut = null;
 // UI
 var _Console = null;
 var _OsShell = null;
+var _Status = null;
 
 // Kernel Interface
 var _KernelInterface = null;
