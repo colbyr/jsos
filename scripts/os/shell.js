@@ -88,15 +88,14 @@ define([
     this.command = this.args.shift();
   }
 
+  function _cleanArg(string) {
+    return string.trim().replace(/"/g, '');
+  }
+
   _.extend(_UserCommand.prototype, {
 
     parseInput: function (string) {
-      return trim(string).toLowerCase().split(" ").reduce(function (input, segment) {
-        if (segment !== '') {
-          input.push(segment);
-        }
-        return input;
-      }, []);
+      return string.match(/("[^"]+"|[^"\s]+)([^\s]|$)/g).map(_cleanArg);
     },
 
     toString: function () {
