@@ -7,6 +7,14 @@ define([
 ], function (rot13) {
 
   return {
+    bluescreen: {
+      description: '- Triggers a Blue Screen of Death',
+      func: function () {
+        _KernelInterface.trapError('User initiated bluescreen.');
+        return false;
+      }
+    },
+
     clear: {
       description: '- Clears the screen and resets the cursor position.',
       func: function () {
@@ -34,7 +42,7 @@ define([
         case '-f':
         case '--full':
           string =
-            now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay() + ' ' +
+            now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay() +' ' +
             now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
           break;
         // hh:mm:ss
