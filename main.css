@@ -18,6 +18,44 @@
   width: 866px;
 }
 
+#loader_wrapper {
+  background: rgba(255, 255, 255, .7);
+  bottom: 0;
+  display: none;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+#loader {
+  margin: 50px auto 0;
+  text-align: center;
+  width: 400px;
+}
+
+#code {
+  display: block;
+  height: 250px;
+  width: 100%;
+}
+
+.warning {
+  display: none;
+}
+
+.invalid {
+  color: red;
+}
+
+.invalid #code {
+  color: red;
+}
+
+.invalid .warning {
+  display: block;
+}
+
 .left {
   float: left;
 }

@@ -1,5 +1,5 @@
 /* ------------  
-   Control.js
+  Control.js
 
    Requires global.js.
 
@@ -17,10 +17,11 @@
 
 define([
   'host/CPU',
+  'host/loader',
   'host/log',
   'os/Canvas',
   'os/Interrupt'
-], function (CPU, log, Canvas, Interrupt) {
+], function (CPU, Loader, log, Canvas, Interrupt) {
 
   // "use strict";
 
@@ -28,6 +29,7 @@ define([
   var _display = null;
   var _hardwareClockId = null;
   var _kernel = null;
+  var _loader = new Loader();
   var _taLog = null;
 
   function _onKeypress(e) {
@@ -101,7 +103,7 @@ define([
     },
 
     load: function (btn) {
-      console.log('load a program!');
+      _loader.show();
     },
 
     reset: function (btn) {

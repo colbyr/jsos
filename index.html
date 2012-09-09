@@ -12,7 +12,9 @@
         socket.on('client log', function (data) {
           console.log('loginator - ' + data.msg);
         });
-      } catch(e) {}
+      } catch(e) {
+        console.log('loginator not found - cd loginator; ./run');
+      }
     </script>
     <script data-main="scripts/bootstrap" type="text/javascript" src="scripts/require.js"></script>
 
@@ -21,6 +23,15 @@
 <body>
 
   <div class="wrapper">
+    <div id="loader_wrapper">
+      <form id="loader">
+        <h2>Enter 6502 HEX code:</h2>
+        <p class="warning">invalid code</p>
+        <textarea id="code"></textarea>
+        <button id="cancel_load">Cancel</button>
+        <input type="submit" value="Load Program" />
+      </form>
+    </div>
     <div class="controls left">
       <input type="button"
              id = "btnStartOS"
