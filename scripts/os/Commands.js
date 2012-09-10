@@ -86,7 +86,6 @@ define([
           if (this.commands.hasOwnProperty(topic) &&
               this.commands[topic].hasOwnProperty('man')) {
             this.commands[topic].man.split('\n').forEach(function (line) {
-              _StdIn.advanceLine();
               _StdIn.putText(line);
             });
           } else {
