@@ -25,7 +25,7 @@ define([
     },
 
     date: {
-      description: '- Displays the current date and time.',
+      description: '[-d][-f][-t][-u][-v] - Displays the current date and time.',
       func: function (flag) {
         var now = new Date();
         var string;
@@ -35,14 +35,14 @@ define([
         // yyyy-mm-dd
         case '-d':
         case '--date':
-          string = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay();
+          string = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate();
           break;
         // yyyy-mm-dd hh:mm:ss
         case undefined:
         case '-f':
         case '--full':
           string =
-            now.getFullYear() + '-' + now.getMonth() + '-' + now.getDay() +' ' +
+            now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate() +' ' +
             now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
           break;
         // hh:mm:ss
@@ -132,9 +132,21 @@ define([
     },
 
     status: {
-      description: '<status> - Set the OS status message',
+      description: '[-r] | <status> - Set the OS status message',
       func: function (message) {
-        _Status.setStatus(message);
+        switch (message) {
+        case '-r':
+        case '--reset':
+          _Status.resetStatus();
+          _StdIn.putText('OS status reset to default.');
+          break;
+        case undefined:
+          _StdIn.putText('Usage: status <message>');
+          break;
+        default:
+          _Status.setStatus(message);
+          _StdIn.putText('OS status updated to "' + message + '".');
+        }
       }
     },
 
