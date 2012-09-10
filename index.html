@@ -23,15 +23,8 @@
 <body>
 
   <div class="wrapper">
-    <div id="loader_wrapper">
-      <form id="loader">
-        <h2>Enter 6502 HEX code:</h2>
-        <p class="warning">invalid code</p>
-        <textarea id="code"></textarea>
-        <button id="cancel_load">Cancel</button>
-        <input type="submit" value="Load Program" />
-      </form>
-    </div>
+    <p class="status" id="status_bar">...</p>
+    <canvas id="display" width="870px" height="500px" tabindex="4"></canvas>
     <div class="controls">
       <div class="left">
         <input type="button"
@@ -69,9 +62,16 @@
         />
       </div>
     </div>
-    <p class="status" id="status_bar"></p>
-    <canvas id="display" width="870px" height="500px" tabindex="3"></canvas>
     <textarea name="taLog" id = "taLog" rows="36" cols="48"></textarea>
+    <div id="loader_wrapper">
+      <form id="loader">
+        <h2>Enter 6502 HEX code:</h2>
+        <p class="warning">invalid code</p>
+        <textarea id="code"></textarea>
+        <button id="cancel_load">Cancel</button>
+        <input type="submit" value="Load Program" />
+      </form>
+    </div>
   </div>
 </body>
 </html>

@@ -5,7 +5,7 @@ define(['utils/underscore'], function () {
    *
    * @var string
    */
-  var DEFAULT = 'Everything is fine. Nothing is ruined';
+  var DEFAULT = 'Everything is fine. Nothing is ruined.';
 
   /**
    * Controller for the status bar
@@ -40,7 +40,7 @@ define(['utils/underscore'], function () {
      * @return string
      */
     render: function () {
-      return this.message + ' - ' + new Date().toLocaleString();
+      return this.message + ' -- ' + new Date().toLocaleString();
     },
 
     /**

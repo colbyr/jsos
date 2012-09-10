@@ -1,12 +1,14 @@
 /* main.css */
 
 .wrapper {
+  font-family: 'Courier';
   position: relative;
   margin: 0 auto;
   width: 870px;
 }
 
 #display {
+  background-color: #000;
   border: 1px solid;
   cursor: default;
   -webkit-appearance: textarea;
@@ -57,6 +59,7 @@
 
 .controls {
   overflow: hidden;
+  margin-bottom: 5px;
 }
 
 .left {
@@ -68,5 +71,7 @@
 }
 
 .status {
+  border: 1px solid;
+  padding: 5px;
   text-align: center;
 }
