@@ -63,10 +63,19 @@ define([
       // More?
     },
 
+    /**
+     * Interupt Service Routine
+     *
+     * !! same as krnKbdDispatchKeyPress
+     *
+     * @param  int
+     * @param  bool
+     * @return void
+     */
     isr: function (keyCode, isShifted) {
       if (typeof keyCode !== 'number' || typeof isShifted !== 'boolean') {
         _KernelInterface.trapError(
-          'KeyboardDriver.isr expects parameters (int, bool)'
+          'KeyboardDriver.isr expects parameters of type (int, bool)'
         );
         return;
       } else {

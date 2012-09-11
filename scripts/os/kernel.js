@@ -120,17 +120,17 @@ define([
       // Note: There is no need to "dismiss" or acknowledge the interrupts in our design here.  
       //       Maybe the hardware simulation will grow to support/require that in the future.
       switch (irq) {
-      case TIMER_IRQ:
-        this.TimerISR();                   // Kernel built-in routine for timers (not the clock).
-        break;
-      case KEYBOARD_IRQ:
-        this.keyboardDriver.isr(params[0], params[1]); // Kernel mode device driver
-        _StdIn.handleInput();
-        break;
-      default:
-        this.trapError(
-          "Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]"
-        );
+        case TIMER_IRQ:
+          this.TimerISR();                   // Kernel built-in routine for timers (not the clock).
+          break;
+        case KEYBOARD_IRQ:
+          this.keyboardDriver.isr(params[0], params[1]); // Kernel mode device driver
+          _StdIn.handleInput();
+          break;
+        default:
+          this.trapError(
+            "Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]"
+          );
       }
 
       // 3. Restore the saved state.  TODO: Question: Should we restore the state via IRET in the ISR instead of here? p560.

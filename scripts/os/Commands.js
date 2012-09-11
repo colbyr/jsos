@@ -3,8 +3,9 @@
  */
 
 define([
+  'utils/Date',
   'utils/rot13',
-], function (rot13) {
+], function (Date, rot13) {
 
   return {
     bluescreen: {
@@ -28,41 +29,39 @@ define([
       description: '[-d][-f][-t][-u][-v] - Displays the current date and time.',
       func: function (flag) {
         var now = new Date();
-        var string;
+        var date;
 
         // parse the command line flags
         switch (flag) {
-        // yyyy-mm-dd
-        case '-d':
-        case '--date':
-          string = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate();
-          break;
-        // yyyy-mm-dd hh:mm:ss
-        case undefined:
-        case '-f':
-        case '--full':
-          string =
-            now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate() +' ' +
-            now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-          break;
-        // hh:mm:ss
-        case '-t':
-        case '--time':
-          string = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-          break;
-        case '-u':
-        case '--utc':
-          string = now.toUTCString();
-          break;
-        case '-v':
-        case '--verbose':
-          string = now.toLocaleString();
-          break;
-        default:
-          string = 'Invalid options. See `man date`.';
+          // yyyy-mm-dd
+          case '-d':
+          case '--date':
+            date = now.date();
+            break;
+          // yyyy-mm-dd hh:mm:ss
+          case undefined:
+          case '-f':
+          case '--full':
+            date = now.full();
+            break;
+          // hh:mm:ss
+          case '-t':
+          case '--time':
+            date = now.time();
+            break;
+          case '-u':
+          case '--utc':
+            date = now.utc();
+            break;
+          case '-v':
+          case '--verbose':
+            date = now.local();
+            break;
+          default:
+            date = 'Invalid options. See `man date`.';
         }
 
-        _StdIn.putText(string);
+        _StdIn.putText(date);
       }
     },
 
@@ -134,17 +133,17 @@ define([
       description: '[-r] | <status> - Set the OS status message',
       func: function (message) {
         switch (message) {
-        case '-r':
-        case '--reset':
-          _Status.resetStatus();
-          _StdIn.putText('OS status reset to default.');
-          break;
-        case undefined:
-          _StdIn.putText('Usage: status <message>');
-          break;
-        default:
-          _Status.setStatus(message);
-          _StdIn.putText('OS status updated to "' + message + '".');
+          case '-r':
+          case '--reset':
+            _Status.resetStatus();
+            _StdIn.putText('OS status reset to default.');
+            break;
+          case undefined:
+            _StdIn.putText('Usage: status <message>');
+            break;
+          default:
+            _Status.setStatus(message);
+            _StdIn.putText('OS status updated to "' + message + '".');
         }
       }
     },
@@ -154,20 +153,20 @@ define([
       func: function (toggle) {
         if (toggle) {
           switch (toggle) {
-          case "on":
-            if (_Trace && _SarcasticMode) {
-              _StdIn.putText("Trace is already on, dumbass.");
-            } else {
-              _Trace = true;
-              _StdIn.putText("Trace ON");
-            }
-            break;
-          case "off":
-            _Trace = false;
-            _StdIn.putText("Trace OFF");
-            break;
-          default:
-            _StdIn.putText("Invalid arguement.  Usage: trace <on | off>.");
+            case "on":
+              if (_Trace && _SarcasticMode) {
+                _StdIn.putText("Trace is already on, dumbass.");
+              } else {
+                _Trace = true;
+                _StdIn.putText("Trace ON");
+              }
+              break;
+            case "off":
+              _Trace = false;
+              _StdIn.putText("Trace OFF");
+              break;
+            default:
+              _StdIn.putText("Invalid arguement.  Usage: trace <on | off>.");
           }
         } else {
           _StdIn.putText("Usage: trace <on | off>");

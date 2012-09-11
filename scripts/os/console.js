@@ -132,34 +132,34 @@ define(['utils/underscore'], function () {
         // Check to see if it's "special" (enter or ctrl-c) or "normal"
         // (anything else that the keyboard device driver gave us).
         switch (chr) {
-        case 8: // Backspace
-          this.backspace();
-          this.resetHistoryIndex();
-          break;
-        case 13: // Enter
-          // The enter key marks the end of a console command, so ...
-          // ... tell the shell ... 
-          _OsShell.handleInput(this.buffer);
-          // ... and reset our buffer.
-          if (this.buffer !== this.history[0]) {
-            this.history.unshift(this.buffer);
-          }
-          this.resetHistoryIndex();
-          this.buffer = '';
-          break;
-        case 38: // Up
-          this.previousCommand();
-          break;
-        case 40: // Down
-          this.nextCommand();
-          break;
-        default:
-          // This is a "normal" character, so ...
-          // ... draw it on the screen...
-          this.putText(chr);
-          // ... and add it to our buffer.
-          this.buffer += chr;
-          this.resetHistoryIndex();
+          case 8: // Backspace
+            this.backspace();
+            this.resetHistoryIndex();
+            break;
+          case 13: // Enter
+            // The enter key marks the end of a console command, so ...
+            // ... tell the shell ... 
+            _OsShell.handleInput(this.buffer);
+            // ... and reset our buffer.
+            if (this.buffer !== this.history[0]) {
+              this.history.unshift(this.buffer);
+            }
+            this.resetHistoryIndex();
+            this.buffer = '';
+            break;
+          case 38: // Up
+            this.previousCommand();
+            break;
+          case 40: // Down
+            this.nextCommand();
+            break;
+          default:
+            // This is a "normal" character, so ...
+            // ... draw it on the screen...
+            this.putText(chr);
+            // ... and add it to our buffer.
+            this.buffer += chr;
+            this.resetHistoryIndex();
         }
       }
     },

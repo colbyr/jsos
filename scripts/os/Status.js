@@ -1,4 +1,7 @@
-define(['utils/underscore'], function () {
+define([
+  'utils/Date',
+  'utils/underscore'
+], function (Date) {
 
   /**
    * Default status message
@@ -6,36 +9,6 @@ define(['utils/underscore'], function () {
    * @var string
    */
   var DEFAULT_STATUS = 'Everything is fine. Nothing is ruined.';
-
-  /**
-   * Days of the week for nice clock formatting
-   *
-   * @var array
-   */
-  var _days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-  /**
-   * formats the date from a js Date object
-   *  e.g. "Sun"
-   *
-   * @param  Date
-   * @return string
-   */
-  function _formatDate(date) {
-    return _days[date.getDay()];
-  }
-
-  /**
-   * formats the time from a js Date object
-   *  e.g. "10:26 PM"
-   *
-   * @param  Date
-   * @return string
-   */
-  function _formatTime(date) {
-    return date.getHours() % 12 + ':' + date.getMinutes() + ' ' +
-      (date.getHours() > 11 ? 'PM' : 'AM');
-  }
 
   /**
    * Controller for the status bar
@@ -70,8 +43,7 @@ define(['utils/underscore'], function () {
      * @return string
      */
     render: function () {
-      var now = new Date();
-      return this.message + ' -- ' + _formatDate(now) + ' ' + _formatTime(now);
+      return this.message + ' -- ' + new Date().macos();
     },
 
     /**
