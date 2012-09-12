@@ -1,7 +1,7 @@
 require([
   'os/Kernel',
   'host/Sim',
-  'utils/ready',
+  'vendor/ready',
   'globals'
 ], function (Kernel, Sim, ready) {
   ready(function () {

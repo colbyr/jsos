@@ -7,7 +7,9 @@
 
    ------------ */
 
-define(['utils/underscore'], function () {
+define([
+  'vendor/underscore'
+], function () {
 
   function Queue() {
     this.q = [];

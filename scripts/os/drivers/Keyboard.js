@@ -10,7 +10,7 @@ define([
   'host/log',
   'os/trace',
   'os/drivers/Device',
-  'utils/underscore'
+  'vendor/underscore'
 ], function (log, trace, DeviceDriver) {
 
   /**

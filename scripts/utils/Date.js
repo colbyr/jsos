@@ -1,5 +1,5 @@
 define([
-  'utils/underscore'
+  'vendor/underscore'
 ], function () {
 
   /**

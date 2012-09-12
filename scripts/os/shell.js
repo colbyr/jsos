@@ -11,7 +11,7 @@ define([
   'os/Commands',
   'os/trace',
   'utils/rot13',
-  'utils/underscore'
+  'vendor/underscore'
 ], function (log, Commands, trace, rot13) {
 
   function Shell(kernel) {

@@ -1,5 +1,5 @@
 define([
-  'utils/ready'
+  'vendor/ready'
 ], function (ready) {
 
   var _taLog = null;

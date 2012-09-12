@@ -1,6 +1,6 @@
 define([
   'utils/Date',
-  'utils/underscore'
+  'vendor/underscore'
 ], function (Date) {
 
   /**

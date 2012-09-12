@@ -17,7 +17,7 @@
 
 define([
   'os/trace',
-  'utils/underscore'
+  'vendor/underscore'
 ], function (trace) {
 
   // "use strict";
