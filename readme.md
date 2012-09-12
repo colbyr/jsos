@@ -1,5 +1,7 @@
 # JSOS: An Operating System in JavaScript
 
+Find the code on github: https://github.com/crabideau5691/JSOS
+
 For [CS422](http://labouseur.com/courses/os/) at Marist.
 
 ## Loginator
