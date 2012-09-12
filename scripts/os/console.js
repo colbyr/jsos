@@ -7,9 +7,7 @@
    Note: This is not the Shell.  The Shell is the "command line interface" (CLI) or interpreter for this console.
    ------------ */
 
-define([
-  'vendor/underscore'
-], function () {
+define(['utils/underscore'], function () {
 
   function Console() {
     this.buffer = '';
@@ -65,7 +63,7 @@ define([
      * @return void
      */
     blueScreen: function () {
-      DRAWING_CONTEXT.fillStyle = "blue";
+      DRAWING_CONTEXT.fillStyle = 'blue';
       DRAWING_CONTEXT.fillRect(0, 0, CANVAS.width, CANVAS.height);
       DRAWING_CONTEXT.drawTextCenter(
         this.CurrentFont,
@@ -140,9 +138,9 @@ define([
           break;
         case 13: // Enter
           // The enter key marks the end of a console command, so ...
-          // ... tell the shell ... 
+          // ... tell the shell ...
           _OsShell.handleInput(this.buffer);
-          // ... and reset our buffer.
+          // ... and reset our buffer
           if (this.buffer !== this.history[0]) {
             this.history.unshift(this.buffer);
           }
