@@ -4,7 +4,7 @@
 
 define([
   'utils/Date',
-  'utils/rot13',
+  'utils/rot13'
 ], function (Date, rot13) {
 
   return {
@@ -69,7 +69,7 @@ define([
       description: '- This is the help command. Seek help.',
       func: function () {
         var command;
-        _StdIn.putText("Commands:");
+        _StdIn.putText('Commands:');
         for (command in this.commands) {
           _StdIn.advanceLine();
           _StdIn.putText('  ' + command + ' ' + this.commands[command].description);
@@ -102,7 +102,7 @@ define([
         if (string) {
           _OsShell.promptStr = string;
         } else {
-          _StdIn.putText("Usage: prompt <string>  Please supply a string.");
+          _StdIn.putText('Usage: prompt <string> Please supply a string.');
         }
       }
     },
@@ -112,9 +112,9 @@ define([
       func: function (string) {
         if (string) {
           // Requires utils/rot13 for rot13() function
-          _StdIn.putText(string + " = '" + rot13(string) + "'");
+          _StdIn.putText(string + ' = "' + rot13(string) + '"');
         } else {
-          _StdIn.putText("Usage: rot13 <string>  Please supply a string.");
+          _StdIn.putText('Usage: rot13 <string>  Please supply a string.');
         }
       }
     },
@@ -122,7 +122,7 @@ define([
     shutdown: {
       description: '- Shuts down the virtual OS but leaves the underlying hardware simulation running',
       func: function () {
-        _StdIn.putText("Shutting down...");
+        _StdIn.putText('Shutting down...');
         // Call Kernal shutdown routine.
         this.kernel.shutdown();
         // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
@@ -153,23 +153,23 @@ define([
       func: function (toggle) {
         if (toggle) {
           switch (toggle) {
-            case "on":
+            case 'on':
               if (_Trace && _SarcasticMode) {
-                _StdIn.putText("Trace is already on, dumbass.");
+                _StdIn.putText('Trace is already on, dumbass.');
               } else {
                 _Trace = true;
-                _StdIn.putText("Trace ON");
+                _StdIn.putText('Trace ON');
               }
               break;
-            case "off":
+            case 'off':
               _Trace = false;
-              _StdIn.putText("Trace OFF");
+              _StdIn.putText('Trace OFF');
               break;
             default:
-              _StdIn.putText("Invalid arguement.  Usage: trace <on | off>.");
+              _StdIn.putText('Invalid arguement. Usage: trace <on | off>.');
           }
         } else {
-          _StdIn.putText("Usage: trace <on | off>");
+          _StdIn.putText('Usage: trace <on | off>');
         }
       }
     },
@@ -193,7 +193,7 @@ define([
               this.advanceLine();
             }.bind(this),
             // error
-            function (error) {
+            function () {
               _StdIn.putText('FAILWHALE');
               this.advanceLine();
             }.bind(this)

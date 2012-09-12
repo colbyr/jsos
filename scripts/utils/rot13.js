@@ -11,14 +11,14 @@ define([], function () {
     var i = 0;
     var ch;
     var code = 0;
-    var retVal = "";
+    var retVal = '';
     for (i; i < str.length; i += 1) {
       ch = str[i];
       code = 0;
-      if ("abcedfghijklmABCDEFGHIJKLM".indexOf(ch) >= 0) {
+      if ('abcedfghijklmABCDEFGHIJKLM'.indexOf(ch) >= 0) {
         code = str.charCodeAt(i) + 13;  // It's okay to use 13.  It's not a magic number, it's called rot13.
         retVal = retVal + String.fromCharCode(code);
-      } else if ("nopqrstuvwxyzNOPQRSTUVWXYZ".indexOf(ch) >= 0) {
+      } else if ('nopqrstuvwxyzNOPQRSTUVWXYZ'.indexOf(ch) >= 0) {
         code = str.charCodeAt(i) - 13;  // It's okay to use 13.  See above.
         retVal = retVal + String.fromCharCode(code);
       } else {

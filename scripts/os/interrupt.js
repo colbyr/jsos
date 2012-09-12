@@ -1,5 +1,5 @@
 /* ------------
-   Interrupt.js   
+   Interrupt.js
    ------------ */
 
 define([], function () {

@@ -11,32 +11,6 @@ define([
   var _validator = /^([0-9A-F]{2} +)+[0-9A-F]{2}$/;
 
   /**
-   * Controller for the program loader
-   *
-   * @param  function  a function to bind to a successful load
-   * @return void
-   */
-  function Loader(toBind) {
-    // onload bindings
-    this.bindings = [];
-
-    // cache the DOM elements
-    this.cancel_btn = document.getElementById('cancel_load');
-    this.form = document.getElementById('loader');
-    this.input = document.getElementById('code');
-    this.wrapper = document.getElementById('loader_wrapper');
-
-    // event listeners
-    this.cancel_btn.addEventListener('click', _cancel.bind(this));
-    this.form.addEventListener('submit', _submit.bind(this));
-
-    // if its there, bind the toBind function
-    if (toBind) {
-      this.bind(toBind);
-    }
-  }
-
-  /**
    * Event handler for the cancel button - clears form and hides the dialog
    *
    * @param  Event
@@ -76,6 +50,32 @@ define([
       _executeBindings.bind(this)(this.parse(code));
     } else {
       this.markInvalid();
+    }
+  }
+
+  /**
+   * Controller for the program loader
+   *
+   * @param  function  a function to bind to a successful load
+   * @return void
+   */
+  function Loader(toBind) {
+    // onload bindings
+    this.bindings = [];
+
+    // cache the DOM elements
+    this.cancel_btn = document.getElementById('cancel_load');
+    this.form = document.getElementById('loader');
+    this.input = document.getElementById('code');
+    this.wrapper = document.getElementById('loader_wrapper');
+
+    // event listeners
+    this.cancel_btn.addEventListener('click', _cancel.bind(this));
+    this.form.addEventListener('submit', _submit.bind(this));
+
+    // if its there, bind the toBind function
+    if (toBind) {
+      this.bind(toBind);
     }
   }
 

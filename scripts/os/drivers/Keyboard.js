@@ -79,7 +79,7 @@ define([
         );
         return;
       } else {
-        trace("Key code:" + keyCode + " shifted:" + isShifted);
+        trace('Key code:' + keyCode + ' shifted:' + isShifted);
       }
 
       var character;
