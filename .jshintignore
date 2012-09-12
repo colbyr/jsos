@@ -1,3 +1,6 @@
+// canvas.js because I'm afraid to change it
+scripts/os/Canvas.js
+
 // loginator
 loginator
 
@@ -5,7 +8,4 @@ loginator
 supergrep
 
 // third party scripts
-scripts/require.js
-scripts/os/Canvas.js
-scripts/utils/ready.js
-scripts/utils/underscore.js
+scripts/vendor
