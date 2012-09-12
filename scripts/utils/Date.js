@@ -109,7 +109,8 @@ define([
      * @return string
      */
     normalTime: function () {
-      return this.hour() % 12 + ':' + this.minute() + ' ' + this.ampm();
+      var hour = this.hour() % 12;
+      return (hour === 0 ? 12 : hour) + ':' + this.minute() + ' ' + this.ampm();
     },
 
     /**
