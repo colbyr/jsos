@@ -15,3 +15,4 @@ Assumes node.js and npm are installed
 1. `cd supergrep/`
 2. `npm install`
 3. `./run_local`
+4. go [here](http://localhost:3000/)
