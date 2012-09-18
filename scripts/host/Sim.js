@@ -22,8 +22,8 @@ define([
   'host/loader',
   'host/log',
   'os/Canvas',
-  'os/Interrupt'
-], function (CPU, Loader, log, Canvas, Interrupt) {
+  'os/interrupts/KeyboardInterrupt'
+], function (CPU, Loader, log, Canvas, KeyboardInterrupt) {
 
   var _btns = null;
   var _display = null;
@@ -41,7 +41,7 @@ define([
       // Note the pressed key code in the params (Mozilla-specific).
       params = [e.which, e.shiftKey];
       // Enqueue this interrupt on the kernal interrupt queue so that it gets to the Interrupt handler.
-      _KernelInterruptQueue.enqueue(new Interrupt(KEYBOARD_IRQ, params));
+      _KernelInterruptQueue.enqueue(new KeyboardInterrupt(params));
     }
   }
 

@@ -124,7 +124,7 @@ define([
       //       Maybe the hardware simulation will grow to support/require that in the future.
       switch (irq) {
         case TIMER_IRQ:
-          this.TimerISR();                   // Kernel built-in routine for timers (not the clock).
+          this.TimerISR(); // Kernel built-in routine for timers (not the clock)
           break;
         case KEYBOARD_IRQ:
           this.keyboardDriver.isr(params[0], params[1]); // Kernel mode device driver

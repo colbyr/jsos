@@ -78,6 +78,13 @@ define([
       man: 'Help displays a list of (hopefully) valid commands.'
     },
 
+    load: {
+      description: '- Loads validated 6502a op codes from the loader into memory and returns the PID.',
+      func: function () {
+        _StdIn.putText('loading...');
+      }
+    },
+
     man: {
       description: '<topic> - Displays the MANual page for <topic>',
       func: function (topic) {
