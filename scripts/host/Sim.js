@@ -21,9 +21,10 @@ define([
   'host/CPU',
   'host/loader',
   'host/log',
+  'host/Memory',
   'os/Canvas',
   'os/interrupts/KeyboardInterrupt'
-], function (CPU, Loader, log, Canvas, KeyboardInterrupt) {
+], function (CPU, Loader, log, Memory, Canvas, KeyboardInterrupt) {
 
   var _btns = null;
   var _display = null;

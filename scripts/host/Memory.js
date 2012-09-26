@@ -48,7 +48,7 @@ define([
    * @return bool
    */
   function _inbounds(loc) {
-    return loc > 0 && loc < MEMORY_SIZE;
+    return loc >= 0 && loc < MEMORY_SIZE;
   }
 
   /**
@@ -60,7 +60,7 @@ define([
    * @return void
    */
   function _error(msg) {
-    throw new Error(CORE_MEMORY + msg);
+    throw new Error(ERROR_PREFIX + msg);
   }
 
   /**
@@ -90,11 +90,11 @@ define([
      * @return void
      */
     accessBlock: function (locA, locB) {
-      if (!_inbounds(loc)) {
+      if (locA >= locB || !_inbounds(locA) || !_inbounds(locB)) {
         _error('invalid memory access');
       }
 
-      return _memory.slice(locA, locB);
+      return _memory.slice(locA, locB + 1);
     },
 
     /**
@@ -125,6 +125,37 @@ define([
 
       for (var i = locA; i <= locB; i += 1) {
         _memory[i] = null;
+      }
+    },
+
+    /**
+     * Writes some data to a memory location
+     *
+     * @param  int    memory location
+     * @param  mixed  value
+     */
+    write: function (loc, value) {
+      if (!_inbounds(loc)) {
+        _error('invalid memory access');
+      }
+
+      _memory[loc] = value;
+    },
+
+    /**
+     * Writes a block of data to memory starting a loc
+     *
+     * @param  int    begining memory location
+     * @param  array  the data to be written
+     */
+    writeBlock: function (locA, block) {
+      var locB = locA + block.length - 1;
+      if (locA >= locB || !_inbounds(locA) || !_inbounds(locB)) {
+        _error('invalid memory access');
+      }
+
+      for (var i = locA; i <= locB; i += 1) {
+        _memory[i] = block[i - locA];
       }
     }
 
