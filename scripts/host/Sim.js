@@ -129,7 +129,6 @@ define([
 
       // ... Create and initialize the CPU ...
       _CPU = new CPU();
-      _CPU.init();
 
       // ... then set the clock pulse simulation to call ?????????.
       _hardwareClockTimeout = setInterval(this.clockPulse, CPU_CLOCK_INTERVAL);
