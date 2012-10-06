@@ -20,7 +20,8 @@ define([
   'vendor/underscore'
 ], function (trace) {
 
-  // "use strict";
+  var OPCODES = {
+  };
 
   function CPU() {
     this.PC    = 0;     // Program Counter
@@ -33,23 +34,23 @@ define([
 
   _.extend(CPU.prototype, {
 
-    init: function () {
-      this.PC    = 0;
-      this.Acc   = 0;
-      this.Xreg  = 0;
-      this.Yreg  = 0;
-      this.Zflag = 0;
-      this.isExecuting = false;
+    cycle: function () {
+      trace('CPU cycle');
+      // TODO: Accumulate CPU usage and profiling statistics here.
+      // Do real work here. Set this.isExecuting appropriately.
     },
 
     pulse: function () {
       // TODO: Do we need this?  Probably not.
     },
 
-    cycle: function () {
-      trace('CPU cycle');
-      // TODO: Accumulate CPU usage and profiling statistics here.
-      // Do real work here. Set this.isExecuting appropriately.
+    reset: function () {
+      this.PC    = 0;     // Program Counter
+      this.Acc   = 0;     // Accumulator
+      this.Xreg  = 0;     // X register
+      this.Yreg  = 0;     // Y register
+      this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
+      this.isExecuting = false;
     }
 
   });
