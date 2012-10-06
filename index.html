@@ -3,8 +3,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <meta name="author" content="Colby Rabideau" />
-    <link rel="stylesheet" href="main.css" type="text/css" media="screen" />
     <title>JSOS</title>
+
+    <!-- css -->
+    <link href="css/grid.css" rel="stylesheet" type="text/css" />
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
+
+    <!-- loginator -->
     <script src="http://localhost:3001/socket.io/socket.io.js"></script>
     <script>
       try {
@@ -16,17 +21,20 @@
         console.log('Loginator: unable to connect - cd loginator; ./run');
       }
     </script>
-    <script data-main="scripts/bootstrap" type="text/javascript" src="scripts/vendor/require.js"></script>
 
+    <!-- JSOS -->
+    <script data-main="scripts/bootstrap" type="text/javascript" src="scripts/vendor/require.js"></script>
 </head>
 
-<body>
+<body class="container">
 
-  <div class="wrapper">
-    <p class="status" id="status_bar">...</p>
-    <canvas id="display" width="870px" height="500px" tabindex="4"></canvas>
-    <div class="controls">
-      <div class="left">
+  <div class="row">
+    <div class="col-12">
+      <p class="status" id="status_bar">...</p>
+    </div>
+
+    <div class="col-12">
+      <div class="controls">
         <input type="button"
                id = "btnStartOS"
                name="brnStartOS"
@@ -41,7 +49,7 @@
                disabled="disabled"
                value="Halt"
                tabindex="1"
-        />            
+        />
         <input type="button"
                id = "btnReset"
                name="brnReset"
@@ -51,27 +59,25 @@
                tabindex="2"
         />
       </div>
-      <div class="right">
-        <input type="button"
-               id = "btnLoad"
-               name="btnLoad"
-               class="normal_button"
-               disabled="disabled"
-               value="Load"
-               tabindex="3"
-        />
-      </div>
     </div>
-    <textarea name="taLog" id = "taLog" rows="36" cols="48"></textarea>
-    <div id="loader_wrapper">
-      <form id="loader">
-        <h2>Enter 6502 HEX code:</h2>
-        <p class="warning">invalid code</p>
-        <textarea id="code"></textarea>
-        <button id="cancel_load">Cancel</button>
-        <input type="submit" value="Load Program" />
-      </form>
+
+    <div class="col-12">
+      <canvas class="canvas" id="display" width="840px" height="500px" tabindex="4"></canvas>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-7">
+      <h2>System log:</h2>
+      <textarea class="log textarea" id="taLog" name="taLog"></textarea>
+    </div>
+
+    <div class="col-5 loader">
+      <h2>Enter 6502 HEX code:</h2>
+      <p class="warning">invalid code</p>
+      <textarea class="textarea" id="code"></textarea>
+    </div>
+  </div>
+
 </body>
 </html>

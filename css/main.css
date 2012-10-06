@@ -1,0 +1,48 @@
+/* main.css */
+
+body {
+  font-family: Courier;
+}
+
+h2 {
+  font-size: 1em;
+  margin-bottom: .2em;
+}
+
+.canvas {
+  background: #000;
+  border: 1px solid #000;
+  margin: 0 auto 5px;
+}
+
+.controls {
+  margin-bottom: 10px;
+}
+
+.loader {}
+  .loader h2 {
+    float: left;
+  }
+  .loader .warning {
+    display: none;
+    float: right;
+    margin-bottom: 0;
+  }
+
+.invalid {
+  color: red;
+}
+  .invalid .warning {
+    display: inherit;
+  }
+
+.textarea {
+  height: 150px;
+  width: 95%;
+}
+
+.status {
+  border: 1px solid;
+  padding: 5px;
+  text-align: center;
+}

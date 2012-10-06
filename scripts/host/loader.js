@@ -69,10 +69,6 @@ define([
     this.input = document.getElementById('code');
     this.wrapper = document.getElementById('loader_wrapper');
 
-    // event listeners
-    this.cancel_btn.addEventListener('click', _cancel.bind(this));
-    this.form.addEventListener('submit', _submit.bind(this));
-
     // if its there, bind the toBind function
     if (toBind) {
       this.bind(toBind);

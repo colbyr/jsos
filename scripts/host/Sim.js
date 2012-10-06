@@ -90,7 +90,6 @@ define([
       Canvas.enable(DRAWING_CONTEXT);
       _btns = {
         halt: document.getElementById('btnHaltOS'),
-        load: document.getElementById('btnLoad'),
         start: document.getElementById('btnStartOS'),
         reset: document.getElementById('btnReset')
       };
@@ -121,7 +120,6 @@ define([
 
       // .. enable the Emergency Halt and Reset buttons ...
       _btns.halt.disabled = false;
-      _btns.load.disabled = false;
       _btns.reset.disabled = false;
 
       // .. set focus on the OS console display ...
