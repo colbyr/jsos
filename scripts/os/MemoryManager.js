@@ -4,15 +4,10 @@ define([
 ], function (CoreMemory) {
 
   var BLOCK_SIZE = 256;
-  var _pids = 0;
 
   var ERROR_PREFIX = 'MEMORY: ';
   function _error(msg) {
     throw new Error(ERROR_PREFIX + msg);
-  }
-
-  function _getPID() {
-    return ++_pids;
   }
 
   var blocks = [];
@@ -21,8 +16,7 @@ define([
     blocks.push({
       allocated: false,
       begin: i,
-      end: i + BLOCK_SIZE - 1,
-      pid: null
+      end: i + BLOCK_SIZE - 1
     });
   }
 
@@ -32,11 +26,10 @@ define([
 
   _.extend(MemoryManager.prototype, {
 
-    allocateBlock: function () {
+    allocateBlock: function (pid) {
       var block = this.getFreeBlock();
-      var pid = _getPID();
-      var manager = new BlockManager(block, pid);
-      block.pid = pid;
+      var manager = new BlockManager(block);
+      block.allocated = true;
       this.managers['pid_' + pid] = manager;
       return manager;
     },
@@ -48,7 +41,7 @@ define([
 
     getFreeBlock: function () {
       return _.find(blocks, function (block) {
-        return block.pid === null;
+        return block.allocated === false;
       });
     }
 
@@ -57,11 +50,10 @@ define([
   function BlockManager(block, pid) {
     this.begin = block.begin;
     this.end = block.end;
-    this.pid = pid;
     this.size = this.end - this.begin + 1;
 
     this.deallocate = function () {
-      block.pid = null;
+      block.allocated = false;
       return this.wipe();
     };
   }
