@@ -129,6 +129,15 @@ define([
     },
 
     /**
+     * Returns size of main memory
+     *
+     * @return int
+     */
+    size: function () {
+      return MEMORY_SIZE;
+    },
+
+    /**
      * Writes some data to a memory location
      *
      * @param  int    memory location

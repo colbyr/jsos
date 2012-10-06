@@ -53,6 +53,9 @@ var DEFAULT_FONT_SIZE = 13;
 var FONT_HEIGHT_MARGIN = 4;
 
 // Default the OS trace to be on.
+
+var _MemoryManager = null;
+
 var _Trace = true;
 
 // OS queues

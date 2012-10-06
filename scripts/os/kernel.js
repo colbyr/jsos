@@ -14,12 +14,13 @@ define([
   'host/log',
   'host/Sim',
   'os/Console',
+  'os/MemoryManager',
   'os/Queue',
   'os/Shell',
   'os/Status',
   'os/trace',
   'os/drivers/Keyboard'
-], function (log, Sim, Console, Queue, Shell, Status, trace, KeyboardDriver) {
+], function (log, Sim, Console, MemoryManager, Queue, Shell, Status, trace, KeyboardDriver) {
 
   var Kernel = {
     //
@@ -33,6 +34,8 @@ define([
       _KernelInterruptQueue = new Queue(); // A (currently) non-priority queue for interrupt requests (IRQs).
       _KernelBuffers = []; // Buffers... for the kernel.
       _KernelInputQueue = new Queue();      // Where device input lands before being processed out somewhere.
+
+      _MemoryManager = new MemoryManager;
       _Console = new Console();             // The console output device.
       _Status = new Status(
         document.getElementById('status_bar')
