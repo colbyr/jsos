@@ -43,10 +43,12 @@ define([
       // TODO: Accumulate CPU usage and profiling statistics here.
       // Do real work here. Set this.isExecuting appropriately.
       var inst = this.process.get(this.registers.pc);
-      _StdIn.putText(inst);
-      _StdIn.advanceLine();
-      this.registers.pc += 1;
-      if (inst === 'FF') {
+      if (inst) {
+        // TODO: make an output interrupt
+        _StdIn.putText(inst);
+        _StdIn.advanceLine();
+        this.registers.pc += 1;
+      } else {
         this.exitProcess();
       }
     },

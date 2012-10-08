@@ -30,6 +30,11 @@ define([
 
   _.extend(Loader.prototype, {
 
+    clear: function () {
+      this.input.value = '';
+      this.code = '';
+    },
+
     /**
      * Clears the invalid class from the modal
      *
@@ -46,7 +51,14 @@ define([
      * @return strinj
      */
     getCode: function () {
-      return (this.valid && this.code !== '') ? this.parse(this.code) : null;
+      var result;
+      if (this.valid && this.code !== '') {
+        result = this.parse(this.code);
+        this.clear();
+      } else {
+        result = null;
+      }
+      return result;
     },
 
     /**
