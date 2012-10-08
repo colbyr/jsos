@@ -16,20 +16,24 @@
    ------------ */
 
 define([
+  'os/interrupts/ExitProcessInterrupt',
   'os/trace',
   'vendor/underscore'
-], function (trace) {
+], function (ExitProcessInterrupt, trace) {
 
   var OPCODES = {
   };
 
   function CPU() {
-    this.PC    = 0;     // Program Counter
-    this.Acc   = 0;     // Accumulator
-    this.Xreg  = 0;     // X register
-    this.Yreg  = 0;     // Y register
-    this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
     this.isExecuting = false;
+    this.process = null;
+    this.registers = {
+      pc:    0, // Program Counter
+      acc:   0, // Accumulator
+      xreg:  0, // X register
+      yreg:  0, // Y register
+      zflag: 0  // Z-ero flag (Think of it as "isZero".)
+    };
   }
 
   _.extend(CPU.prototype, {
@@ -38,19 +42,30 @@ define([
       trace('CPU cycle');
       // TODO: Accumulate CPU usage and profiling statistics here.
       // Do real work here. Set this.isExecuting appropriately.
+      var inst = this.process.get(this.registers.pc);
+      _StdIn.putText(inst);
+      _StdIn.advanceLine();
+      this.registers.pc += 1;
+      if (inst === 'FF') {
+        this.exitProcess();
+      }
     },
 
-    pulse: function () {
-      // TODO: Do we need this?  Probably not.
+    execute: function (process) {
+      this.process = process;
+      this.isExecuting = true;
     },
 
-    reset: function () {
-      this.PC    = 0;     // Program Counter
-      this.Acc   = 0;     // Accumulator
-      this.Xreg  = 0;     // X register
-      this.Yreg  = 0;     // Y register
-      this.Zflag = 0;     // Z-ero flag (Think of it as "isZero".)
+    exitProcess: function () {
+      this.resetRegisters();
       this.isExecuting = false;
+      _KernelInterruptQueue.enqueue(new ExitProcessInterrupt());
+    },
+
+    resetRegisters: function () {
+      for (var k in this.registers) {
+        this.registers[k] = 0;
+      }
     }
 
   });

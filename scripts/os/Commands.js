@@ -3,9 +3,12 @@
  */
 
 define([
+  'host/Sim',
+  'os/interrupts/CreateProcessInterrupt',
+  'os/interrupts/RunProcessInterrupt',
   'utils/Date',
   'utils/rot13'
-], function (Date, rot13) {
+], function (Sim, CreateProcessInterrupt, RunProcessInterrupt, Date, rot13) {
 
   return {
     bluescreen: {
@@ -81,7 +84,15 @@ define([
     load: {
       description: '- Loads validated 6502a op codes from the loader into memory and returns the PID.',
       func: function () {
-        _StdIn.putText('loading...');
+        var code = Sim.loadCode();
+        if (code) {
+          _KernelInterruptQueue.enqueue(new CreateProcessInterrupt({
+            program: code
+          }));
+          return false;
+        } else {
+          _StdIn.putText('FAIL: No valid code found.');
+        }
       }
     },
 
@@ -124,6 +135,20 @@ define([
           _StdIn.putText('Usage: rot13 <string>  Please supply a string.');
         }
       }
+    },
+
+    run: {
+      description: '<pid> - runs the process <pid>',
+      func: function (pid) {
+        if (pid) {
+          _KernelInterruptQueue.enqueue(
+            new RunProcessInterrupt({pid: pid})
+          );
+          return false;
+        } else {
+          _StdIn.putText('Usage: run <pid>');
+        }
+      },
     },
 
     shutdown: {

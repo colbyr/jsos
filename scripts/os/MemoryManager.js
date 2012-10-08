@@ -47,7 +47,7 @@ define([
 
   });
 
-  function BlockManager(block, pid) {
+  function BlockManager(block) {
     this.begin = block.begin;
     this.end = block.end;
     this.size = this.end - this.begin + 1;

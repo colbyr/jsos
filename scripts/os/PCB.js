@@ -1,7 +1,6 @@
 define([
-  'os/MemoryManager',
   'vendor/underscore'
-], function (MemoryManager) {
+], function () {
 
   /**
    * Process ID counter
@@ -16,7 +15,8 @@ define([
    * @return int
    */
   function _getPid() {
-    return ++_pids;
+    _pids += 1;
+    return _pids;
   }
 
   /**
@@ -26,13 +26,15 @@ define([
     // process ID
     this.pid = _getPid();
     // memory manager
-    this.memory = MemoryManager.allocateBlock();
+    this.memory = _MemoryManager.allocateBlock();
     // process status
-    this.acc = 0;
-    this.pc = 0;
-    this.x = 0;
-    this.y = 0;
-    this.z = 0;
+    this.registers = {
+      acc: 0,
+      pc: 0,
+      x: 0,
+      y: 0,
+      z: 0
+    };
 
     // init
     this.memory.write(0, program);
@@ -40,7 +42,9 @@ define([
 
   _.extend(PCB.prototype, {
 
-    
+    get: function (index) {
+      return this.memory.access(index);
+    }
 
   });
 

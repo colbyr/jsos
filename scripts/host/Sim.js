@@ -31,7 +31,6 @@ define([
   var _hardwareClockTimeout = null;
   var _kernel = null;
   var _loader = new Loader();
-  // var _taLog = null;
 
   function _onKeypress(e) {
     var params;
@@ -102,8 +101,8 @@ define([
       _btns.start.focus();     // TODO: This does not seem to work.  Why?
     },
 
-    load: function () {
-      _loader.show();
+    loadCode: function () {
+      return _loader.getCode();
     },
 
     reset: function () {

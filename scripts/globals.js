@@ -27,6 +27,9 @@ var TIMER_IRQ = 0;
 
 // NOTE: The timer is different from hardware clock pulses. Don't confuse these.
 var KEYBOARD_IRQ = 1;
+var CREATE_PROCESS_IRQ = 2;
+var RUN_PROCESS_IRQ = 3;
+var EXIT_PROCESS_IRQ = 4;
 
 
 //

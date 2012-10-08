@@ -15,14 +15,27 @@ define([
   'host/Sim',
   'os/Console',
   'os/MemoryManager',
+  'os/PCB',
   'os/Queue',
   'os/Shell',
   'os/Status',
   'os/trace',
   'os/drivers/Keyboard'
-], function (log, Sim, Console, MemoryManager, Queue, Shell, Status, trace, KeyboardDriver) {
+], function (log, Sim, Console, MemoryManager, PCB, Queue, Shell, Status, trace, KeyboardDriver) {
+
+  var _processes = {};
 
   var Kernel = {
+
+    createProcess: function (code) {
+      var process = new PCB(code);
+      _processes['pid_' + process.pid] = process;
+      return process.pid;
+    },
+
+    runProcess: function (pid) {
+    },
+
     //
     // OS Startup and Shutdown Routines
     //
@@ -35,7 +48,7 @@ define([
       _KernelBuffers = []; // Buffers... for the kernel.
       _KernelInputQueue = new Queue();      // Where device input lands before being processed out somewhere.
 
-      _MemoryManager = new MemoryManager;
+      _MemoryManager = new MemoryManager();
       _Console = new Console();             // The console output device.
       _Status = new Status(
         document.getElementById('status_bar')
@@ -47,8 +60,10 @@ define([
 
       // Load the Keyboard Device Driver
       trace('Loading the keyboard device driver.');
-      this.keyboardDriver = new KeyboardDriver();     // Construct it.
-      this.keyboardDriver.driverEntry();                    // Call the driverEntry() initialization routine.
+      // Construct it.
+      this.keyboardDriver = new KeyboardDriver();
+      // Call the driverEntry() initialization routine
+      this.keyboardDriver.driverEntry();
       trace(this.keyboardDriver.status);
 
       //
@@ -132,6 +147,22 @@ define([
         case KEYBOARD_IRQ:
           this.keyboardDriver.isr(params[0], params[1]); // Kernel mode device driver
           _StdIn.handleInput();
+          break;
+        case CREATE_PROCESS_IRQ:
+          _StdIn.putText('pid ' + this.createProcess(params.program));
+          _OsShell.advanceLine();
+          break;
+        case EXIT_PROCESS_IRQ:
+          _OsShell.advanceLine();
+          break;
+        case RUN_PROCESS_IRQ:
+          var process = _processes['pid_' + params.pid];
+          if (process) {
+            _CPU.execute(process);
+          } else {
+            _StdIn.putText('FAIL: process ' + params.pid + ' does not exist');
+            _OsShell.advanceLine();
+          }
           break;
         default:
           this.trapError(
