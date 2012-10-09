@@ -24,9 +24,13 @@ define([
     this.memory = _MemoryManager.allocateBlock();
     this.pcb = new PCB();
     this.pid = _getPid();
+    this.valid = false;
 
     // init
-    this.memory.write(0, program);
+    if (this.memory) {
+      this.memory.write(0, program);
+      this.valid = true;
+    }
   }
 
   _.extend(Process.prototype, {

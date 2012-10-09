@@ -28,9 +28,14 @@ define([
 
     allocateBlock: function () {
       var block = this.getFreeBlock();
-      var manager = new BlockManager(block);
-      block.allocated = true;
-      this.managers.push(manager);
+      var manager;
+      if (block) {
+        manager = new BlockManager(block);
+        block.allocated = true;
+        this.managers.push(manager);
+      } else {
+        manager = null;
+      }
       return manager;
     },
 

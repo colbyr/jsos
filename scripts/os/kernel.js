@@ -29,9 +29,13 @@ define([
   var Kernel = {
 
     createProcess: function (code) {
+      var pid;
       var process = new Process(code);
-      _processes['pid_' + process.pid] = process;
-      return process.pid;
+      if (process.valid) {
+        _processes['pid_' + process.pid] = process;
+        pid = process.pid;
+      }
+      return pid;
     },
 
     runProcess: function (pid) {
@@ -150,8 +154,14 @@ define([
           _StdIn.handleInput();
           break;
         case CREATE_PROCESS_IRQ:
-          _StdIn.putText('pid ' + this.createProcess(params.program));
-          _OsShell.advanceLine();
+          var pid = this.createProcess(params.program);
+          if (pid) {
+            _StdIn.putText('pid ' + pid);
+            _OsShell.advanceLine();
+          } else {
+            _StdIn.putText('FAIL: unable to create process');
+            _OsShell.advanceLine();
+          }
           break;
         case EXIT_PROCESS_IRQ:
           _OsShell.advanceLine();
@@ -159,7 +169,6 @@ define([
         case RUN_PROCESS_IRQ:
           var process = _processes['pid_' + params.pid];
           if (process) {
-            console.log(process);
             _CPU.execute(process);
           } else {
             _StdIn.putText('FAIL: process ' + params.pid + ' does not exist');
