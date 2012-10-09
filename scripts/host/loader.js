@@ -8,7 +8,7 @@ define([
    *
    * @var regex
    */
-  var _validator = /^([0-9A-F]{2} +)*[0-9A-F]{2}$/;
+  var _validator = /^([0-9a-fA-F]{2} +)*[0-9a-fA-F]{2}$/;
 
   /**
    * Controller for the program loader

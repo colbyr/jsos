@@ -22,6 +22,7 @@ define([
 
   function Process(program) {
     this.memory = _MemoryManager.allocateBlock();
+    this.partition = program.length;
     this.pcb = new PCB();
     this.pid = _getPid();
     this.valid = false;
@@ -37,7 +38,19 @@ define([
 
     inst: function (index) {
       return this.memory.access(index);
-    }
+    },
+
+    offset: function (loc) {
+      return loc + this.partition;
+    },
+
+    read: function (loc) {
+      return this.memory.access(this.offset(loc));
+    },
+
+    write: function (loc, data) {
+      this.memory.write(this.offset(loc), data);
+    },
 
   });
 

@@ -36,7 +36,7 @@ define([
 
   // initialize the memory block
   for (var i = 0; i < MEMORY_SIZE; i += 1) {
-    _memory.push(null);
+    _memory.push('00');
   }
 
   /**
