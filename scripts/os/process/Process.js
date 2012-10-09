@@ -1,6 +1,7 @@
 define([
-  'vendor/underscore'
-], function () {
+  'os/process/PCB',
+  'vendor/underscore',
+], function (PCB) {
 
   /**
    * Process ID counter
@@ -19,35 +20,23 @@ define([
     return _pids;
   }
 
-  /**
-   * Process Control Block
-   */
-  function PCB(program) {
-    // process ID
-    this.pid = _getPid();
-    // memory manager
+  function Process(program) {
     this.memory = _MemoryManager.allocateBlock();
-    // process status
-    this.registers = {
-      acc: 0,
-      pc: 0,
-      x: 0,
-      y: 0,
-      z: 0
-    };
+    this.pcb = new PCB();
+    this.pid = _getPid();
 
     // init
     this.memory.write(0, program);
   }
 
-  _.extend(PCB.prototype, {
+  _.extend(Process.prototype, {
 
-    get: function (index) {
+    inst: function (index) {
       return this.memory.access(index);
     }
 
   });
 
-  return PCB;
+  return Process;
 
 });

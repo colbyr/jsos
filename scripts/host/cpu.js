@@ -42,7 +42,7 @@ define([
       trace('CPU cycle');
       // TODO: Accumulate CPU usage and profiling statistics here.
       // Do real work here. Set this.isExecuting appropriately.
-      var inst = this.process.get(this.registers.pc);
+      var inst = this.process.inst(this.registers.pc);
       if (inst) {
         // TODO: make an output interrupt
         _StdIn.putText(inst);
@@ -59,8 +59,9 @@ define([
     },
 
     exitProcess: function () {
-      this.resetRegisters();
       this.isExecuting = false;
+      this.process = null;
+      this.resetRegisters();
       _KernelInterruptQueue.enqueue(new ExitProcessInterrupt());
     },
 

@@ -15,20 +15,21 @@ define([
   'host/Sim',
   'os/Console',
   'os/MemoryManager',
-  'os/PCB',
+  'os/process/Process',
   'os/Queue',
   'os/Shell',
   'os/Status',
   'os/trace',
   'os/drivers/Keyboard'
-], function (log, Sim, Console, MemoryManager, PCB, Queue, Shell, Status, trace, KeyboardDriver) {
+], function (log, Sim, Console, MemoryManager, Process, Queue, Shell, Status, trace, KeyboardDriver) {
 
   var _processes = {};
+  P = _processes;
 
   var Kernel = {
 
     createProcess: function (code) {
-      var process = new PCB(code);
+      var process = new Process(code);
       _processes['pid_' + process.pid] = process;
       return process.pid;
     },
@@ -158,6 +159,7 @@ define([
         case RUN_PROCESS_IRQ:
           var process = _processes['pid_' + params.pid];
           if (process) {
+            console.log(process);
             _CPU.execute(process);
           } else {
             _StdIn.putText('FAIL: process ' + params.pid + ' does not exist');

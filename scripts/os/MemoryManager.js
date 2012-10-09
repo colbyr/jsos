@@ -21,16 +21,16 @@ define([
   }
 
   function MemoryManager() {
-    this.managers = {};
+    this.managers = [];
   }
 
   _.extend(MemoryManager.prototype, {
 
-    allocateBlock: function (pid) {
+    allocateBlock: function () {
       var block = this.getFreeBlock();
       var manager = new BlockManager(block);
       block.allocated = true;
-      this.managers['pid_' + pid] = manager;
+      this.managers.push(manager);
       return manager;
     },
 
@@ -61,16 +61,23 @@ define([
   _.extend(BlockManager.prototype, {
 
     access: function (a, b) {
+      a = this.getRealLoc(a);
+      b = this.getRealLoc(b);
       return b ?
-        CoreMemory.accessBlock(a + this.begin, b + this.begin) :
-        CoreMemory.access(a + this.begin);
+        CoreMemory.accessBlock(a, b) :
+        CoreMemory.access(a);
+    },
+
+    getRealLoc: function (loc) {
+      return loc + this.begin;
     },
 
     inRange: function (loc) {
-      return loc >= 0 && loc < this.size;
+      return loc >= this.begin && loc < this.getRealLoc(this.size);
     },
 
     write: function (loc, data) {
+      loc = this.getRealLoc(loc);
       if (!this.inRange(loc) || !this.inRange(loc + data.length - 1)) {
         _error('Invalid memory access');
       }
