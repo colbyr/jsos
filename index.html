@@ -33,7 +33,7 @@
       <p class="status" id="status_bar">...</p>
     </div>
 
-    <div class="col-12">
+    <div class="col-6">
       <div class="controls">
         <input type="button"
                id = "btnStartOS"
@@ -59,6 +59,29 @@
                tabindex="2"
         />
       </div>
+    </div>
+
+    <div class="col-6">
+      <table class="registers" id="registers">
+        <thead>
+          <tr>
+            <th>ACC</th>
+            <th>PC</th>
+            <th>XR</th>
+            <th>YR</th>
+            <th>ZF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="acc"></td>
+            <td id="pc"></td>
+            <td id="xr"></td>
+            <td id="yr"></td>
+            <td id="zf"></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <div class="col-12">
