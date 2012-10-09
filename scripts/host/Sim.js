@@ -22,15 +22,17 @@ define([
   'host/loader',
   'host/log',
   'host/Memory',
+  'host/Monitor',
   'os/Canvas',
   'os/interrupts/KeyboardInterrupt'
-], function (CPU, Loader, log, Memory, Canvas, KeyboardInterrupt) {
+], function (CPU, Loader, log, Memory, Monitor, Canvas, KeyboardInterrupt) {
 
   var _btns = null;
   var _display = null;
   var _hardwareClockTimeout = null;
   var _kernel = null;
   var _loader = new Loader();
+  var _monitor = new Monitor();
 
   function _onKeypress(e) {
     var params;
@@ -103,6 +105,10 @@ define([
 
     loadCode: function () {
       return _loader.getCode();
+    },
+
+    updateMonitor: function () {
+      _monitor.update();
     },
 
     reset: function () {

@@ -24,7 +24,6 @@ define([
 ], function (log, Sim, Console, MemoryManager, Process, Queue, Shell, Status, trace, KeyboardDriver) {
 
   var _processes = {};
-  P = _processes;
 
   var Kernel = {
 
@@ -36,9 +35,6 @@ define([
         pid = process.pid;
       }
       return pid;
-    },
-
-    runProcess: function (pid) {
     },
 
     //
@@ -117,6 +113,7 @@ define([
         // If there are no interrupts and there is nothing being executed then just be idle.
         trace('Idle');
       }
+      Sim.updateMonitor();
     },
 
     //

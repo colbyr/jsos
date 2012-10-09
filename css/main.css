@@ -16,6 +16,7 @@ h2 {
 }
 
 .controls {
+  line-height: 48px;
   margin-bottom: 10px;
 }
 
@@ -40,6 +41,19 @@ h2 {
   height: 150px;
   width: 95%;
 }
+
+.registers {
+  border: 1px solid;
+  float: right;
+  font-size: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+  .registers td,
+  .registers th {
+    min-height: 1em;
+    padding: 0 1em;
+  }
 
 .status {
   border: 1px solid;

@@ -89,11 +89,11 @@ define([
     this.isExecuting = false;
     this.process = null;
     this.registers = {
-      pc:    0, // Program Counter
-      acc:   0, // Accumulator
-      xreg:  0, // X register
-      yreg:  0, // Y register
-      zflag: 0  // Z-ero flag (Think of it as "isZero".)
+      pc:  0, // Program Counter
+      acc: 0, // Accumulator
+      xr:  0, // X register
+      yr:  0, // Y register
+      zf:  0  // Z-ero flag (Think of it as "isZero".)
     };
   }
 
@@ -113,6 +113,7 @@ define([
     },
 
     execute: function (process) {
+      this.resetRegisters();
       this.process = process;
       this.isExecuting = true;
     },
@@ -120,7 +121,6 @@ define([
     exitProcess: function () {
       this.isExecuting = false;
       this.process = null;
-      this.resetRegisters();
       _KernelInterruptQueue.enqueue(new ExitProcessInterrupt());
     },
 
