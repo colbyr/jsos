@@ -8,6 +8,9 @@ h2 {
   font-size: 1em;
   margin-bottom: .2em;
 }
+.canvas_wrapper {
+  background: #000;
+}
 
 .canvas {
   background: #000;
