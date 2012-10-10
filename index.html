@@ -33,7 +33,7 @@
       <p></p>
     </div>
 
-    <div class="col-6">
+    <div class="col-8">
       <div class="controls">
         <input type="button"
                id = "btnStartOS"
@@ -61,27 +61,8 @@
       </div>
     </div>
 
-    <div class="col-6">
-      <table class="registers" id="registers">
-        <thead>
-          <tr>
-            <th>ACC</th>
-            <th>PC</th>
-            <th>XR</th>
-            <th>YR</th>
-            <th>ZF</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td id="acc">&nbsp;</td>
-            <td id="pc">&nbsp;</td>
-            <td id="xr">&nbsp;</td>
-            <td id="yr">&nbsp;</td>
-            <td id="zf">&nbsp;</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-4 loader" id="loader">
+      <textarea class="code textarea" id="code" placeholder="Enter 6502 hex code"></textarea>
     </div>
 
     <div class="col-12">
@@ -91,15 +72,38 @@
   </div>
 
   <div class="row">
-    <div class="col-7">
+    <div class="col-8">
       <h2>System log:</h2>
-      <textarea class="log textarea" id="taLog" name="taLog"></textarea>
+      <textarea class="log textarea" id="taLog" name="taLog" readonly></textarea>
     </div>
 
-    <div class="col-5 loader" id="loader">
-      <h2>Enter 6502 HEX code:</h2>
-      <p class="warning">invalid code</p>
-      <textarea class="textarea" id="code"></textarea>
+    <div class="col-4">
+      <h2>Registers:</h2>
+      <table class="registers" id="registers">
+        <thead>
+          <tr>
+            <th>PC</th>
+            <th>ACC</th>
+            <th>XR</th>
+            <th>YR</th>
+            <th>ZF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="pc">&nbsp;</td>
+            <td id="acc">&nbsp;</td>
+            <td id="xr">&nbsp;</td>
+            <td id="yr">&nbsp;</td>
+            <td id="zf">&nbsp;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-4">
+      <h2>Memory:</h2>
+      <textarea class="memory textarea" id="memory" ></textarea>
     </div>
   </div>
 

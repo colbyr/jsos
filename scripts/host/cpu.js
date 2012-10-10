@@ -17,9 +17,10 @@
 
 define([
   'os/interrupts/ExitProcessInterrupt',
+  'os/interrupts/PrintInterrupt',
   'os/trace',
   'vendor/underscore'
-], function (ExitProcessInterrupt, trace) {
+], function (ExitProcessInterrupt, PrintInterrupt, trace) {
 
   var CONST = 2;
   var MEM = 3;
@@ -84,7 +85,6 @@ define([
     '00': { // BRK - Break (really a system call)
       arg: NONE,
       func: function () {
-        // TODO: exit process interrupt
         this.exitProcess();
       }
     },
@@ -97,7 +97,10 @@ define([
     },
     'D0': { // BNE - branch X bytes if ZF = 0
       arg: CONST,
-      func: function (num) {}
+      func: function (num) {
+        if (this.registers.zf == 0) {
+        }
+      }
     },
     'EE': { // INC - incrememt the value of a byte
       arg: MEM,
@@ -111,6 +114,21 @@ define([
     'FF': { // SYS - system call loaded from XR
       arg: NONE,
       func: function () {
+        var call = this.registers.xr;
+        switch (call) {
+          case '01':
+            _KernelInterruptQueue.enqueue(new PrintInterrupt({
+              item: this.registers.yr.toUpperCase()
+            }));
+            break;
+          case '02':
+            _KernelInterruptQueue.enqueue(new PrintInterrupt({
+              item: this.process.read(
+                _dec(this.registers.yr)
+              ).toUpperCase()
+            }));
+            break;
+        }
       }
     }
   };
@@ -140,10 +158,14 @@ define([
     if (op) {
       switch (op.arg) {
         case CONST:
-          args[0] = cpu.process.inst(cpu.pcloc + 1);
+          args[0] = cpu.process.inst(
+            _dec(_add(cpu.registers.pc, '01'))
+          );
           break;
         case MEM:
-          args[0] = _dec(cpu.process.inst(cpu.pcloc + 1));
+          var a = cpu.process.inst(_dec(_add(cpu.registers.pc, '02')));
+          var b = cpu.process.inst(_dec(_add(cpu.registers.pc, '01')));
+          args[0] = _dec(a + b);
           break;
         case NONE:
           break;
@@ -163,14 +185,13 @@ define([
 
   function CPU() {
     this.isExecuting = false;
-    this.pcloc = 0;
     this.process = null;
     this.registers = {
       pc:  '00', // Program Counter
       acc: '00', // Accumulator
       xr:  '00', // X register
       yr:  '00', // Y register
-      zf:  '0'  // Z-ero flag (Think of it as "isZero".)
+      zf:  '0'   // Z-ero flag (Think of it as "isZero".)
     };
   }
 
@@ -180,10 +201,12 @@ define([
       trace('CPU cycle');
       // TODO: Accumulate CPU usage and profiling statistics here.
       // Do real work here. Set this.isExecuting appropriately.
-      var inst = this.process.inst(this.pcloc);
+      var inst = this.process.inst(_dec(this.registers.pc));
       // TODO: make an output interrupt
-      this.pcloc += _exec(this, inst);
-      this.registers.pc = _inc(this.registers.pc);
+      this.registers.pc = _add(
+        this.registers.pc,
+        _exec(this, inst)
+      );
     },
 
     execute: function (process) {
@@ -199,9 +222,8 @@ define([
     },
 
     resetRegisters: function () {
-      this.pcloc = 0;
       for (var k in this.registers) {
-        this.registers[k] = '00';
+        this.registers[k] = k === 'zf' ? '0' : '00';
       }
     }
 

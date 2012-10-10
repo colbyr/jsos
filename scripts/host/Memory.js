@@ -97,6 +97,10 @@ define([
       return _memory.slice(locA, locB + 1);
     },
 
+    dump: function () {
+      return this.accessBlock(0, MEMORY_SIZE - 1);
+    },
+
     /**
      * Clears a single memory location
      *

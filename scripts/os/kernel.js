@@ -172,6 +172,9 @@ define([
             _OsShell.advanceLine();
           }
           break;
+        case PRINT_IRQ:
+          _StdIn.putText(params.item + ' ');
+          break;
         default:
           this.trapError(
             'Invalid Interrupt Request. irq=' + irq + ' params=[' + params + ']'
