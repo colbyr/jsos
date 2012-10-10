@@ -99,6 +99,7 @@ define([
       arg: CONST,
       func: function (num) {
         if (this.registers.zf == 0) {
+          this.registers.pc = num;
         }
       }
     },
