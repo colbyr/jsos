@@ -97,9 +97,19 @@ define([
     },
     'D0': { // BNE - branch X bytes if ZF = 0
       arg: CONST,
-      func: function (num) {
-        if (this.registers.zf == 0) {
-          this.registers.pc = num;
+      func: function (offset) {
+        console.log("BNE [D0 " + offset + "]");
+        if(this.registers.zf === '0') {
+            console.log("  PC before branch: " + this.registers.pc);
+            // apply branch-ahead offset 
+            var pc = _add(this.registers.pc, offset);
+            // check to see that we haven't gone "around" past 255.
+            if(_dec(pc) > 255) {
+                pc = _sub(this.registers.pc, '100');
+            }
+            this.registers.pc = pc;
+            // LOG
+            console.log("  PC after branch: " + this.registers.pc);
         }
       }
     },
@@ -145,6 +155,10 @@ define([
 
   function _add(h1, h2) {
     return _hex(_dec(h1) + _dec(h2));
+  }
+
+  function _sub(h1, h2) {
+    return _hex(_dec(h1) - _dec(h2));
   }
 
   function _inc(h1) {
