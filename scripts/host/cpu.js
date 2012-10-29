@@ -19,8 +19,9 @@ define([
   'os/interrupts/ExitProcessInterrupt',
   'os/interrupts/PrintInterrupt',
   'os/trace',
+  'utils/hex',
   'vendor/underscore'
-], function (ExitProcessInterrupt, PrintInterrupt, trace) {
+], function (ExitProcessInterrupt, PrintInterrupt, trace, hex) {
 
   var CONST = 2;
   var MEM = 3;
@@ -48,7 +49,7 @@ define([
     '6D': { // ADC - add contents of a memory location to the ACC
       arg: MEM,
       func: function (loc) {
-        this.registers.acc = _add(
+        this.registers.acc = hex.add(
           this.registers.acc,
           this.process.read(loc)
         );
@@ -98,18 +99,18 @@ define([
     'D0': { // BNE - branch X bytes if ZF = 0
       arg: CONST,
       func: function (offset) {
-        console.log("BNE [D0 " + offset + "]");
+        console.log('BNE [D0 ' + offset + ']');
         if(this.registers.zf === '0') {
-            console.log("  PC before branch: " + this.registers.pc);
-            // apply branch-ahead offset 
-            var pc = _add(this.registers.pc, offset);
+            console.log('  PC before branch: ' + this.registers.pc);
+            // apply branch-ahead offset
+            var pc = hex.add(this.registers.pc, offset);
             // check to see that we haven't gone "around" past 255.
-            if(_dec(pc) > 255) {
-                pc = _sub(this.registers.pc, '100');
+            if(hex.toDec(pc) > 255) {
+                pc = hex.sub(this.registers.pc, '100');
             }
             this.registers.pc = pc;
             // LOG
-            console.log("  PC after branch: " + this.registers.pc);
+            console.log('  PC after branch: ' + this.registers.pc);
         }
       }
     },
@@ -118,7 +119,7 @@ define([
       func: function (loc) {
         this.process.write(
           loc,
-          _inc(this.process.read(loc))
+          hex.inc(this.process.read(loc))
         );
       }
     },
@@ -135,7 +136,7 @@ define([
           case '02':
             _KernelInterruptQueue.enqueue(new PrintInterrupt({
               item: this.process.read(
-                _dec(this.registers.yr)
+                hex.toDec(this.registers.yr)
               ).toUpperCase()
             }));
             break;
@@ -143,27 +144,6 @@ define([
       }
     }
   };
-
-  function _dec(string) {
-    return parseInt(string, 16);
-  }
-
-  function _hex(num) {
-    var hex = num.toString(16);
-    return hex.length === 2 ? hex : '0' + hex;
-  }
-
-  function _add(h1, h2) {
-    return _hex(_dec(h1) + _dec(h2));
-  }
-
-  function _sub(h1, h2) {
-    return _hex(_dec(h1) - _dec(h2));
-  }
-
-  function _inc(h1) {
-    return _add('01', h1);
-  }
 
   function _exec(cpu, inst) {
     inst = inst.toUpperCase();
@@ -174,13 +154,13 @@ define([
       switch (op.arg) {
         case CONST:
           args[0] = cpu.process.inst(
-            _dec(_add(cpu.registers.pc, '01'))
+            hex.toDec(hex.add(cpu.registers.pc, '01'))
           );
           break;
         case MEM:
-          var a = cpu.process.inst(_dec(_add(cpu.registers.pc, '02')));
-          var b = cpu.process.inst(_dec(_add(cpu.registers.pc, '01')));
-          args[0] = _dec(a + b);
+          var a = cpu.process.inst(hex.toDec(hex.add(cpu.registers.pc, '02')));
+          var b = cpu.process.inst(hex.toDec(hex.add(cpu.registers.pc, '01')));
+          args[0] = hex.toDec(a + b);
           break;
         case NONE:
           break;
@@ -216,11 +196,11 @@ define([
       trace('CPU cycle');
       // TODO: Accumulate CPU usage and profiling statistics here.
       // Do real work here. Set this.isExecuting appropriately.
-      var inst = this.process.inst(_dec(this.registers.pc));
+      var inst = this.process.inst(hex.toDec(this.registers.pc));
       // TODO: make an output interrupt
-      this.registers.pc = _add(
+      this.registers.pc = hex.add(
         this.registers.pc,
-        _exec(this, inst)
+        hex.toHex(_exec(this, inst))
       );
     },
 
