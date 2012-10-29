@@ -173,7 +173,7 @@ define([
           }
           break;
         case PRINT_IRQ:
-          _StdIn.putText(params.item + ' ');
+          _StdIn.putText(params.item);
           break;
         default:
           this.trapError(

@@ -128,17 +128,29 @@ define([
       func: function () {
         var call = this.registers.xr;
         switch (call) {
-          case '01':
-            _KernelInterruptQueue.enqueue(new PrintInterrupt({
-              item: this.registers.yr.toUpperCase()
-            }));
+          case '01': // print Y-register
+            _KernelInterruptQueue.enqueue(
+               new PrintInterrupt({
+                 item: hex.format(this.registers.yr, 1)
+               })
+            );
             break;
-          case '02':
-            _KernelInterruptQueue.enqueue(new PrintInterrupt({
-              item: this.process.read(
-                hex.toDec(this.registers.yr)
-              ).toUpperCase()
-            }));
+          case '02': // print 00 terminated string
+            var inc = 0;
+            var codes = [];
+            var character = this.process.read(hex.toDec(this.registers.yr) + inc);
+            while (character !== '00') {
+              codes.push(
+                hex.toDec(character)
+              );
+              inc += 1;
+              character = this.process.read(hex.toDec(this.registers.yr) + inc);
+            }
+            _KernelInterruptQueue.enqueue(
+              new PrintInterrupt({
+                item: String.fromCharCode.apply(null, codes)
+              })
+            );
             break;
         }
       }
@@ -151,16 +163,17 @@ define([
     var op = OPCODES[inst];
     var inc = 0;
     if (op) {
+      inc = op.arg;
       switch (op.arg) {
         case CONST:
-          args[0] = cpu.process.inst(
-            hex.toDec(hex.add(cpu.registers.pc, '01'))
-          );
+          args[0] = cpu.process.read(hex.toDec(cpu.registers.pc) + 1);
           break;
         case MEM:
-          var a = cpu.process.inst(hex.toDec(hex.add(cpu.registers.pc, '02')));
-          var b = cpu.process.inst(hex.toDec(hex.add(cpu.registers.pc, '01')));
-          args[0] = hex.toDec(a + b);
+          var a = cpu.process.read(hex.toDec(cpu.registers.pc) + 2);
+          var b = cpu.process.read(hex.toDec(cpu.registers.pc) + 1);
+          args[0] = hex.toDec(
+            hex.add(a, b)
+          );
           break;
         case NONE:
           break;
@@ -168,7 +181,6 @@ define([
           throw new Error('CPU._exec: no arg specified for "' + inst + '"');
       }
       op.func.apply(cpu, args);
-      inc = op.arg;
     } else {
       // TODO: handle error case
       _StdIn.putText('FAIL: unrecognized op code "' + inst + '"');
@@ -196,7 +208,7 @@ define([
       trace('CPU cycle');
       // TODO: Accumulate CPU usage and profiling statistics here.
       // Do real work here. Set this.isExecuting appropriately.
-      var inst = this.process.inst(hex.toDec(this.registers.pc));
+      var inst = this.process.read(hex.toDec(this.registers.pc));
       // TODO: make an output interrupt
       this.registers.pc = hex.add(
         this.registers.pc,

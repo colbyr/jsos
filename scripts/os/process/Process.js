@@ -1,6 +1,6 @@
 define([
   'os/process/PCB',
-  'vendor/underscore',
+  'vendor/underscore'
 ], function (PCB) {
 
   /**
@@ -36,21 +36,17 @@ define([
 
   _.extend(Process.prototype, {
 
-    inst: function (index) {
-      return this.memory.access(index);
-    },
-
     offset: function (loc) {
       return loc + this.partition;
     },
 
     read: function (loc) {
-      return this.memory.access(this.offset(loc));
+      return this.memory.access(loc);
     },
 
     write: function (loc, data) {
-      this.memory.write(this.offset(loc), data);
-    },
+      this.memory.write(loc, data);
+    }
 
   });
 
