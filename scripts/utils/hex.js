@@ -1,7 +1,7 @@
 define([], function () {
 
   /**
-   * Default length for elongate
+   * Default length for format
    */
   var DEFAULT_LENGTH = 2;
 
@@ -69,10 +69,10 @@ define([], function () {
      * @param  int      goal length
      * @return string
      */
-    elongate: function (hex, length) {
+    format: function (hex, length) {
       if (!this.isHex(hex)) {
         throw new Error(
-          'Hex.elongate: "' + hex.toString() + '" is not a hex string'
+          'Hex.format: "' + hex.toString() + '" is not a hex string'
         );
       }
 
@@ -81,9 +81,17 @@ define([], function () {
       if (negative) {
         hex = hex.slice(1);
       }
-      while (hex.length < length) {
-        hex = '0' + hex;
+
+      if (hex.length < length) {
+        while (hex.length < length) {
+          hex = '0' + hex;
+        }
+      } else if (hex.length > length) {
+        while (hex.length > length && hex.charAt(0) === '0') {
+          hex = hex.slice(1);
+        }
       }
+
       return (negative ? '-' + hex : hex).toUpperCase();
     },
 
@@ -189,7 +197,7 @@ define([], function () {
         throw new Error('Hex.toHex: expects a number, ' + typeof dec + ' given');
       }
 
-      return this.elongate(
+      return this.format(
         dec.toString(16),
         length
       );
