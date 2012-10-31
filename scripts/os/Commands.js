@@ -137,12 +137,24 @@ define([
       }
     },
 
+    rrq: {
+      description: '<quantum> - sets the Round Robin Quantum (in clock ticks)',
+      func: function (quantum) {
+        if (quantum && /[0-9]+/.test(quantum)) {
+          RR_QUANTUM = quantum;
+          _StdIn.putText('RR Quantum set to ' + quantum);
+        } else {
+          _StdIn.putText('Quantum: ' + RR_QUANTUM + ' - Usage: rrq <quantum>');
+        }
+      }
+    },
+
     run: {
       description: '<pid> - runs the process <pid>',
       func: function (pid) {
         if (pid) {
           _KernelInterruptQueue.enqueue(
-            new RunProcessInterrupt({pid: pid})
+            new RunProcessInterrupt({pid: parseInt(pid)})
           );
           return false;
         } else {

@@ -22,7 +22,6 @@ define([
 
   function Process(program) {
     this.memory = _MemoryManager.allocateBlock();
-    this.partition = program.length;
     this.pcb = new PCB();
     this.pid = _getPid();
     this.valid = false;

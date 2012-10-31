@@ -17,13 +17,12 @@ define([
   'os/MemoryManager',
   'os/process/Process',
   'os/Queue',
+  'os/ReadyQueue',
   'os/Shell',
   'os/Status',
   'os/trace',
   'os/drivers/Keyboard'
-], function (log, Sim, Console, MemoryManager, Process, Queue, Shell, Status, trace, KeyboardDriver) {
-
-  var _processes = {};
+], function (log, Sim, Console, MemoryManager, Process, Queue, ReadyQueue, Shell, Status, trace, KeyboardDriver) {
 
   var Kernel = {
 
@@ -31,7 +30,7 @@ define([
       var pid;
       var process = new Process(code);
       if (process.valid) {
-        _processes['pid_' + process.pid] = process;
+        _ReadyQueue.add(process);
         pid = process.pid;
       }
       return pid;
@@ -48,6 +47,7 @@ define([
       _KernelInterruptQueue = new Queue(); // A (currently) non-priority queue for interrupt requests (IRQs).
       _KernelBuffers = []; // Buffers... for the kernel.
       _KernelInputQueue = new Queue();      // Where device input lands before being processed out somewhere.
+      _ReadyQueue = new ReadyQueue();
 
       _MemoryManager = new MemoryManager();
       _Console = new Console();             // The console output device.
@@ -164,7 +164,7 @@ define([
           _OsShell.advanceLine();
           break;
         case RUN_PROCESS_IRQ:
-          var process = _processes['pid_' + params.pid];
+          var process = _ReadyQueue.squeeze(params.pid);
           if (process) {
             _CPU.execute(process);
           } else {

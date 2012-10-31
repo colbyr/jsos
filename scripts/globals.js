@@ -22,6 +22,8 @@ var APP_VERSION = '0.0.1';
 // in ms, or milliseconds, so 1000 = 1 second.
 var CPU_CLOCK_INTERVAL = 100;
 
+var RR_QUANTUM = 7;
+
 // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 var TIMER_IRQ = 0;
 
@@ -66,6 +68,7 @@ var _Trace = true;
 var _KernelInterruptQueue = null;
 var _KernelBuffers = null;
 var _KernelInputQueue = null;
+var _ReadyQueue = null;
 
 // Standard input and output
 var _StdIn  = null;

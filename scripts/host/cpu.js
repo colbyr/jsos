@@ -223,9 +223,13 @@ define([
     },
 
     exitProcess: function () {
+      _KernelInterruptQueue.enqueue(
+        new ExitProcessInterrupt({
+          process: this.process
+        })
+      );
       this.isExecuting = false;
       this.process = null;
-      _KernelInterruptQueue.enqueue(new ExitProcessInterrupt());
     },
 
     resetRegisters: function () {
