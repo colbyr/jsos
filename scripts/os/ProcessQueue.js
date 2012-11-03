@@ -9,11 +9,11 @@ define([
   /**
    * An FIFO queue of processes for CPU scheduler
    */
-  function ReadyQueue() {
+  function ProcessQueue() {
     this.q = [];
   }
 
-  _.extend(ReadyQueue.prototype, {
+  _.extend(ProcessQueue.prototype, {
 
     /**
      * Add a process to the queue
@@ -22,7 +22,7 @@ define([
      */
     add: function (process) {
       if (!(process instanceof Process)) {
-        throw new Error('ReadyQueue.add expects a Process');
+        throw new Error('ProcessQueue.add expects a Process');
       }
 
       this.q.push(process);
@@ -37,7 +37,7 @@ define([
     contains: function (pid) {
       if (!_isPid(pid)) {
         throw new Error(
-          'ReadyQueue.contains: "' + pid + '" is not a valid PID'
+          'ProcessQueue.contains: "' + pid + '" is not a valid PID'
         );
       }
 
@@ -53,7 +53,7 @@ define([
     indexOf: function (pid) {
       if (!_isPid(pid)) {
         throw new Error(
-          'ReadyQueue.indexOf: "' + pid + '" is not a valid PID'
+          'ProcessQueue.indexOf: "' + pid + '" is not a valid PID'
         );
       }
 
@@ -89,10 +89,10 @@ define([
      * @param  int
      * @return Process
      */
-    squeeze: function (pid) {
+    remove: function (pid) {
       if (!_isPid(pid)) {
         throw new Error(
-          'ReadyQueue.remove: "' + pid + '" is not a valid PID'
+          'ProcessQueue.remove: "' + pid + '" is not a valid PID'
         );
       }
 
@@ -111,6 +111,6 @@ define([
 
   });
 
-  return ReadyQueue;
+  return ProcessQueue;
 
 });

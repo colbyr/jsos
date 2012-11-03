@@ -206,6 +206,7 @@ define([
 
     cycle: function () {
       trace('CPU cycle');
+      this.process.cycles += 1;
       // TODO: Accumulate CPU usage and profiling statistics here.
       // Do real work here. Set this.isExecuting appropriately.
       var inst = this.process.read(hex.toDec(this.registers.pc));
@@ -225,7 +226,7 @@ define([
     exitProcess: function () {
       _KernelInterruptQueue.enqueue(
         new ExitProcessInterrupt({
-          process: this.process
+          pid: this.process.pid
         })
       );
       this.isExecuting = false;

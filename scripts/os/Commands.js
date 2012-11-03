@@ -81,6 +81,34 @@ define([
       man: 'Help displays a list of (hopefully) valid commands.'
     },
 
+    jobs: {
+      description: '- Diplays all processes',
+      func: function () {
+        _.each(_Processes.q, function (process) {
+          _StdIn.putText(
+            '{' + process.pid + '} - CPU cycles: ' + process.cycles
+          );
+          _StdIn.advanceLine();
+        });
+      }
+    },
+
+    kill: {
+      description: '<pid> - Terminate a process',
+      func: function (pid) {
+        pid = parseInt(pid);
+        if (pid && _Processes.contains(pid)) {
+          _Processes.remove(pid);
+          _ReadyQueue.remove(pid);
+          _StdIn.putText('Process ' + pid + ' terminated');
+        } else if (pid) {
+          _StdIn.putText('Process ' + pid + ' does not exist');
+        } else {
+          _StdIn.putText('Usage: kill <pid>');
+        }
+      }
+    },
+
     load: {
       description: '- Loads validated 6502a op codes from the loader into memory and returns the PID.',
       func: function () {

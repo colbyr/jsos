@@ -21,6 +21,7 @@ define([
   }
 
   function Process(program) {
+    this.cycles = 0;
     this.memory = _MemoryManager.allocateBlock();
     this.pcb = new PCB();
     this.pid = _getPid();
