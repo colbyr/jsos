@@ -112,7 +112,7 @@ define([
         _error('invalid memory access');
       }
 
-      _memory[loc] = null;
+      _memory[loc] = '00';
     },
 
     /**
@@ -128,7 +128,7 @@ define([
       }
 
       for (var i = locA; i <= locB; i += 1) {
-        _memory[i] = null;
+        _memory[i] = '00';
       }
     },
 

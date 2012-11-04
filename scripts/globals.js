@@ -33,6 +33,8 @@ var CREATE_PROCESS_IRQ = 2;
 var RUN_PROCESS_IRQ = 3;
 var EXIT_PROCESS_IRQ = 4;
 var PRINT_IRQ = 5;
+var CONTEXT_SWITCH_IRQ = 6;
+var SHELL_RETURN_IRQ = 7;
 
 
 //
@@ -70,6 +72,7 @@ var _KernelBuffers = null;
 var _KernelInputQueue = null;
 var _Processes = null;
 var _ReadyQueue = null;
+var _Scheduler = null;
 
 // Standard input and output
 var _StdIn  = null;

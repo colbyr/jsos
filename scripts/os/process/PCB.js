@@ -8,15 +8,19 @@ define([
   function PCB() {
     // process status
     this.registers = {
-      acc: 0,
-      pc: 0,
-      x: 0,
-      y: 0,
-      z: 0
+      acc: '00',
+      pc: '00',
+      xr: '00',
+      yr: '00',
+      zf: '0'
     };
   }
 
-  _.extend(PCB.prototype, {});
+  _.extend(PCB.prototype, {
+    snapshot: function (ss) {
+      _.extend(this.registers, ss);
+    }
+  });
 
   return PCB;
 

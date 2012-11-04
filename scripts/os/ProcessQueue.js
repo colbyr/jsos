@@ -75,12 +75,22 @@ define([
     },
 
     /**
-     * Returns the next process in the queue
+     * Returns the next process in the queue, removing it from the queue
      *
      * @return Process
      */
     next: function () {
-      return this.isEmpty() ? null : this.q.pop();
+      return this.isEmpty() ? null : this.q.shift();
+    },
+
+    /**
+     * Returns the next process in the queue
+     *
+     * @param  int
+     * @return Process
+     */
+    peek: function (pid) {
+      return pid ? this.q[this.indexOf(pid)] : this.q[this.q.length - 1];
     },
 
     /**

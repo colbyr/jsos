@@ -18,11 +18,12 @@ define([
   'os/process/Process',
   'os/Queue',
   'os/ProcessQueue',
+  'os/process/Scheduler',
   'os/Shell',
   'os/Status',
   'os/trace',
   'os/drivers/Keyboard'
-], function (log, Sim, Console, MemoryManager, Process, Queue, ProcessQueue, Shell, Status, trace, KeyboardDriver) {
+], function (log, Sim, Console, MemoryManager, Process, Queue, ProcessQueue, Scheduler, Shell, Status, trace, KeyboardDriver) {
 
   var Kernel = {
 
@@ -30,7 +31,6 @@ define([
       var pid;
       var process = new Process(code);
       if (process.valid) {
-        _ReadyQueue.add(process);
         _Processes.add(process);
         pid = process.pid;
       }
@@ -50,6 +50,7 @@ define([
       _KernelInputQueue = new Queue();      // Where device input lands before being processed out somewhere.
       _ReadyQueue = new ProcessQueue();
       _Processes = new ProcessQueue();
+      _Scheduler = new Scheduler(_CPU, _ReadyQueue, _KernelInterruptQueue);
 
       _MemoryManager = new MemoryManager();
       _Console = new Console();             // The console output device.
@@ -96,23 +97,15 @@ define([
 
 
     onCPUClockPulse: function () {
-      // This gets called from the host hardware every time there is a hardware
-      // clock pulse. This is NOT the same as a TIMER, which causes an interrupt
-      // and is handled like other interrupts. This, on the other hand, is the
-      // lock pulse from the hardware (or host) that tells the kernel that it
-      // has to look for interrupts and process them if it finds any.
+      _Scheduler.check();
 
-      // Check for an interrupt, are any. Page 560
       if (_KernelInterruptQueue.getSize() > 0) {
-        // Process the first interrupt on the interrupt queue.
-        // TODO: Implement a priority queye based on the IRQ number/id to enforce interrupt priority.
         var interrput = _KernelInterruptQueue.dequeue();
         this.interruptHandler(interrput.irq, interrput.params);
       } else if (_CPU.isExecuting) {
-        // If there are no interrupts then run a CPU cycle if there is anything being processed.
         _CPU.cycle();
+        _Scheduler.inc();
       } else {
-        // If there are no interrupts and there is nothing being executed then just be idle.
         trace('Idle');
       }
       Sim.updateMonitor();
@@ -152,6 +145,13 @@ define([
           this.keyboardDriver.isr(params[0], params[1]); // Kernel mode device driver
           _StdIn.handleInput();
           break;
+        case CONTEXT_SWITCH_IRQ:
+          console.log('context switch');
+          if (_CPU.isExecuting) {
+            _ReadyQueue.add(_CPU.snapshot());
+          }
+          _CPU.execute(_ReadyQueue.next());
+          break;
         case CREATE_PROCESS_IRQ:
           var pid = this.createProcess(params.program);
           if (pid) {
@@ -163,20 +163,31 @@ define([
           }
           break;
         case EXIT_PROCESS_IRQ:
-          _OsShell.advanceLine();
-          _Processes.remove(params.pid);
+          _Processes.remove(params.pid).exit();
           break;
         case RUN_PROCESS_IRQ:
-          var process = _ReadyQueue.remove(params.pid);
-          if (process) {
-            _CPU.execute(process);
+          var running = false;
+          _.each(params.pids, function (pid) {
+            var process = _Processes.peek(pid);
+            if (!process) {
+              _StdIn.putText('WARN: process ' + pid + ' does not exist');
+              _StdIn.advanceLine();
+            } else {
+              _ReadyQueue.add(process);
+              running = true;
+            }
+          });
+          if (running) {
+            _Scheduler.start();
           } else {
-            _StdIn.putText('FAIL: process ' + params.pid + ' does not exist');
             _OsShell.advanceLine();
           }
           break;
         case PRINT_IRQ:
           _StdIn.putText(params.item);
+          break;
+        case SHELL_RETURN_IRQ:
+          _OsShell.advanceLine();
           break;
         default:
           this.trapError(
@@ -184,7 +195,6 @@ define([
           );
       }
 
-      // 3. Restore the saved state.  TODO: Question: Should we restore the state via IRET in the ISR instead of here? p560.
     },
 
     timerISR: function () {

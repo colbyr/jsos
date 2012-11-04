@@ -59,7 +59,6 @@ define([
 
     this.deallocate = function () {
       block.allocated = false;
-      return this.wipe();
     };
   }
 

@@ -167,7 +167,7 @@ define([
      * @return array
      */
     parseInput: function (string) {
-      return string.match(/("[^"]+"|[^"\s]+)([^\s]|$)/g).map(_cleanArg);
+      return string.match(/("[^"]+"|[^"\s]+)([^\s]|)*/g).map(_cleanArg);
     },
 
     /**

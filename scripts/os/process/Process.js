@@ -36,6 +36,10 @@ define([
 
   _.extend(Process.prototype, {
 
+    exit: function () {
+      this.memory.deallocate();
+    },
+
     offset: function (loc) {
       return loc + this.partition;
     },
