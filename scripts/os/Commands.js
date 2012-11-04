@@ -172,7 +172,7 @@ define([
           _Scheduler.setQuantum(quantum);
           _StdIn.putText('Scheduler Quantum set to ' + quantum);
         } else {
-          _StdIn.putText('Quantum: ' + Scheduler.quantum + ' - Usage: rrq <quantum>');
+          _StdIn.putText('Quantum: ' + _Scheduler.quantum + ' - Usage: rrq <quantum>');
         }
       }
     },
