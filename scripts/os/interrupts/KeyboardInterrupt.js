@@ -3,15 +3,15 @@ define([
   'vendor/underscore'
 ], function (Interrupt) {
 
-  var PRIORITY = 0;
+  var PRIORITY = 1;
   var IRQ = 1;
 
-  function TimerInterrupt(params) {
+  function KeyboardInterrupt(params) {
     this.irq = IRQ;
     this.params = params;
   }
 
-  _.extend(TimerInterrupt.prototype, Interrupt.prototype, {
+  _.extend(KeyboardInterrupt.prototype, Interrupt.prototype, {
 
     priority: function () {
       return PRIORITY;
@@ -19,5 +19,5 @@ define([
 
   });
 
-  return TimerInterrupt;
+  return KeyboardInterrupt;
 });

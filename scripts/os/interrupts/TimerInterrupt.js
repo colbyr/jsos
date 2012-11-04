@@ -6,12 +6,12 @@ define([
   var PRIORITY = 0;
   var IRQ = 0;
 
-  function KeyboardInterrupt(params) {
+  function TimerInterrupt(params) {
     this.irq = IRQ;
     this.params = params;
   }
 
-  _.extend(KeyboardInterrupt.prototype, Interrupt.prototype, {
+  _.extend(TimerInterrupt.prototype, Interrupt.prototype, {
 
     priority: function () {
       return PRIORITY;
@@ -19,5 +19,5 @@ define([
 
   });
 
-  return KeyboardInterrupt;
+  return TimerInterrupt;
 });

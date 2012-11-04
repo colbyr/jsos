@@ -3,7 +3,7 @@ define([
   'vendor/underscore'
 ], function (Interrupt) {
 
-  var PRIORITY = 0;
+  var PRIORITY = 2;
   var IRQ = 3;
 
   function RunProcessInterrupt(params) {

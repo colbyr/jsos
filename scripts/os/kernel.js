@@ -17,13 +17,14 @@ define([
   'os/MemoryManager',
   'os/process/Process',
   'os/Queue',
+  'os/InterruptQueue',
   'os/ProcessQueue',
   'os/process/Scheduler',
   'os/Shell',
   'os/Status',
   'os/trace',
   'os/drivers/Keyboard'
-], function (log, Sim, Console, MemoryManager, Process, Queue, ProcessQueue, Scheduler, Shell, Status, trace, KeyboardDriver) {
+], function (log, Sim, Console, MemoryManager, Process, Queue, InterruptQueue, ProcessQueue, Scheduler, Shell, Status, trace, KeyboardDriver) {
 
   var Kernel = {
 
@@ -45,7 +46,7 @@ define([
       log('info', 'host', 'bootstrap');
 
       // Initialize our global queues.
-      _KernelInterruptQueue = new Queue(); // A (currently) non-priority queue for interrupt requests (IRQs).
+      _KernelInterruptQueue = new InterruptQueue(); // A (currently) non-priority queue for interrupt requests (IRQs).
       _KernelBuffers = []; // Buffers... for the kernel.
       _KernelInputQueue = new Queue();      // Where device input lands before being processed out somewhere.
       _ReadyQueue = new ProcessQueue();
@@ -95,7 +96,6 @@ define([
       trace('end shutdown OS');
     },
 
-
     onCPUClockPulse: function () {
       _Scheduler.check();
 
@@ -139,7 +139,7 @@ define([
       //       Maybe the hardware simulation will grow to support/require that in the future.
       switch (irq) {
         case TIMER_IRQ:
-          this.TimerISR(); // Kernel built-in routine for timers (not the clock)
+          this.timerISR(); // Kernel built-in routine for timers (not the clock)
           break;
         case KEYBOARD_IRQ:
           this.keyboardDriver.isr(params[0], params[1]); // Kernel mode device driver

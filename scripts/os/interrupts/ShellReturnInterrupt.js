@@ -3,7 +3,7 @@ define([
   'vendor/underscore'
 ], function (Interrupt) {
 
-  var PRIORITY = 0;
+  var PRIORITY = 3;
   var IRQ = 7;
 
   function ShellReturnInterrupt() {

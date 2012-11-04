@@ -26,11 +26,11 @@ define([
     },
 
     enqueue: function (element) {
-      this.q.push(element);
+      this.q.unshift(element);
     },
 
     dequeue: function () {
-      return this.q.length > 0 ? this.q.shift() : null;
+      return this.q.length > 0 ? this.q.pop() : null;
     },
 
     toString: function () {
