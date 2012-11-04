@@ -59,8 +59,28 @@ h2 {
   }
 
 .memory.textarea {
-  height: 84px;
+  height: 100px;
   text-align: center;
+}
+
+table.processes {
+  margin-top: 8px;
+}
+  table.processes th {
+    padding: 0 123px 0 0;
+  }
+  table.processes td {
+    border: 1px solid;
+    height: 100px;
+    padding: 0 5px;
+    text-align: center;
+    vertical-align: top;
+  }
+
+
+ul.processes {
+  list-style: none;
+  padding-left: 0;
 }
 
 .textarea {

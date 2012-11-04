@@ -33,7 +33,13 @@
       <p></p>
     </div>
 
-    <div class="col-8">
+    <div class="col-4 loader" id="loader">
+      <h2>Loader:</h2>
+      <textarea class="code textarea" id="code" placeholder="Enter 6502 hex code"></textarea>
+    </div>
+
+    <div class="col-4" style="text-align: center">
+      <h2>Controls:</h2>
       <div class="controls">
         <input type="button"
                id = "btnStartOS"
@@ -61,24 +67,6 @@
       </div>
     </div>
 
-    <div class="col-4 loader" id="loader">
-      <textarea class="code textarea" id="code" placeholder="Enter 6502 hex code"></textarea>
-    </div>
-
-    <div class="col-12">
-      <p class="status" id="status_bar">...</p>
-      <div class="canvas_wrapper">
-        <canvas class="canvas" id="display" width="838px" height="475px" tabindex="4"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-8">
-      <h2>System log:</h2>
-      <textarea class="log textarea" id="taLog" name="taLog" readonly></textarea>
-    </div>
-
     <div class="col-4">
       <h2>Registers:</h2>
       <table class="registers" id="registers">
@@ -103,10 +91,54 @@
       </table>
     </div>
 
+    <div class="col-12">
+      <p class="status" id="status_bar">...</p>
+      <div class="canvas_wrapper">
+        <canvas class="canvas" id="display" width="838px" height="475px" tabindex="4"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
     <div class="col-4">
       <h2>Memory:</h2>
       <textarea class="memory textarea" id="memory" ></textarea>
     </div>
+
+    <div class="col-8">
+      <table class="processes">
+        <thead>
+          <tr>
+            <th>Running:</th>
+            <th>Ready:</th>
+            <th>Active:</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <ul class="processes" id="running"></ul>
+            </td>
+            <td>
+              <ul class="processes" id="ready"></ul>
+            </td>
+            <td>
+              <ul class="processes" id="active">
+                <li>butts</li>
+                <li>butts</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-12">
+      <h2>System log:</h2>
+      <textarea class="log textarea" id="taLog" name="taLog" readonly></textarea>
+    </div>
+
   </div>
 
 </body>

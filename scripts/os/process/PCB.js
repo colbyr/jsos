@@ -16,11 +16,7 @@ define([
     };
   }
 
-  _.extend(PCB.prototype, {
-    snapshot: function (ss) {
-      _.extend(this.registers, ss);
-    }
-  });
+  _.extend(PCB.prototype, {});
 
   return PCB;
 

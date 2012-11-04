@@ -98,7 +98,7 @@ define([
       func: function (pid) {
         pid = parseInt(pid);
         if (pid && _Processes.contains(pid)) {
-          _Processes.remove(pid);
+          _Processes.remove(pid).exit();
           _ReadyQueue.remove(pid);
           _StdIn.putText('Process ' + pid + ' terminated');
         } else if (pid) {

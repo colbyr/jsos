@@ -48,6 +48,16 @@ define([
       return this.memory.access(loc);
     },
 
+    toString: function () {
+      var pcb = this.pcb.registers;
+      return this.pid +
+        ' [' + pcb.pc +
+         ' ' + pcb.acc +
+         ' ' + pcb.xr +
+         ' ' + pcb.yr +
+         ' ' + pcb.zf + ']';
+    },
+
     write: function (loc, data) {
       this.memory.write(loc, data);
     }

@@ -214,8 +214,7 @@ define([
     },
 
     execute: function (process) {
-      this.resetRegisters();
-      _.extend(this.registers, process.pcb.registers);
+      this.registers = process.pcb.registers;
       this.process = process;
       this.isExecuting = true;
     },
@@ -237,7 +236,6 @@ define([
     },
 
     snapshot: function () {
-      this.process.pcb.snapshot(this.registers);
       return this.process;
     }
 
