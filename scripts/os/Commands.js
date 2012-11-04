@@ -86,7 +86,7 @@ define([
       func: function () {
         _.each(_Processes.q, function (process) {
           _StdIn.putText(
-            '{' + process.pid + '} - CPU cycles: ' + process.cycles
+            process.pid + ' - CPU cycles: ' + process.cycles
           );
           _StdIn.advanceLine();
         });

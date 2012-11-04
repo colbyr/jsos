@@ -106,6 +106,9 @@ define([
         _CPU.cycle();
         _Scheduler.inc();
       } else {
+        if (_Scheduler.is_running) {
+          _Scheduler.finish();
+        }
         trace('Idle');
       }
       Sim.updateMonitor();
@@ -146,7 +149,6 @@ define([
           _StdIn.handleInput();
           break;
         case CONTEXT_SWITCH_IRQ:
-          console.log('context switch');
           if (_CPU.isExecuting) {
             _ReadyQueue.add(_CPU.snapshot());
           }
@@ -165,6 +167,9 @@ define([
         case EXIT_PROCESS_IRQ:
           _Processes.remove(params.pid).exit();
           break;
+        case PRINT_IRQ:
+          _StdIn.putText(params.item);
+          break;
         case RUN_PROCESS_IRQ:
           var running = false;
           _.each(params.pids, function (pid) {
@@ -182,9 +187,6 @@ define([
           } else {
             _OsShell.advanceLine();
           }
-          break;
-        case PRINT_IRQ:
-          _StdIn.putText(params.item);
           break;
         case SHELL_RETURN_IRQ:
           _OsShell.advanceLine();

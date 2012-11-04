@@ -25,14 +25,11 @@ define([
       if (this.shouldSwitch()) {
         this.send(this.ready.peek().pid);
         this.reset();
-      } else if (this.is_running && this.ready.isEmpty()) {
-        this.finish();
       }
     },
 
     finish: function () {
       this.is_running = false;
-      console.log('finish');
       this.iq.enqueue(
         new ShellReturnInterrupt()
       );

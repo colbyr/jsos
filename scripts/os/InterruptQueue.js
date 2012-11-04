@@ -14,13 +14,16 @@ define([
         throw new Error('InterruptQueue.enqueue expects an Interrupt');
       }
 
-      this.q.push(interrupt);
-      this.prioritize();
-    },
+      // timestamp our interrupts to deal with inconsistent seach implementations
+      interrupt.t = Date.now();
 
-    prioritize: function () {
+      this.q.unshift(interrupt);
       this.q.sort(function (a, b) {
-        return a.priority() - b.priority();
+        var i = a.priority() - b.priority();
+        if (i === 0) {
+          i = a.t - b.t;
+        }
+        return i;
       });
     }
 
