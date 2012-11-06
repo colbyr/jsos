@@ -178,9 +178,16 @@ define([
     },
 
     run: {
-      description: '<pid> - runs the process <pid>',
+      description: '-a,--all|<pid> - runs the process <pid>',
       func: function (/*args*/) {
-        if (arguments.length > 0) {
+        if (arguments[0] === '-a' || arguments[0] === '--all') {
+          _KernelInterruptQueue.enqueue(
+            new RunProcessInterrupt({
+              pids: _.pluck(_Processes.q, 'pid')
+            })
+          );
+          return false;
+        } else if (arguments.length > 0) {
           _KernelInterruptQueue.enqueue(
             new RunProcessInterrupt({
               pids: Array.prototype.slice.call(arguments, 0, arguments.length).map(function (n) { return parseInt(n); })
@@ -188,7 +195,7 @@ define([
           );
           return false;
         } else {
-          _StdIn.putText('Usage: run <pid>');
+          _StdIn.putText('Usage: run --all|<pid>[ <pid>]');
         }
       },
     },
