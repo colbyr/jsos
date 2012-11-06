@@ -100,13 +100,10 @@ define([
       arg: CONST,
       func: function (offset) {
         if(this.registers.zf === '0') {
-            // apply branch-ahead offset
-            var pc = hex.add(this.registers.pc, offset);
-            // check to see that we haven't gone "around" past 255.
-            if(hex.toDec(pc) > 255) {
-                pc = hex.sub(this.registers.pc, '100');
-            }
-            this.registers.pc = pc;
+          this.registers.pc = hex.mod(
+            hex.add(this.registers.pc, offset),
+            'ff'
+          );
         }
       }
     },

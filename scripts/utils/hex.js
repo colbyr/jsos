@@ -122,6 +122,31 @@ define([], function () {
     },
 
     /**
+     * Mod (%) two hex strings
+     *
+     * @param  string
+     * @param  string
+     * @param  int     length
+     * @return string  result in hex
+     */
+    mod: function (operand, mod, length) {
+      if (!this.isHex(operand)) {
+        throw new Error(
+          'Hex.mod: ' + operand.toString() + ' (operand) is not a hex string'
+        );
+      } else if (!this.isHex(mod)) {
+        throw new Error(
+          'Hex.mod: ' + mod.toString() + ' (mod) is not a hex string'
+        );
+      }
+
+      return this.toHex(
+        this.toDec(operand) % this.toDec(mod),
+        length
+      );
+    },
+
+    /**
      * Multiply two hex strings
      *
      * @param  string
