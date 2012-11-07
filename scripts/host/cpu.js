@@ -92,19 +92,27 @@ define([
     'EC': { // CPX - compare byte in mem to the XR (set Z flagto zero if equal)
       arg: MEM,
       func: function (loc) {
-        this.registers.zf =
-          this.registers.xr === this.process.read(loc) ?  '0' : '1';
+        if (this.registers.xr === this.process.read(loc)) {
+          this.registers.zf = '1';
+        } else {
+          this.registers.zf = '0';
+        }
+        console.log('CPX  ', this.registers.xr, this.process.read(loc), '=> '+this.registers.zf);
       }
     },
     'D0': { // BNE - branch X bytes if ZF = 0
       arg: CONST,
       func: function (offset) {
-        if(this.registers.zf === '0') {
+        var branch = this.registers.zf === '0';
+        if (branch) {
+          var old = this.registers.pc;
           this.registers.pc = hex.mod(
             hex.add(this.registers.pc, offset),
             'ff'
           );
+          console.log('BNE  ', old, offset, '=> ' + this.registers.pc);
         }
+        return branch ? 1 : 2;
       }
     },
     'EE': { // INC - incrememt the value of a byte
@@ -156,7 +164,6 @@ define([
     var op = OPCODES[inst];
     var inc = 0;
     if (op) {
-      inc = op.arg;
       switch (op.arg) {
         case CONST:
           args[0] = cpu.process.read(hex.toDec(cpu.registers.pc) + 1);
@@ -173,14 +180,14 @@ define([
         default:
           throw new Error('CPU._exec: no arg specified for "' + inst + '"');
       }
-      op.func.apply(cpu, args);
+      inc = op.func.apply(cpu, args) || op.arg;
     } else {
       // TODO: handle error case
       _StdIn.putText('FAIL: unrecognized op code "' + inst + '"');
       _StdIn.advanceLine();
       cpu.exitProcess();
     }
-    return inc;
+    return hex.toHex(inc);
   }
 
   function CPU() {
@@ -204,10 +211,9 @@ define([
       // Do real work here. Set this.isExecuting appropriately.
       var inst = this.process.read(hex.toDec(this.registers.pc));
       // TODO: make an output interrupt
-      this.registers.pc = hex.add(
-        this.registers.pc,
-        hex.toHex(_exec(this, inst))
-      );
+      console.log('CYCLE', this.registers.pc, inst);
+      var inc = _exec(this, inst);
+      this.registers.pc = hex.add(this.registers.pc, inc);
     },
 
     execute: function (process) {
