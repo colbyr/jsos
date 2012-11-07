@@ -97,22 +97,24 @@ define([
         } else {
           this.registers.zf = '0';
         }
-        console.log('CPX  ', this.registers.xr, this.process.read(loc), '=> '+this.registers.zf);
       }
     },
     'D0': { // BNE - branch X bytes if ZF = 0
       arg: CONST,
       func: function (offset) {
-        var branch = this.registers.zf === '0';
-        if (branch) {
+        var inc;
+        if (this.registers.zf === '0') {
           var old = this.registers.pc;
-          this.registers.pc = hex.mod(
-            hex.add(this.registers.pc, offset),
-            'ff'
-          );
-          console.log('BNE  ', old, offset, '=> ' + this.registers.pc);
+          var sum = hex.add(this.registers.pc, offset);
+          if (hex.toDec(sum) > 255) {
+            this.registers.pc = hex.mod(sum, 'ff');
+            inc = 1;
+          } else {
+            this.registers.pc = sum;
+            inc = 0;
+          }
         }
-        return branch ? 1 : 2;
+        return inc;
       }
     },
     'EE': { // INC - incrememt the value of a byte
@@ -211,7 +213,6 @@ define([
       // Do real work here. Set this.isExecuting appropriately.
       var inst = this.process.read(hex.toDec(this.registers.pc));
       // TODO: make an output interrupt
-      console.log('CYCLE', this.registers.pc, inst);
       var inc = _exec(this, inst);
       this.registers.pc = hex.add(this.registers.pc, inc);
     },
