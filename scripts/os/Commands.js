@@ -11,11 +11,33 @@ define([
 ], function (Sim, CreateProcessInterrupt, RunProcessInterrupt, Date, rot13) {
 
   return {
+    append: {
+      description: '<file> <content> - appends content to file',
+      func: function (file, content) {
+        if (file && content) {
+          _StdIn.putText('appending "' + content + '" to ' + file);
+        } else {
+          _StdIn.putText('Usage: append <file> <content>');
+        }
+      }
+    },
+
     bluescreen: {
       description: '- Triggers a Blue Screen of Death',
       func: function () {
         _KernelInterface.trapError('User initiated bluescreen.');
         return false;
+      }
+    },
+
+    cat: {
+      description: '<file> - prints the contents of a file to the console',
+      func: function (file) {
+        if (file) {
+          _StdIn.putText('printing ' + file);
+        } else {
+          _StdIn.putText('Usage: cat <file>');
+        }
       }
     },
 
@@ -124,6 +146,13 @@ define([
       }
     },
 
+    ls: {
+      description: '- Lists all files on the disk',
+      func: function () {
+        _StdIn.putText('listing some files...');
+      }
+    },
+
     man: {
       description: '<topic> - Displays the MANual page for <topic>',
       func: function (topic) {
@@ -149,6 +178,17 @@ define([
           _OsShell.promptStr = string;
         } else {
           _StdIn.putText('Usage: prompt <string> Please supply a string.');
+        }
+      }
+    },
+
+    rm: {
+      description: '<file> - deletes a file',
+      func: function (file) {
+        if (file) {
+          _StdIn.putText('deleting ' + file);
+        } else {
+          _StdIn.putText('Usage: rm <file>');
         }
       }
     },
@@ -229,6 +269,17 @@ define([
       }
     },
 
+    touch: {
+      description: '<file> - creates a new file',
+      func: function (file) {
+        if (file) {
+          _StdIn.putText('creating ' + file);
+        } else {
+          _StdIn.putText('Usage: touch <file>');
+        }
+      }
+    },
+
     trace: {
       description: '<on | off> - Turns the OS trace on or off.',
       func: function (toggle) {
@@ -284,10 +335,19 @@ define([
         }
         return false;
       }
+    },
+
+    write: {
+      description: '<file> <content> - writes content to file',
+      func: function (file, content) {
+        if (file && content) {
+          _StdIn.putText('writing "' + content + '" to ' + file);
+        } else {
+          _StdIn.putText('Usage: write <file> <content>');
+        }
+      }
     }
 
-    // processes - list the running processes and their IDs
-    // kill <id> - kills the specified process id.
   };
 
 });
