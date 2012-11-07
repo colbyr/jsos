@@ -1,3 +1,4 @@
+body{font-size:0.8em;}
 .container{margin:0 auto;max-width:850px;padding:0 20px;position:relative;}
 .row{margin-left:-1.745%;max-width:870px;overflow:hidden;}
 .row [class^="col-"]{float:left;margin:0 0 0 1.745%;}
@@ -15,4 +16,3 @@
 .row .col-12{width:98.246%;margin-right:0;}
 img,object,embed{max-width:100%;}
 img{height:auto;}
-@media only screen and (max-width:1024px){body{font-size:0.8em;line-height:1.5em;}}@media handheld,only screen and (max-width:768px){body{font-size:16px;-webkit-text-size-adjust:none;} .row{margin-left:0;} .row [class^="col-"]{float:none;margin-left:0;width:auto;}}

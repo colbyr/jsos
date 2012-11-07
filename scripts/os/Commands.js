@@ -178,7 +178,7 @@ define([
     },
 
     run: {
-      description: '-a,--all|<pid> - runs the process <pid>',
+      description: '[-a] | <pid> - runs the process <pid>',
       func: function (/*args*/) {
         if (arguments[0] === '-a' || arguments[0] === '--all') {
           _KernelInterruptQueue.enqueue(
