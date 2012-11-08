@@ -43,6 +43,15 @@ define([], function () {
     },
 
     /**
+     * Returns true if the browser supports LS
+     *
+     * @return bool
+     */
+    isSupported: function () {
+      return !!window.localStorage;
+    },
+
+    /**
      * Returns an array of all keys in LS
      *
      * @return array
@@ -79,12 +88,16 @@ define([], function () {
     },
 
     /**
-     * Returns true if the browser supports LS
+     * Returns an array of all values in LS
      *
-     * @return bool
+     * @return array
      */
-    isSupported: function () {
-      return !!window.localStorage;
+    values: function () {
+      var values = [];
+      for (var k in window.localStorage) {
+        values.push(localStorage[k]);
+      }
+      return values;
     }
 
   };

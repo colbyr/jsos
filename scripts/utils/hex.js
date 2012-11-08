@@ -226,6 +226,28 @@ define([], function () {
         dec.toString(16),
         length
       );
+    },
+
+    stringToHexBits: function (string, length) {
+      var res = '';
+      for (var i = 0; i < string.length; i += 1) {
+        res += this.toHex(string.charCodeAt(i)) + ' ';
+      }
+      if (length) {
+        while (res.length < (length * 3)) {
+          res += '00 ';
+        }
+      }
+      return res.trim();
+    },
+
+    hexBitsToString: function (bits) {
+      bits = bits.split(' ');
+      var res = '';
+      for (var i = 0; i < bits.length; i += 1) {
+        res += String.fromCharCode(this.toDec(bits[i]));
+      }
+      return res.trim();
     }
 
   };
