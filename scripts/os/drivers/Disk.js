@@ -11,15 +11,25 @@ define([
     return file;
   }());
 
+  file_index = {};
+
   // FAT:   0-0-0 => 0-7-7
   // Files: 1-0-0 => 7-7-7
   // 00 -1 -1 -1 00 00 00 00 00 00 00 ... 00 (64bits)
 
   return {
 
+    createFile: function (filename, contents) {
+      var fat = this.findFreeFat(),
+          file = this.findFree();
+      file_index[filename] = fat;
+      this.write(fat, hex.stringToHexBits(filename));
+      this.link(fat, file);
+      this.write(file, hex.stringToHexBits(contents));
+    },
+
     dump: function (type) {
-      this['each' + (type || '')](function (t, s, b) {
-        var key = this.key(t, s, b);
+      this['each' + (type || '')](function (key) {
         console.log(key + ' | ' + ls.get(key));
       }, this);
     },
@@ -32,7 +42,7 @@ define([
       for (var t = 0; t < 8; t += 1) {
         for (var s = 0; s < 8; s += 1) {
           for (var b = 0; b < 8; b += 1) {
-            res = action(t, s, b);
+            res = action(this.key(t, s, b), t, s, b);
             if (res) {
               return res;
             }
@@ -48,7 +58,7 @@ define([
       }
       for (var s = 0; s < 8; s += 1) {
         for (var b = 0; b < 8; b += 1) {
-          res = action(0, s, b);
+          res = action(this.key(0, s, b), 0, s, b);
           if (res) {
             return res;
           }
@@ -64,7 +74,7 @@ define([
       for (var t = 1; t < 8; t += 1) {
         for (var s = 0; s < 8; s += 1) {
           for (var b = 0; b < 8; b += 1) {
-            res = action(t, s, b);
+            res = action(this.key(t, s, b), t, s, b);
             if (res) {
               return res;
             }
@@ -73,18 +83,12 @@ define([
       }
     },
 
-    file: function () {
-      this.eachFile(function (t, s, b) {
-        var key = key(t, s, b);
-        if (!this.isOpen(key)) {
-          console.log(this.contents(key));
-        }
-      }, this);
+    files: function () {
+      return _.keys(file_index);
     },
 
     findFree: function () {
-      return this.eachFile(function (t, s, b) {
-        var key = this.key(t, s, b);
+      return this.eachFile(function (key) {
         if (this.isOpen(key)) {
           return key;
         }
@@ -92,8 +96,7 @@ define([
     },
 
     findFreeFat: function () {
-      return this.eachFat(function (t, s, b) {
-        var key = this.key(t, s, b);
+      return this.eachFat(function (key) {
         if (this.isOpen(key)) {
           return key;
         }
@@ -101,9 +104,29 @@ define([
     },
 
     format: function () {
-      this.each(function (t, s, b) {
-        ls.set(this.key(t, s, b), NULL_FILE);
+      this.each(function (key) {
+        ls.set(key, NULL_FILE);
       }, this);
+    },
+
+    hasLink: function (contents) {
+      return contents.slice(3, 11) !== '-1 -1 -1';
+    },
+
+    indexFiles: function () {
+      this.eachFat(function (key) {
+        if (!this.isOpen(key)) {
+          file_index[hex.hexBitsToString(this.read(key, true))] = key;
+        }
+      }, this);
+    },
+
+    init: function () {
+      if (ls.length === 0) {
+        this.format();
+      } else {
+        this.indexFiles();
+      }
     },
 
     isOpen: function (key) {
@@ -114,7 +137,29 @@ define([
       return '' + t + s + b;
     },
 
-    read: function (key) {
+    link: function (from, to) {
+      this.setStatus(to, true);
+      ls.set(
+        from,
+        '01 0' + to.split('').join(' 0') + ls.get(from).slice(11)
+      );
+    },
+
+    next: function (key) {
+      var file = ls.get(key);
+      var next = null;
+      if (this.hasLink(file)) {
+        next = file.charAt(4) +
+          file.charAt(7) +
+          file.charAt(10);
+      }
+      if (next === key) {
+        throw new Error('FUCK THIS SHIT MAN ' + key + ', ' + next);
+      }
+      return next;
+    },
+
+    read: function (key, stop) {
       var i = 0,
           next = this.next(key),
           raw = ls.get(key).split(' ').slice(4),
@@ -124,40 +169,50 @@ define([
           string += (i === 0 ? '' : ' ') + raw[i];
           i += 1;
         }
-        if (next) {
+        if (next && !stop) {
           string += this.read(next);
         }
       }
       return string;
     },
 
-    next: function (key) {
-      var file = ls.get(key);
-      var next = null;
-      if (file.slice(2, 11)) {
-        next = file.charAt(4) +
-          file.charAt(7) +
-          file.charAt(10);
-      }
-      return next;
-    },
-
-    createFile: function (filename, contents) {
-      var fat = this.findFreeFat(),
-          file = this.findFree();
-      this.write(fat, hex.stringToHexBits(filename));
-      this.link(fat, file);
-      this.write(file, hex.stringToHexBits(contents));
-    },
-
     readFile: function (filename, contents) {
-      var fat = ls.getKey(hex.stringToHexBits(filename, 60));
-      return hex.hexBitsToString(this.read(this.next(fat)));
+      var result = null;
+      if (file_index.hasOwnProperty(filename)) {
+        result = this.read(
+          this.next(
+            file_index[filename]
+          )
+        );
+      }
+      return result
     },
 
-    writeFile: function (filename, contents) {
-      var fat = ls.getKey(hex.stringToHexBits(filename, 60));
-      this.write(this.next(fat), contents);
+    remove: function (key) {
+      var next = this.next(key);
+      if (next) {
+        this.remove(next);
+      }
+      ls.set(key, '00 -1 -1 -1' + ls.get(key).slice(11));
+    },
+
+    removeFile: function (filename) {
+      if (file_index[filename]) {
+        this.remove(file_index[filename]);
+        delete file_index[filename];
+      }
+    },
+
+    setStatus: function (key, st) {
+      ls.set(key, '0' + (+st).toString() + ' ' + ls.get(key).slice(3));
+    },
+
+    unlink: function (from) {
+      this.setStatus(to, true);
+      ls.set(
+        from,
+        '01 -1 -1 -1' + ls.get(from).slice(11)
+      );
     },
 
     write: function (file, contents) {
@@ -184,17 +239,10 @@ define([
       return file;
     },
 
-    link: function (from, to) {
-      this.setStatus(to, true);
-      ls.set(
-        from,
-        '01 0' + to.split('').join(' 0') + ls.get(from).slice(11)
-      );
-    },
-
-    setStatus: function (key, st) {
-      ls.set(key, '0' + (+st).toString() + ' ' + ls.get(key).slice(3));
-    },
+    writeFile: function (filename, contents) {
+      var fat = ls.getKey(hex.stringToHexBits(filename, 60));
+      this.write(this.next(fat), contents);
+    }
 
   };
 

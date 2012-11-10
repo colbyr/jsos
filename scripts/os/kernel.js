@@ -14,6 +14,7 @@ define([
   'host/log',
   'host/Sim',
   'os/Console',
+  'os/drivers/Disk',
   'os/MemoryManager',
   'os/process/Process',
   'os/Queue',
@@ -24,7 +25,7 @@ define([
   'os/Status',
   'os/trace',
   'os/drivers/Keyboard'
-], function (log, Sim, Console, MemoryManager, Process, Queue, InterruptQueue, ProcessQueue, Scheduler, Shell, Status, trace, KeyboardDriver) {
+], function (log, Sim, Console, Disk, MemoryManager, Process, Queue, InterruptQueue, ProcessQueue, Scheduler, Shell, Status, trace, KeyboardDriver) {
 
   var Kernel = {
 
@@ -44,6 +45,9 @@ define([
     bootstrap: function () { // Page 8
       // Use simLog because we ALWAYS want this, even if _Trace is off.
       log('info', 'host', 'bootstrap');
+
+      _Disk = Disk;
+      _Disk.init();
 
       // Initialize our global queues.
       _KernelInterruptQueue = new InterruptQueue(); // A (currently) non-priority queue for interrupt requests (IRQs).
