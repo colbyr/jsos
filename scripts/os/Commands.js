@@ -16,7 +16,7 @@ define([
       description: '<file> <content> - appends content to file',
       func: function (file, content) {
         if (file && content) {
-          _Disk.appendFile(file, content);
+          _Disk.appendFile(file, hex.stringToHexBits(content));
         } else {
           _StdIn.putText('Usage: append <file> <content>');
         }
@@ -350,7 +350,7 @@ define([
       description: '<file> <content> - writes content to file',
       func: function (file, content) {
         if (file && content) {
-          _Disk.writeFile(file, content);
+          _Disk.writeFile(file, hex.stringToHexBits(content));
         } else {
           _StdIn.putText('Usage: write <file> <content>');
         }

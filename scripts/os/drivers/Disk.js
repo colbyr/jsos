@@ -21,7 +21,7 @@ define([
 
     appendFile: function (filename, contents) {
       if (file_index.hasOwnProperty(filename)) {
-        contents = hex.hexBitsToString(this.readFile(filename)) + contents;
+        contents = this.readFile(filename) + ' ' + contents;
         this.removeFile(filename);
       }
       this.createFile(filename, contents);
@@ -33,7 +33,7 @@ define([
       file_index[filename] = fat;
       this.write(fat, hex.stringToHexBits(filename));
       this.link(fat, file);
-      this.write(file, hex.stringToHexBits(contents));
+      this.write(file, contents);
     },
 
     dump: function (type) {

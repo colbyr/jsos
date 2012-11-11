@@ -242,10 +242,12 @@ define([], function () {
     },
 
     hexBitsToString: function (bits) {
-      bits = bits.split(' ');
       var res = '';
-      for (var i = 0; i < bits.length; i += 1) {
-        res += String.fromCharCode(this.toDec(bits[i]));
+      if (bits !== '') {
+        bits = bits.split(' ');
+        for (var i = 0; i < bits.length; i += 1) {
+          res += String.fromCharCode(this.toDec(bits[i]));
+        }
       }
       return res.trim();
     }
