@@ -155,7 +155,7 @@ define([
    * @return string
    */
   function _cleanArg(string) {
-    return string.trim().replace(/"/g, '').replace('\\n', '\n');
+    return string.trim().replace(/"/g, '').replace(/\\n/g, '\n');
   }
 
   _.extend(UserCommand.prototype, {

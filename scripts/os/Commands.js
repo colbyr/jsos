@@ -35,12 +35,17 @@ define([
       description: '<file> - prints the contents of a file to the console',
       func: function (file) {
         if (file) {
-          _.each(
-            hex.hexBitsToString(_Disk.readFile(file)).split('\n')
-          , function (line) {
-            _StdIn.putText(line);
-            _StdIn.advanceLine();
-          });
+          var contents = _Disk.readFile(file);
+          if (contents) {
+            _.each(
+              hex.hexBitsToString(contents).split('\n')
+            , function (line) {
+              _StdIn.putText(line);
+              _StdIn.advanceLine();
+            });
+          } else {
+            _StdIn.putText('ERR: No such file "' + file + '"');
+          }
         } else {
           _StdIn.putText('Usage: cat <file>');
         }
@@ -153,11 +158,13 @@ define([
     },
 
     ls: {
-      description: '- Lists all files on the disk',
-      func: function () {
-        _.each(_Disk.files(), function (file) {
-          _StdIn.putText(file);
-          _StdIn.advanceLine();
+      description: '[-a] - Lists files on the disk (-a shows hidden files)',
+      func: function (flag) {
+        _.each(_Disk.files().sort(), function (file) {
+          if (flag === '-a' || file.charAt(0) !== '.') {
+            _StdIn.putText(file);
+            _StdIn.advanceLine();
+          }
         });
       }
     },

@@ -244,7 +244,7 @@ define([], function () {
     hexBitsToString: function (bits) {
       var res = '';
       if (bits !== '') {
-        bits = bits.split(' ');
+        bits = bits.trim().split(' ');
         for (var i = 0; i < bits.length; i += 1) {
           res += String.fromCharCode(this.toDec(bits[i]));
         }
