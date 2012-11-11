@@ -7,15 +7,16 @@ define([
   'os/interrupts/CreateProcessInterrupt',
   'os/interrupts/RunProcessInterrupt',
   'utils/Date',
+  'utils/hex',
   'utils/rot13'
-], function (Sim, CreateProcessInterrupt, RunProcessInterrupt, Date, rot13) {
+], function (Sim, CreateProcessInterrupt, RunProcessInterrupt, Date, hex, rot13) {
 
   return {
     append: {
       description: '<file> <content> - appends content to file',
       func: function (file, content) {
         if (file && content) {
-          _StdIn.putText('appending "' + content + '" to ' + file);
+          _Disk.appendFile(file, content);
         } else {
           _StdIn.putText('Usage: append <file> <content>');
         }
@@ -34,7 +35,12 @@ define([
       description: '<file> - prints the contents of a file to the console',
       func: function (file) {
         if (file) {
-          _StdIn.putText('printing ' + file);
+          _.each(
+            hex.hexBitsToString(_Disk.readFile(file)).split('\n')
+          , function (line) {
+            _StdIn.putText(line);
+            _StdIn.advanceLine();
+          });
         } else {
           _StdIn.putText('Usage: cat <file>');
         }
@@ -149,7 +155,10 @@ define([
     ls: {
       description: '- Lists all files on the disk',
       func: function () {
-        _StdIn.putText('listing some files...');
+        _.each(_Disk.files(), function (file) {
+          _StdIn.putText(file);
+          _StdIn.advanceLine();
+        });
       }
     },
 
@@ -186,7 +195,7 @@ define([
       description: '<file> - deletes a file',
       func: function (file) {
         if (file) {
-          _StdIn.putText('deleting ' + file);
+          _Disk.removeFile(file);
         } else {
           _StdIn.putText('Usage: rm <file>');
         }
@@ -273,7 +282,7 @@ define([
       description: '<file> - creates a new file',
       func: function (file) {
         if (file) {
-          _StdIn.putText('creating ' + file);
+          _Disk.createFile(file, '');
         } else {
           _StdIn.putText('Usage: touch <file>');
         }
@@ -341,7 +350,7 @@ define([
       description: '<file> <content> - writes content to file',
       func: function (file, content) {
         if (file && content) {
-          _StdIn.putText('writing "' + content + '" to ' + file);
+          _Disk.writeFile(file, content);
         } else {
           _StdIn.putText('Usage: write <file> <content>');
         }

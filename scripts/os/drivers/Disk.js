@@ -19,6 +19,14 @@ define([
 
   return {
 
+    appendFile: function (filename, contents) {
+      if (file_index.hasOwnProperty(filename)) {
+        contents = hex.hexBitsToString(this.readFile(filename)) + contents;
+        this.removeFile(filename);
+      }
+      this.createFile(filename, contents);
+    },
+
     createFile: function (filename, contents) {
       var fat = this.findFreeFat(),
           file = this.findFree();
@@ -240,8 +248,10 @@ define([
     },
 
     writeFile: function (filename, contents) {
-      var fat = ls.getKey(hex.stringToHexBits(filename, 60));
-      this.write(this.next(fat), contents);
+      if (file_index.hasOwnProperty(filename)) {
+        this.removeFile(filename);
+      }
+      this.createFile(filename, contents);
     }
 
   };
