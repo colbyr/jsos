@@ -242,7 +242,7 @@ define([
         var next = this.findFree();
         this.link(file, next);
         ls.set(file, ls.get(file).slice(0, 12) + current.join(' '));
-        this.write(next, contents.slice(60));
+        this.write(next, contents.slice(60).join(' '));
       }
       return file;
     },

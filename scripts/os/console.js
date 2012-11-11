@@ -8,8 +8,9 @@
    ------------ */
 
 define([
+  'utils/hex',
   'vendor/underscore'
-], function () {
+], function (hex) {
 
   function Console() {
     this.buffer = '';
@@ -17,7 +18,7 @@ define([
     this.CurrentFontSize = DEFAULT_FONT_SIZE;
     this.CurrentXPosition = 0;
     this.CurrentYPosition = DEFAULT_FONT_SIZE;
-    this.history = [];
+    this.history = this.fetchHistory();
     this.history_index = -1;
     this.lines = 0;
     this.max_lines = Math.floor(CANVAS.height / this.lineheight());
@@ -105,6 +106,28 @@ define([
       DRAWING_CONTEXT.clearRect(0, 0, CANVAS.width, CANVAS.height);
     },
 
+    fetchHistory: function () {
+      var result,
+          raw = _Disk.readFile('.history');
+      if (raw) {
+        result = hex.hexBitsToString(raw).split('\n');
+      } else {
+        result = [];
+        _Disk.createFile('.history', '');
+      }
+      return result;
+    },
+
+    updateHistory: function (command) {
+      this.history.unshift(command);
+      _Disk.writeFile(
+        '.history', 
+        hex.stringToHexBits(
+          this.history.slice(0, 10).join('\n')
+        )
+      );
+    },
+
     /**
      * Get image of the current canvas
      *
@@ -144,7 +167,7 @@ define([
           _OsShell.handleInput(this.buffer);
           // ... and reset our buffer.
           if (this.buffer !== this.history[0]) {
-            this.history.unshift(this.buffer);
+            this.updateHistory(this.buffer);
           }
           this.resetHistoryIndex();
           this.buffer = '';
