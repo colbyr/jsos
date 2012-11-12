@@ -366,7 +366,6 @@ define([
       func: function (file, content) {
         if (file && content) {
           if (content === '-l' || content === '--loader') {
-          console.log(arguments);
             _Disk.writeFile(file, Sim.loadCode().join(' '));
           } else {
             _Disk.writeFile(file, hex.stringToHexBits(content));
