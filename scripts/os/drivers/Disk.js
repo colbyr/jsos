@@ -6,7 +6,7 @@ define([
   var NULL_FILE = (function () {
     var file = '00 -1 -1 -1';
     for (var i = 0; i < 60; i += 1) {
-      file += ' 00';
+      file += ' -1';
     }
     return file;
   }());
@@ -15,7 +15,7 @@ define([
 
   // FAT:   0-0-0 => 0-7-7
   // Files: 1-0-0 => 7-7-7
-  // 00 -1 -1 -1 00 00 00 00 00 00 00 ... 00 (64bits)
+  // 00 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 ... -1 (64bits)
 
   return {
 
@@ -173,7 +173,7 @@ define([
           raw = ls.get(key).split(' ').slice(4),
           string = '';
       if (!this.isOpen(key)) {
-        while (raw[i] !== '00' && i < raw.length) {
+        while (raw[i] !== '-1' && i < raw.length) {
           string += (i === 0 ? '' : ' ') + raw[i];
           i += 1;
         }
@@ -225,8 +225,8 @@ define([
 
     write: function (file, contents) {
       contents = contents.split(' ');
-      if (contents[contents.length - 1] !== '00') {
-        contents.push('00');
+      if (contents[contents.length - 1] !== '-1') {
+        contents.push('-1');
       }
       this.setStatus(file, true);
       var current = ls.get(file).split(' ').slice(4);
