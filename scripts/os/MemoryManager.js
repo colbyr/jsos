@@ -33,34 +33,31 @@ define([
 
     allocateBlock: function () {
       var block = this.getFreeBlock(),
-          manager,
+          manager = new BlockManager(block, this),
           self = this;
-      manager = new BlockManager(block, function () {
-        var new_block = self.getFreeBlock();
-            contents = _Disk.readFile('.swap_' + this.id).trim().split(' ');
-        new_block.allocated = true;
-        this.updateBlock(new_block);
-        this.write(0, contents);
-        self.active.unshift(this);
-        _Disk.removeFile('.swap_' + this.id);
-      });
       block.allocated = true;
       this.active.unshift(manager);
       return manager;
     },
 
-    getManager: function (id) {
-      return _.find(this.active, function (manager) {
-        return manager.id === id;
+    deallocate: function (id) {
+      this.active.splice(this.getManagerIndex(id), 1);
+    },
+
+    getManagerIndex: function (id) {
+      var index = -1;
+      _.each(this.active, function (manager, index) {
+        if (manager.id === id) {
+          index = index;
+        }
       });
+      return index;
     },
 
     forceAllocate: function () {
       var to_swap = this.active.pop();
-      var contents = to_swap.all();
-      _Disk.createFile('.swap_' + to_swap.id, contents.join(' '));
-      var block = to_swap.deallocate();
-      return block;
+      _Disk.createFile('.swap_' + to_swap.id, to_swap.all().join(' '));
+      return to_swap.deallocate();
     },
 
     getFreeBlock: function () {
@@ -75,23 +72,15 @@ define([
 
   var MANAGER_IDS = 0;
 
-  function BlockManager(block, swap) {
+  function BlockManager(block, manager) {
     this.id = ++MANAGER_IDS;
     this.active = false;
     this.begin = null;
     this.block = null;
     this.end = null;
+    this.manager = manager;
     this.size = null;
     this.updateBlock(block);
-
-    this.deallocate = function () {
-      var block = this.block;
-      this.active = false;
-      this.block = null;
-      if (block) block.allocated = false;
-      return block;
-    };
-    this.swap = swap;
   }
 
   _.extend(BlockManager.prototype, {
@@ -112,12 +101,37 @@ define([
       return this.access(0, this.size);
     },
 
+    deallocate: function () {
+      var block = this.block;
+      this.active = false;
+      this.block = null;
+      if (block) {
+        block.allocated = false;
+      }
+      return block;
+    },
+
     getRealLoc: function (loc) {
       return loc + this.begin;
     },
 
     inRange: function (loc) {
       return loc >= this.begin && loc < this.getRealLoc(this.size);
+    },
+
+    release: function () {
+      this.deallocate();
+      this.manager.deallocate(this.id);
+    },
+
+    swap: function () {
+      var new_block = this.manager.getFreeBlock();
+          contents = _Disk.readFile('.swap_' + this.id).trim().split(' ');
+      new_block.allocated = true;
+      this.updateBlock(new_block);
+      this.write(0, contents);
+      this.manager.active.unshift(this);
+      _Disk.removeFile('.swap_' + this.id);
     },
 
     updateBlock: function (block) {

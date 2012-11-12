@@ -37,7 +37,7 @@ define([
   _.extend(Process.prototype, {
 
     exit: function () {
-      this.memory.deallocate();
+      this.memory.release();
     },
 
     offset: function (loc) {
@@ -50,13 +50,12 @@ define([
 
     toString: function () {
       var pcb = this.pcb.registers;
-      return this.pid +
-        ' [' + pcb.pc +
+      return  this.pid + (this.memory.active ? '-' : '*') +
+         '[' + pcb.pc +
          ' ' + pcb.acc +
          ' ' + pcb.xr +
          ' ' + pcb.yr +
-         ' ' + pcb.zf + ']' +
-         (this.memory.active ? ' ' : '*');
+         ' ' + pcb.zf + ']';
     },
 
     write: function (loc, data) {
