@@ -252,6 +252,10 @@ define([
     putText: function (txt) {
       if (txt !== '') {
         // Draw the text at the current X and Y coordinates.
+        var width = this.CurrentXPosition + this.measure(txt);
+        if (width > 825) {
+          this.advanceLine();
+        }
         DRAWING_CONTEXT.drawText(
           this.CurrentFont,
           this.CurrentFontSize,
@@ -259,7 +263,7 @@ define([
           this.CurrentYPosition,
           txt
         );
-        this.CurrentXPosition = this.CurrentXPosition + this.measure(txt);
+        this.CurrentXPosition += this.measure(txt);
       }
     },
 
