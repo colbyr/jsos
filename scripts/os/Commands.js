@@ -155,9 +155,12 @@ define([
           code = Sim.loadCode();
         }
         if (code) {
-          _KernelInterruptQueue.enqueue(new CreateProcessInterrupt({
-            program: code
-          }));
+          _KernelInterruptQueue.enqueue(
+            new CreateProcessInterrupt({
+              execute: false,
+              program: code
+            })
+          );
           return false;
         } else {
           _StdIn.putText('FAIL: No valid code found.');
@@ -251,10 +254,28 @@ define([
             })
           );
           return false;
+        } else if (!/^[\d]+$/.test(arguments[0])) {
+          var code, filename = arguments[0];
+          code = _Disk.readFile(filename);
+          if (code) {
+            code = code.trim().split(' ');
+          }
+          if (code) {
+            _KernelInterruptQueue.enqueue(
+              new CreateProcessInterrupt({
+                execute: true,
+                program: code
+              })
+            );
+            return false;
+          } else {
+            _StdIn.putText('FAIL: No valid code found.');
+          }
         } else if (arguments.length > 0) {
           _KernelInterruptQueue.enqueue(
             new RunProcessInterrupt({
-              pids: Array.prototype.slice.call(arguments, 0, arguments.length).map(function (n) { return parseInt(n); })
+              pids: Array.prototype.slice.call(arguments, 0, arguments.length)
+                .map(function (n) { return parseInt(n); })
             })
           );
           return false;

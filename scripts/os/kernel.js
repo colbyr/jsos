@@ -29,7 +29,7 @@ define([
 
   var Kernel = {
 
-    createProcess: function (code) {
+    createProcess: function (code, execute) {
       var pid;
       var process = new Process(code);
       if (process.valid) {
@@ -37,6 +37,24 @@ define([
         pid = process.pid;
       }
       return pid;
+    },
+
+    runProcess: function (pids) {
+      var running = false;
+      _.each(pids, function (pid) {
+        var process = _Processes.peek(pid);
+        if (!process) {
+          _StdIn.putText('WARN: process ' + pid + ' does not exist');
+          _StdIn.advanceLine();
+        } else {
+          _ReadyQueue.add(process);
+          running = true;
+        }
+      });
+      if (running) {
+        _Scheduler.start();
+      }
+      return running;
     },
 
     //
@@ -160,7 +178,9 @@ define([
           break;
         case CREATE_PROCESS_IRQ:
           var pid = this.createProcess(params.program);
-          if (pid) {
+          if (params.execute && pid) {
+            this.runProcess([pid]);
+          } else if (pid) {
             _StdIn.putText('pid ' + pid);
             _OsShell.advanceLine();
           } else {
@@ -175,20 +195,7 @@ define([
           _StdIn.putText(params.item);
           break;
         case RUN_PROCESS_IRQ:
-          var running = false;
-          _.each(params.pids, function (pid) {
-            var process = _Processes.peek(pid);
-            if (!process) {
-              _StdIn.putText('WARN: process ' + pid + ' does not exist');
-              _StdIn.advanceLine();
-            } else {
-              _ReadyQueue.add(process);
-              running = true;
-            }
-          });
-          if (running) {
-            _Scheduler.start();
-          } else {
+          if (this.runProcess(params.pid)) {
             _OsShell.advanceLine();
           }
           break;
