@@ -178,7 +178,7 @@ define([
           i += 1;
         }
         if (next && !stop) {
-          string += this.read(next);
+          string += ' ' + this.read(next);
         }
       }
       return string;

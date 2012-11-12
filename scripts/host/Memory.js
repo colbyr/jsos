@@ -14,7 +14,7 @@ define([
    *
    * @var string
    */
-  var ERROR_PREFIX = 'CORE MEMORY: ';
+  var ERROR_PREFIX = 'CORE_MEMORY.';
 
   /**
    * @private
@@ -59,13 +59,13 @@ define([
    * @param  string  error message
    * @return void
    */
-  function _error(msg) {
-    throw new Error(ERROR_PREFIX + msg);
+  function _error(method, msg) {
+    throw new Error(
+      ERROR_PREFIX + method + ': ' + msg + ' ' + '[' +
+      Array.prototype.slice.call(arguments, 2).toString() + ']'
+    );
   }
 
-  /**
-   * Public functions
-   */
   return {
 
     /**
@@ -76,7 +76,7 @@ define([
      */
     access: function (loc) {
       if (!_inbounds(loc)) {
-        _error('invalid memory access');
+        _error('access', 'invalid memory access', loc);
       }
 
       return _memory[loc];
@@ -91,7 +91,7 @@ define([
      */
     accessBlock: function (locA, locB) {
       if (locA >= locB || !_inbounds(locA) || !_inbounds(locB)) {
-        _error('invalid memory access');
+        _error('accessBlock', 'invalid memory access', locA, locB);
       }
 
       return _memory.slice(locA, locB + 1);
@@ -109,7 +109,7 @@ define([
      */
     clear: function (loc) {
       if (!_inbounds(loc)) {
-        _error('invalid memory access');
+        _error('clear', 'invalid memory access', loc);
       }
 
       _memory[loc] = '00';
@@ -124,7 +124,7 @@ define([
      */
     clearBlock: function (locA, locB) {
       if (locA >= locB || !_inbounds(locA) || !_inbounds(locB)) {
-        _error('invalid memory access');
+        _error('clearBlock', 'invalid memory access', locA, locB);
       }
 
       for (var i = locA; i <= locB; i += 1) {
@@ -149,7 +149,7 @@ define([
      */
     write: function (loc, value) {
       if (!_inbounds(loc)) {
-        _error('invalid memory access');
+        _error('write', 'invalid memory access', loc, value);
       }
 
       _memory[loc] = value;
@@ -164,7 +164,7 @@ define([
     writeBlock: function (locA, block) {
       var locB = locA + block.length - 1;
       if (locA >= locB || !_inbounds(locA) || !_inbounds(locB)) {
-        _error('invalid memory access');
+        _error('writeBlock', 'invalid memory access', loc);
       }
 
       for (var i = locA; i <= locB; i += 1) {

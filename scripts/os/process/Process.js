@@ -55,7 +55,8 @@ define([
          ' ' + pcb.acc +
          ' ' + pcb.xr +
          ' ' + pcb.yr +
-         ' ' + pcb.zf + ']';
+         ' ' + pcb.zf + ']' +
+         (this.memory.active ? ' ' : '*');
     },
 
     write: function (loc, data) {
