@@ -144,8 +144,16 @@ define([
 
     load: {
       description: '- Loads validated 6502a op codes from the loader into memory and returns the PID.',
-      func: function () {
-        var code = Sim.loadCode();
+      func: function (filename) {
+        var code;
+        if (filename) {
+          code = _Disk.readFile(filename);
+          if (code) {
+            code = code.trim().split(' ');
+          }
+        } else {
+          code = Sim.loadCode();
+        }
         if (code) {
           _KernelInterruptQueue.enqueue(new CreateProcessInterrupt({
             program: code
@@ -357,7 +365,12 @@ define([
       description: '<file> <content> - writes content to file',
       func: function (file, content) {
         if (file && content) {
-          _Disk.writeFile(file, hex.stringToHexBits(content));
+          if (content === '-l' || content === '--loader') {
+          console.log(arguments);
+            _Disk.writeFile(file, Sim.loadCode().join(' '));
+          } else {
+            _Disk.writeFile(file, hex.stringToHexBits(content));
+          }
         } else {
           _StdIn.putText('Usage: write <file> <content>');
         }
