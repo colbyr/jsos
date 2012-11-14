@@ -50,7 +50,7 @@ define([
 
     toString: function () {
       var pcb = this.pcb.registers;
-      return  this.pid + (this.memory.active ? '-' : '*') +
+      return  this.pid + (this.memory.active ? '*' : '-') +
          '[' + pcb.pc +
          ' ' + pcb.acc +
          ' ' + pcb.xr +

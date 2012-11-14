@@ -72,9 +72,10 @@ table.processes {
   table.processes td {
     border: 1px solid;
     height: 103px;
-    padding: 0 20px 0 10px;
+    padding: 0 15px 0 10px;
     text-align: right;
     vertical-align: top;
+    width: 33.3333%;
   }
 
 

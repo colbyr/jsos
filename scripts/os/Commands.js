@@ -33,10 +33,19 @@ define([
 
     cat: {
       description: '<file> - prints the contents of a file to the console',
-      func: function (file) {
+      func: function (flag, file) {
+        console.log(arguments);
+        var raw = (flag === '-r' || flag === '--raw');
+        if (!raw) {
+          file = flag;
+        }
+
         if (file) {
           var contents = _Disk.readFile(file);
-          if (contents) {
+          if (contents && raw) {
+            _StdIn.putText(contents);
+            _StdIn.advanceLine();
+          } else if (contents) {
             _.each(
               hex.hexBitsToString(contents).split('\n')
             , function (line) {
@@ -246,16 +255,16 @@ define([
 
     run: {
       description: '[-a] | <pid> - runs the process <pid>',
-      func: function (/*args*/) {
-        if (arguments[0] === '-a' || arguments[0] === '--all') {
+      func: function (arg) {
+        if (arg === '-a' || arg === '--all') {
           _KernelInterruptQueue.enqueue(
             new RunProcessInterrupt({
               pids: _.pluck(_Processes.q, 'pid')
             })
           );
           return false;
-        } else if (!/^[\d]+$/.test(arguments[0])) {
-          var code, filename = arguments[0];
+        } else if (!/^[\d]+$/.test(arg)) {
+          var code, filename = arg;
           code = _Disk.readFile(filename);
           if (code) {
             code = code.trim().split(' ');

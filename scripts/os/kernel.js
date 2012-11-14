@@ -29,7 +29,7 @@ define([
 
   var Kernel = {
 
-    createProcess: function (code, execute) {
+    createProcess: function (code) {
       var pid;
       var process = new Process(code);
       if (process.valid) {
@@ -195,7 +195,7 @@ define([
           _StdIn.putText(params.item);
           break;
         case RUN_PROCESS_IRQ:
-          if (this.runProcess(params.pid)) {
+          if (!this.runProcess(params.pids)) {
             _OsShell.advanceLine();
           }
           break;
