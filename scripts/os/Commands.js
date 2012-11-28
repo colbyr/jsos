@@ -34,7 +34,6 @@ define([
     cat: {
       description: '<file> - prints the contents of a file to the console',
       func: function (flag, file) {
-        console.log(arguments);
         var raw = (flag === '-r' || flag === '--raw');
         if (!raw) {
           file = flag;
@@ -254,42 +253,47 @@ define([
     },
 
     run: {
-      description: '[-a] | <pid> - runs the process <pid>',
+      description: '[-a] | -f <filename> | <pid> - runs the process <pid>',
       func: function (arg) {
-        if (arg === '-a' || arg === '--all') {
-          _KernelInterruptQueue.enqueue(
-            new RunProcessInterrupt({
-              pids: _.pluck(_Processes.q, 'pid')
-            })
-          );
-          return false;
-        } else if (!/^[\d]+$/.test(arg)) {
-          var code, filename = arg;
-          code = _Disk.readFile(filename);
-          if (code) {
-            code = code.trim().split(' ');
-          }
-          if (code) {
+        switch (arg) {
+          case '-a':
+          case '--all':
             _KernelInterruptQueue.enqueue(
-              new CreateProcessInterrupt({
-                execute: true,
-                program: code
+              new RunProcessInterrupt({
+                pids: _.pluck(_Processes.q, 'pid')
               })
             );
             return false;
-          } else {
-            _StdIn.putText('FAIL: No valid code found.');
-          }
-        } else if (arguments.length > 0) {
-          _KernelInterruptQueue.enqueue(
-            new RunProcessInterrupt({
-              pids: Array.prototype.slice.call(arguments, 0, arguments.length)
-                .map(function (n) { return parseInt(n); })
-            })
-          );
-          return false;
-        } else {
-          _StdIn.putText('Usage: run --all|<pid>[ <pid>]');
+            break;
+          case '-f':
+          case '--file':
+            var filename = arguments[1],
+                code = _Disk.readFile(filename);
+            if (code) {
+              code = code.trim().split(' ');
+            }
+            if (code) {
+              _KernelInterruptQueue.enqueue(
+                new CreateProcessInterrupt({
+                  execute: true,
+                  program: code
+                })
+              );
+              return false;
+            } else {
+              _StdIn.putText('FAIL: No valid code found.');
+            }
+          case undefined:
+            _StdIn.putText('Usage: run --all|<pid>[ <pid>]');
+            break;
+          default:
+            _KernelInterruptQueue.enqueue(
+              new RunProcessInterrupt({
+                pids: Array.prototype.slice.call(arguments, 0, arguments.length)
+                  .map(function (n) { return parseInt(n); })
+              })
+            );
+            return false;
         }
       },
     },
