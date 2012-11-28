@@ -4,7 +4,7 @@
 
 define(['host/log'], function (log) {
 
-  var _THROTTLE = 10;
+  var _THROTTLE = 500;
 
   return function (msg) {
     // Check globals to see if trace is set ON.  If so, then (maybe) log it

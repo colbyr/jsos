@@ -20,7 +20,7 @@ var APP_NAME = 'JSOS';
 var APP_VERSION = '0.0.1';
 
 // in ms, or milliseconds, so 1000 = 1 second.
-var CPU_CLOCK_INTERVAL = 100;
+var CPU_CLOCK_INTERVAL = 1;
 
 var RR_QUANTUM = 6;
 
