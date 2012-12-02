@@ -110,6 +110,23 @@ define([
       }
     },
 
+    debug: {
+      description: 'on|off - Toggles the CPU cycle rate between debug mode',
+      func: function (setting) {
+        if (setting) {
+          setting = setting.trim().toLowerCase();
+          if (setting === 'on') {
+            DEBUG_MODE = true;
+          } else if (setting === 'off') {
+            DEBUG_MODE = false;
+          } else {
+            _StdIn.putText('"' + setting + '"? ');
+          }
+        }
+        _StdIn.putText('debug mode is ' + (DEBUG_MODE ? 'ON' : 'OFF'));
+      }
+    },
+
     help: {
       description: '- This is the help command. Seek help.',
       func: function () {
