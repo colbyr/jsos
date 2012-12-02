@@ -54,6 +54,7 @@ define([
       _OSclock += 1;
       // Call the kernel clock pulse event handler.
       _kernel.onCPUClockPulse();
+      this.startTimeout();
     },
 
     disableKeyboardInterrupt: function () {
@@ -133,10 +134,17 @@ define([
       // ... Create and initialize the CPU ...
       _CPU = new CPU();
 
-      // ... then set the clock pulse simulation to call ?????????.
-      _hardwareClockTimeout = setInterval(this.clockPulse, CPU_CLOCK_INTERVAL);
+      this.startTimeout();
 
+      // ... then set the clock pulse simulation to call ?????????.
       _kernel.bootstrap();
+    },
+
+    startTimeout: function () {
+      _hardwareClockTimeout = setTimeout(
+        _(this.clockPulse).bind(this),
+        DEBUG_MODE ? CPU_DEBUG_INTERVAL : CPU_CLOCK_INTERVAL
+      );
     }
 
   };

@@ -21,6 +21,11 @@ var APP_VERSION = '0.0.1';
 
 // in ms, or milliseconds, so 1000 = 1 second.
 var CPU_CLOCK_INTERVAL = 1;
+var CPU_DEBUG_INTERVAL = 100;
+
+var IDLE_THROTTLE = 10;
+
+var DEBUG_MODE = false;
 
 var RR_QUANTUM = 6;
 
@@ -35,6 +40,7 @@ var EXIT_PROCESS_IRQ = 4;
 var PRINT_IRQ = 5;
 var CONTEXT_SWITCH_IRQ = 6;
 var SHELL_RETURN_IRQ = 7;
+var KILL_PROCESS_IRQ = 8;
 
 
 //

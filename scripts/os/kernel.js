@@ -39,6 +39,18 @@ define([
       return pid;
     },
 
+    killProcess: function (pid) {
+      console.log('kill process ', pid);
+      var running = _CPU.process && _CPU.process.pid === pid;
+      if (running) {
+        _CPU.exitProcess();
+      } else {
+        _Processes.remove(pid).exit();
+        _ReadyQueue.remove(pid);
+      }
+      return running;
+    },
+
     runProcess: function (pids) {
       var running = false;
       _.each(pids, function (pid) {
@@ -169,6 +181,13 @@ define([
         case KEYBOARD_IRQ:
           this.keyboardDriver.isr(params[0], params[1]); // Kernel mode device driver
           _StdIn.handleInput();
+          break;
+        case KILL_PROCESS_IRQ:
+          var wasRunning = this.killProcess(params.pid);
+          _StdIn.putText('Process ' + params.pid + ' terminated');
+          if (!wasRunning) {
+            _OsShell.advanceLine();
+          }
           break;
         case CONTEXT_SWITCH_IRQ:
           if (_CPU.isExecuting) {

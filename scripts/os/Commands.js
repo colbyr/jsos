@@ -5,11 +5,12 @@
 define([
   'host/Sim',
   'os/interrupts/CreateProcessInterrupt',
+  'os/interrupts/KillProcessInterrupt',
   'os/interrupts/RunProcessInterrupt',
   'utils/Date',
   'utils/hex',
   'utils/rot13'
-], function (Sim, CreateProcessInterrupt, RunProcessInterrupt, Date, hex, rot13) {
+], function (Sim, CreateProcessInterrupt, KillProcessInterrupt, RunProcessInterrupt, Date, hex, rot13) {
 
   return {
     append: {
@@ -139,9 +140,12 @@ define([
       func: function (pid) {
         pid = parseInt(pid);
         if (pid && _Processes.contains(pid)) {
-          _Processes.remove(pid).exit();
-          _ReadyQueue.remove(pid);
-          _StdIn.putText('Process ' + pid + ' terminated');
+          _KernelInterruptQueue.enqueue(
+            new KillProcessInterrupt({
+              pid: pid
+            })
+          );
+          return false;
         } else if (pid) {
           _StdIn.putText('Process ' + pid + ' does not exist');
         } else {
