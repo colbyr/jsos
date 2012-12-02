@@ -65,6 +65,15 @@ define([], function () {
     },
 
     /**
+     * Returns the length of localStorage
+     *
+     * @return int
+     */
+    length: function () {
+      return window.localStorage.length;
+    },
+
+    /**
      * Remove a key-value pair from LS
      *
      * @param  string

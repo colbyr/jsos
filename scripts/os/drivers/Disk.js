@@ -130,7 +130,7 @@ define([
     },
 
     init: function () {
-      if (ls.length === 0) {
+      if (ls.length() === 0) {
         this.format();
       } else {
         this.indexFiles();
