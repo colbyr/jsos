@@ -291,13 +291,26 @@ define([
             _StdIn.putText('Usage: run --all|<pid>[ <pid>]');
             break;
           default:
-            _KernelInterruptQueue.enqueue(
-              new RunProcessInterrupt({
-                pids: Array.prototype.slice.call(arguments, 0, arguments.length)
-                  .map(function (n) { return parseInt(n); })
-              })
-            );
-            return false;
+            var pids = Array.prototype.slice.call(arguments, 0, arguments.length)
+              .reduce(function (pids, n) {
+                n = n.trim();
+                if (/^\d+$/.test(n)) {
+                  pids.push(parseInt(n));
+                } else {
+                  _StdIn.putText('"' + n + '" is not a pid');
+                  _StdIn.advanceLine();
+                }
+                return pids;
+              }, []);
+
+            if (pids.length > 0) {
+              _KernelInterruptQueue.enqueue(
+                new RunProcessInterrupt({
+                  pids: pids
+                })
+              );
+              return false;
+            }
         }
       },
     },
