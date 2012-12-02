@@ -131,9 +131,13 @@ define([
       description: '- This is the help command. Seek help.',
       func: function () {
         var command;
-        _StdIn.putText('Commands:');
+        var first = true;
         for (command in this.commands) {
-          _StdIn.advanceLine();
+          if (!first) {
+            _StdIn.advanceLine();
+          } else {
+            first = false;
+          }
           _StdIn.putText('  ' + command + ' ' + this.commands[command].description);
         }
       },
