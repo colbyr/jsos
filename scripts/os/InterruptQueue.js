@@ -1,5 +1,5 @@
 define([
-  'os/Queue',
+  'os/queue',
   'os/interrupts/Interrupt'
 ], function (Queue, Interrupt) {
 

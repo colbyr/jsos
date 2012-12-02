@@ -18,7 +18,7 @@
    ------------ */
 
 define([
-  'host/CPU',
+  'host/cpu',
   'host/loader',
   'host/log',
   'host/Memory',

@@ -13,15 +13,15 @@
 define([
   'host/log',
   'host/Sim',
-  'os/Console',
+  'os/console',
   'os/drivers/Disk',
   'os/MemoryManager',
   'os/process/Process',
-  'os/Queue',
+  'os/queue',
   'os/InterruptQueue',
   'os/ProcessQueue',
   'os/process/Scheduler',
-  'os/Shell',
+  'os/shell',
   'os/Status',
   'os/trace',
   'os/drivers/Keyboard'

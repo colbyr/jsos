@@ -1,5 +1,5 @@
 require([
-  'os/Kernel',
+  'os/kernel',
   'host/Sim',
   'vendor/ready',
   'globals'
