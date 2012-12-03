@@ -86,6 +86,7 @@ ul.processes {
 
 .textarea {
   font-family: Courier;
+  font-size: 11px;
   height: 160px;
   outline: none;
   width: 98%;
