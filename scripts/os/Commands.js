@@ -336,6 +336,18 @@ define([
       },
     },
 
+    scheduling: {
+      description: '[<type>] - display/set the scheduling type',
+      func: function (type) {
+        if (type) {
+          if (!_Scheduler.setType(type.toLowerCase())) {
+            _StdIn.putText('"' + type + '"? ');
+          }
+        }
+        _StdIn.putText('scheduling mode is ' + _Scheduler.type.toUpperCase());
+      }
+    },
+
     shutdown: {
       description: '- Shuts down the virtual OS but leaves the underlying hardware simulation running',
       func: function () {

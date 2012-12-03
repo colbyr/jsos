@@ -28,6 +28,7 @@ var IDLE_THROTTLE = 10;
 var DEBUG_MODE = false;
 
 var RR_QUANTUM = 6;
+var PRIORITY_SCHEDULING = false;
 
 // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 var TIMER_IRQ = 0;

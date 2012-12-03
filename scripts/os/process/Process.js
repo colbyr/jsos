@@ -20,11 +20,12 @@ define([
     return _pids;
   }
 
-  function Process(program) {
+  function Process(program, priority) {
     this.cycles = 0;
     this.memory = _MemoryManager.allocateBlock();
     this.pcb = new PCB();
     this.pid = _getPid();
+    this.priority = priority || 0;
     this.valid = false;
 
     // init

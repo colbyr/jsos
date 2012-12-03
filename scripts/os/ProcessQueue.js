@@ -80,7 +80,30 @@ define([
      * @return Process
      */
     next: function () {
-      return this.isEmpty() ? null : this.q.shift();
+      if (PRIORITY_SCHEDULING) {
+        return this.nextByPriority();
+      } else {
+        return this.isEmpty() ? null : this.q.shift();
+      }
+    },
+
+    /**
+     * Returns the next process in the queue with the highest priority
+     *
+     * @return Process
+     */
+    nextByPriority: function () {
+      var highest,
+          res = null;
+      if (!this.isEmpty()) {
+        for (var i = 1, len = this.q.length; i < len; i++) {
+          if (this.q[i].priority > this.q[highest].priority) {
+            highest = i;
+          }
+        }
+        res = this.q.splice(highest, 1);
+      }
+      return res;
     },
 
     /**

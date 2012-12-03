@@ -11,6 +11,35 @@ define([
    */
   var DEFAULT_QUANTUM = 7;
 
+  var TYPES = {
+    rr: {
+      check: function () {
+        return (this.atLimit() || !this.cpu.isExecuting) && !this.ready.isEmpty();
+      },
+      set: function () {
+        PRIORITY_SCHEDULING = false;
+      }
+    },
+
+    fcfs: {
+      check: function () {
+        return !this.cpu.isExecuting && !this.ready.isEmpty();
+      },
+      set: function () {
+        PRIORITY_SCHEDULING = false;
+      }
+    },
+
+    priority: {
+      check: function () {
+        return !this.cpu.isExecuting && !this.ready.isEmpty();
+      },
+      set: function () {
+        PRIORITY_SCHEDULING = true;
+      }
+    }
+  };
+
   /**
    * Round Robin CPU Scheduler
    *
@@ -22,11 +51,12 @@ define([
   function Scheduler(cpu, ready, interrupt_queue, quantum) {
     this.cpu = cpu;
     this.iq = interrupt_queue;
+    this.is_running = false;
     this.quantum = quantum || DEFAULT_QUANTUM;
     this.ready = ready;
-    this.is_running = false;
     this.running = null;
     this.running_for = 0;
+    this.type = 'rr';
   }
 
   _.extend(Scheduler.prototype, {
@@ -98,12 +128,27 @@ define([
     },
 
     /**
+     * Set the scheduling method
+     *
+     * @param  string  type
+     * @return bool    true if type exists
+     */
+    setType: function (type) {
+      var typeExists = TYPES.hasOwnProperty(type);
+      if (typeExists) {
+        this.type = type;
+        TYPES[type].set.call(this);
+      }
+      return typeExists;
+    },
+
+    /**
      * Returns true a context switch is necessary
      *
      * @return bool
      */
     shouldSwitch: function () {
-      return (this.atLimit() || !this.cpu.isExecuting) && !this.ready.isEmpty();
+      return TYPES[this.type].check.call(this);
     },
 
     /**
