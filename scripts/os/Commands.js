@@ -176,9 +176,22 @@ define([
     },
 
     load: {
-      description: '- Loads validated 6502a op codes from the loader into memory and returns the PID.',
-      func: function (filename) {
-        var code;
+      description: '[-p <priotity>] - Loads validated 6502a op codes into memory and returns the PID.',
+      func: function (arg1) {
+        var code, filename, priority = 0;
+        switch (arg1) {
+          case '-p':
+          case '--priority':
+            priority = arguments[1];
+            filename = arguments[2];
+            if (!/^\d+$/.test(priority)) {
+              _StdIn.putText('"' + priority + '" is not a valid priority');
+              return;
+            }
+            break;
+          default:
+            filename = arg1;
+        }
         if (filename) {
           code = _Disk.readFile(filename);
           if (code) {
@@ -191,6 +204,7 @@ define([
           _KernelInterruptQueue.enqueue(
             new CreateProcessInterrupt({
               execute: false,
+              priority: priority,
               program: code
             })
           );

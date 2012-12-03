@@ -93,15 +93,17 @@ define([
      * @return Process
      */
     nextByPriority: function () {
-      var highest,
+      var highest = 0,
           res = null;
-      if (!this.isEmpty()) {
+      if (this.q.length === 1) {
+        res = this.q.pop();
+      } else if (!this.isEmpty()) {
         for (var i = 1, len = this.q.length; i < len; i++) {
           if (this.q[i].priority > this.q[highest].priority) {
             highest = i;
           }
         }
-        res = this.q.splice(highest, 1);
+        res = this.q.splice(highest, 1).pop();
       }
       return res;
     },

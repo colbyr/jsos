@@ -50,6 +50,7 @@ define([
    */
   function Scheduler(cpu, ready, interrupt_queue, quantum) {
     this.cpu = cpu;
+    this.first = false;
     this.iq = interrupt_queue;
     this.is_running = false;
     this.quantum = quantum || DEFAULT_QUANTUM;
@@ -148,7 +149,11 @@ define([
      * @return bool
      */
     shouldSwitch: function () {
-      return TYPES[this.type].check.call(this);
+      var should = TYPES[this.type].check.call(this) && !this.first;
+      if (this.first) {
+        this.first = false;
+      }
+      return should;
     },
 
     /**
@@ -156,6 +161,7 @@ define([
      */
     start: function () {
       trace('Scheduler: start executing ready queue');
+      this.first = true;
       this.is_running = true;
       this.send(this.ready.peek().pid);
     }

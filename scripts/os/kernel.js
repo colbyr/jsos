@@ -29,9 +29,9 @@ define([
 
   var Kernel = {
 
-    createProcess: function (code) {
+    createProcess: function (code, priority) {
       var pid;
-      var process = new Process(code);
+      var process = new Process(code, priority);
       if (process.valid) {
         _Processes.add(process);
         pid = process.pid;
@@ -196,7 +196,7 @@ define([
           _CPU.execute(_ReadyQueue.next());
           break;
         case CREATE_PROCESS_IRQ:
-          var pid = this.createProcess(params.program);
+          var pid = this.createProcess(params.program, params.priority);
           if (params.execute && pid) {
             this.runProcess([pid]);
           } else if (pid) {
