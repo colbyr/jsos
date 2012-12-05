@@ -470,7 +470,7 @@ define([
     },
 
     write: {
-      description: '<file> <content> - writes content to file',
+      description: '<file> <content>|-l - writes content to file',
       func: function (file, content) {
         if (file && content) {
           if (content === '-l' || content === '--loader') {
