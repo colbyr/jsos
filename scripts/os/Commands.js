@@ -32,35 +32,6 @@ define([
       }
     },
 
-    cat: {
-      description: '<file> - prints the contents of a file to the console',
-      func: function (flag, file) {
-        var raw = (flag === '-r' || flag === '--raw');
-        if (!raw) {
-          file = flag;
-        }
-
-        if (file) {
-          var contents = _Disk.readFile(file);
-          if (contents && raw) {
-            _StdIn.putText(contents);
-            _StdIn.advanceLine();
-          } else if (contents) {
-            _.each(
-              hex.hexBitsToString(contents).split('\n')
-            , function (line) {
-              _StdIn.putText(line);
-              _StdIn.advanceLine();
-            });
-          } else {
-            _StdIn.putText('ERR: No such file "' + file + '"');
-          }
-        } else {
-          _StdIn.putText('Usage: cat <file>');
-        }
-      }
-    },
-
     clear: {
       description: '- Clears the screen and resets the cursor position.',
       func: function () {
@@ -68,6 +39,18 @@ define([
         _StdIn.resetXY();
       },
       man: 'Clear: Clears the screen and resets the cursor position.'
+    },
+
+    create: {
+      description: '<file> - creates a new file',
+      func: function (file) {
+        if (file) {
+          _Disk.createFile(file, '');
+          _StdIn.putText(file + ' created...');
+        } else {
+          _StdIn.putText('Usage: create <file>');
+        }
+      }
     },
 
     date: {
@@ -124,6 +107,26 @@ define([
           }
         }
         _StdIn.putText('debug mode is ' + (DEBUG_MODE ? 'ON' : 'OFF'));
+      }
+    },
+
+    delete: {
+      description: '<file> - deletes a file',
+      func: function (file) {
+        if (file) {
+          _Disk.removeFile(file);
+          _StdIn.putText(file + ' deleted...');
+        } else {
+          _StdIn.putText('Usage: delete <file>');
+        }
+      }
+    },
+
+    format: {
+      description: '- DELETES EVERYTHING ON THE DISK!!! be careful...',
+      func: function () {
+        _Disk.format();
+        _StdIn.putText('IT\'S ALL GONE BRO');
       }
     },
 
@@ -256,13 +259,31 @@ define([
       }
     },
 
-    rm: {
-      description: '<file> - deletes a file',
-      func: function (file) {
+    read: {
+      description: '<file> - prints the contents of a file to the console',
+      func: function (flag, file) {
+        var raw = (flag === '-r' || flag === '--raw');
+        if (!raw) {
+          file = flag;
+        }
+
         if (file) {
-          _Disk.removeFile(file);
+          var contents = _Disk.readFile(file);
+          if (contents !== null && raw) {
+            _StdIn.putText(contents);
+            _StdIn.advanceLine();
+          } else if (contents !== null) {
+            _.each(
+              hex.hexBitsToString(contents).split('\n')
+            , function (line) {
+              _StdIn.putText(line);
+              _StdIn.advanceLine();
+            });
+          } else {
+            _StdIn.putText('ERR: No such file "' + file + '"');
+          }
         } else {
-          _StdIn.putText('Usage: rm <file>');
+          _StdIn.putText('Usage: read <file>');
         }
       }
     },
@@ -332,7 +353,7 @@ define([
                 if (/^\d+$/.test(n)) {
                   pids.push(parseInt(n));
                 } else {
-                  _StdIn.putText('"' + n + '" is not a pid');
+                  _StdIn.putText('"' + n + '" is not a pid. Maybe try `run -f`?');
                   _StdIn.advanceLine();
                 }
                 return pids;
@@ -387,17 +408,6 @@ define([
           default:
             _Status.setStatus(message);
             _StdIn.putText('OS status updated to "' + message + '".');
-        }
-      }
-    },
-
-    touch: {
-      description: '<file> - creates a new file',
-      func: function (file) {
-        if (file) {
-          _Disk.createFile(file, '');
-        } else {
-          _StdIn.putText('Usage: touch <file>');
         }
       }
     },
@@ -465,8 +475,10 @@ define([
         if (file && content) {
           if (content === '-l' || content === '--loader') {
             _Disk.writeFile(file, Sim.loadCode().join(' '));
+            _StdIn.putText(file + ' written from loader...');
           } else {
             _Disk.writeFile(file, hex.stringToHexBits(content));
+            _StdIn.putText(file + ' written...');
           }
         } else {
           _StdIn.putText('Usage: write <file> <content>');

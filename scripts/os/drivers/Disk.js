@@ -112,6 +112,7 @@ define([
     },
 
     format: function () {
+      file_index = {};
       this.each(function (key) {
         ls.set(key, NULL_FILE);
       }, this);
@@ -191,7 +192,7 @@ define([
           this.next(
             file_index[filename]
           )
-        );
+        ) || '';
       }
       return result
     },
