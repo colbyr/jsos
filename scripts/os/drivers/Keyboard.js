@@ -32,9 +32,12 @@ define([
     56: {l: '8', u: '*'},
     57: {l: '9', u: '('},
     // special characters
+    59: {l: ';', u: ':'},
     186: {l: ';', u: ':'},
+    61: {l: '=', u: '+'},
     187: {l: '=', u: '+'},
     188: {l: ',', u: '<'},
+    173: {l: '-', u: '_'},
     189: {l: '-', u: '_'},
     190: {l: '.', u: '>'},
     191: {l: '/', u: '?'},
@@ -97,6 +100,8 @@ define([
         character = keyCode;
       } else if (_characters.hasOwnProperty(keyCode)) { // special characters
         character = isShifted ? _characters[keyCode].u : _characters[keyCode].l;
+      } else {
+        console.log('unrecognized key: code ' + keyCode);
       }
 
       // if it isn't a recognized keyCode, don't bother queuing
