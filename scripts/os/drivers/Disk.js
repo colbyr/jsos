@@ -131,7 +131,7 @@ define([
     },
 
     init: function () {
-      if (ls.length() === 0) {
+      if (ls.length() === 0 || !ls.get('000')) {
         this.format();
       } else {
         this.indexFiles();
