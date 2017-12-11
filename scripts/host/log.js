@@ -25,14 +25,6 @@ define([
       '[' + data.clock + ']',
       data.msg
     ].join(' ') + '\n' + _taLog.value;
-
-    // Optionally udpate a log database or some streaming service.
-    if (socket) {
-      socket.emit('log', {
-        log: data.source,
-        info: data
-      });
-    }
   }
 
   return log;

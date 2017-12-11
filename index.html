@@ -9,19 +9,6 @@
     <link href="css/grid.css" rel="stylesheet" type="text/css" />
     <link href="css/main.css" rel="stylesheet" type="text/css" />
 
-    <!-- loginator -->
-    <script src="http://localhost:3001/socket.io/socket.io.js"></script>
-    <script>
-      try {
-        var socket = io.connect('http://localhost:3001');
-        socket.on('client log', function (data) {
-          console.log('loginator - ' + data.msg);
-        });
-      } catch(e) {
-        console.log('Loginator: unable to connect - cd loginator; ./run');
-      }
-    </script>
-
     <!-- JSOS -->
     <script data-main="scripts/bootstrap" type="text/javascript" src="scripts/vendor/require.js"></script>
 </head>
